@@ -1,4 +1,6 @@
 rootProject.name = 'astrea'
 include 'oauth-sdk'
 findProject(':oauth-sdk')?.name = 'oauth'
+include 'oidc-sdk'
+findProject(':oidc-sdk')?.name = 'oidc'
 
