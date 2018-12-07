@@ -12,6 +12,7 @@ import io.imulab.astrea.sdk.oauth.client.pwd.BCryptPasswordEncoder
 import io.imulab.astrea.sdk.oauth.error.InvalidClient
 import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.request.OAuthRequestForm
+import io.imulab.astrea.sdk.oauth.reserved.AuthenticationMethod
 import io.imulab.astrea.sdk.oauth.reserved.Param
 import io.imulab.astrea.sdk.then
 import kotlinx.coroutines.runBlocking
@@ -23,6 +24,11 @@ object ClientSecretPostAuthenticatorSpec : Spek({
 
     given("a properly configured authenticator") {
         val authenticator = Given().authenticator
+
+        then("should support only client_secret_post") {
+            assertThat(authenticator.supports(AuthenticationMethod.clientSecretPost)).isTrue()
+            assertThat(authenticator.supports(AuthenticationMethod.clientSecretBasic)).isFalse()
+        }
 
         `when`("a request is made with valid credential") {
             val request = requestWithCredential("foo", "s3cret")
@@ -47,6 +53,15 @@ object ClientSecretPostAuthenticatorSpec : Spek({
 
         `when`("a request with made with unknown client") {
             val request = requestWithCredential("bar", "s3cret")
+
+            then("authentication should raise an error") {
+                assertThatExceptionOfType(OAuthException::class.java)
+                    .isThrownBy { runBlocking { authenticator.authenticate(request) } }
+            }
+        }
+
+        `when`("a request with made with empty credentials") {
+            val request = requestWithCredential("", "")
 
             then("authentication should raise an error") {
                 assertThatExceptionOfType(OAuthException::class.java)
