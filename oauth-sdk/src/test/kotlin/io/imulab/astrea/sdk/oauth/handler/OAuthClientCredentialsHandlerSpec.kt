@@ -48,6 +48,10 @@ object OAuthClientCredentialsHandlerSpec : Spek({
                 assertThat(response.accessToken).isNotEmpty()
             }
 
+            then("a refresh token should have been issued in response") {
+                assertThat(response.refreshToken).isNotEmpty()
+            }
+
             then("token type should have been set in response") {
                 assertThat(response.tokenType).isEqualTo("bearer")
             }
@@ -63,6 +67,25 @@ object OAuthClientCredentialsHandlerSpec : Spek({
             then("an access token session should have been created") {
                 assertThat(runBlocking { given.accessTokenRepository.getAccessTokenSession(response.accessToken) })
                     .isNotNull
+            }
+        }
+
+        `when`("a request with grant_type<>client_credentials is made") {
+            val client = mock<OAuthClient> { onGeneric { id } doReturn "foo" }
+            val request = OAuthAccessRequest.Builder().also { b ->
+                b.client = client
+                b.scopes = mutableSetOf("foo", "bar", "offline_access")
+                b.grantTypes = mutableSetOf(GrantType.authorizationCode)
+                b.redirectUri = "https://test.com/callback"
+            }.build()
+            val response = TokenEndpointResponse()
+            runBlocking {
+                handler.updateSession(request)
+                handler.handleAccessRequest(request, response)
+            }
+
+            then("nothing should be handled") {
+                assertThat(response.accessToken).isEmpty()
             }
         }
 
@@ -133,7 +156,7 @@ object OAuthClientCredentialsHandlerSpec : Spek({
         }
         return OAuthAccessRequest.Builder().also { b ->
             b.client = client
-            b.scopes = mutableSetOf("foo", "bar")
+            b.scopes = mutableSetOf("foo", "bar", "offline_access")
             b.grantTypes = mutableSetOf(GrantType.clientCredentials)
             b.redirectUri = "https://test.com/callback"
         }.build()

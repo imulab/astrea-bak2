@@ -34,6 +34,7 @@ class JwtAccessTokenStrategy(
     override fun computeIdentifier(token: String): String {
         return try {
             JwtConsumerBuilder()
+                .setSkipSignatureVerification()
                 .setSkipAllValidators()
                 .setRequireJwtId()
                 .build()
