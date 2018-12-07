@@ -15,16 +15,29 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url = uri("https://dl.bintray.com/spekframework/spek") }
     }
 }
 
 subprojects {
     tasks.withType<KotlinCompile>().all {
-        println("Configuring $name in project ${project.name}")
         kotlinOptions {
             sourceCompatibility = "1.8"
             targetCompatibility = "1.8"
             suppressWarnings = true
+        }
+    }
+
+    tasks.withType<Test>().all {
+        useJUnitPlatform {
+            includeEngines("spek2")
+        }
+    }
+
+    tasks.withType<JacocoReport>().all {
+        reports {
+            html.isEnabled = true
+            html.destination = file("$buildDir/reports/jacoco/html")
         }
     }
 }
