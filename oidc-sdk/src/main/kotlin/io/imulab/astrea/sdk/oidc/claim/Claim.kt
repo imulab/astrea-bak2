@@ -20,11 +20,11 @@ data class Claim(
 
 class Claims(map: Map<String, Any> = emptyMap()) {
 
-    constructor(claims: List<io.imulab.astrea.sdk.oidc.claim.Claim>) : this() {
+    constructor(claims: List<Claim>) : this() {
         this.claims.addAll(claims)
     }
 
-    private val claims: MutableList<io.imulab.astrea.sdk.oidc.claim.Claim> = LinkedList<io.imulab.astrea.sdk.oidc.claim.Claim>().apply {
+    private val claims: MutableList<Claim> = LinkedList<Claim>().apply {
         listOf("userinfo", "id_token").forEach { source ->
             (map[source] as? Map<*, *>)?.entries
                 ?.map { entry ->
@@ -33,7 +33,7 @@ class Claims(map: Map<String, Any> = emptyMap()) {
                     val values = (entry.value as? Map<*, *>)?.get("value")?.toString()?.let { listOf(it) }
                         ?: ((entry.value as? Map<*, *>)?.get("values") as? List<*>)?.map { it?.toString() ?: "" }
                         ?: emptyList()
-                    return@map io.imulab.astrea.sdk.oidc.claim.Claim(
+                    return@map Claim(
                         name,
                         source,
                         essential,
@@ -45,16 +45,16 @@ class Claims(map: Map<String, Any> = emptyMap()) {
         }
     }
 
-    fun getClaim(name: String): io.imulab.astrea.sdk.oidc.claim.Claim? = claims.firstOrNull { it.name == name }
+    fun getClaim(name: String): Claim? = claims.firstOrNull { it.name == name }
 
-    fun getAllClaims(): List<io.imulab.astrea.sdk.oidc.claim.Claim> = claims
+    fun getAllClaims(): List<Claim> = claims
 
     fun requireAuthTime() {
         if (getClaim(IdTokenClaim.authTime) == null)
-            addClaim(io.imulab.astrea.sdk.oidc.claim.Claim(IdTokenClaim.authTime, "id_token", true, emptyList()))
+            addClaim(Claim(IdTokenClaim.authTime, "id_token", true, emptyList()))
     }
 
-    private fun addClaim(claim: io.imulab.astrea.sdk.oidc.claim.Claim) {
+    private fun addClaim(claim: Claim) {
         this.claims.add(claim)
     }
 
