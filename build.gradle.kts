@@ -1,8 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import build.*
 
 plugins {
     java
     kotlin("jvm") version "1.3.10"
+    id("com.gradle.build-scan") version "1.16"
 }
 
 configure<JavaPluginConvention> {
@@ -40,4 +42,9 @@ subprojects {
             html.destination = file("$buildDir/reports/jacoco/html")
         }
     }
+}
+
+buildScan {
+    setTermsOfServiceUrl("https://gradle.com/terms-of-service")
+    setTermsOfServiceAgree("yes")
 }
