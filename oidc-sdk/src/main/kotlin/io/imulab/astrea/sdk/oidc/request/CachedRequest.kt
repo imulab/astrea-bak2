@@ -29,5 +29,5 @@ class CachedRequest(
      */
     val hash: String = ""
 ) {
-    fun hasExpired(): Boolean = expiry?.isAfter(LocalDateTime.now()) == true
+    fun hasExpired(): Boolean = expiry?.isBefore(LocalDateTime.now()) == true
 }

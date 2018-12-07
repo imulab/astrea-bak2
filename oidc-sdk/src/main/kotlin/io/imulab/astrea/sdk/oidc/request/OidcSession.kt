@@ -21,7 +21,7 @@ open class OidcSession(
         if (another is OidcSession) {
             if (obfuscatedSubject.isEmpty())
                 obfuscatedSubject = another.obfuscatedSubject
-            if (authTime != null)
+            if (authTime == null)
                 authTime = another.authTime
             acrValues.addAll(another.acrValues)
             if (nonce.isEmpty())
