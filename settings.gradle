@@ -3,4 +3,6 @@ include 'oauth-sdk'
 findProject(':oauth-sdk')?.name = 'oauth'
 include 'oidc-sdk'
 findProject(':oidc-sdk')?.name = 'oidc'
+include 'client-sdk'
+findProject(':client-sdk')?.name = 'client'
 

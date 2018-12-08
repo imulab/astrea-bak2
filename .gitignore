@@ -4,3 +4,5 @@
 build/
 out/
 .DS_Store
+
+client-sdk/src/generated/

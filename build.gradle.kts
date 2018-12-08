@@ -3,7 +3,7 @@ import build.*
 
 plugins {
     java
-    kotlin("jvm") version "1.3.10"
+    kotlin("jvm") version "1.3.10" apply false
     id("com.gradle.build-scan") version "1.16"
 }
 
@@ -22,6 +22,8 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "idea")
+
     tasks.withType<KotlinCompile>().all {
         kotlinOptions {
             sourceCompatibility = "1.8"
