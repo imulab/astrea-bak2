@@ -1,4 +1,7 @@
+import build.junitPlatform
 import build.kotlinAndCoroutine
+import build.spek2
+import build.grpc
 import com.google.protobuf.gradle.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -14,10 +17,14 @@ version = "0.0.1"
 
 dependencies {
     kotlinAndCoroutine()
+    grpc()
+    implementation(project(":oauth"))
+    implementation(project(":oidc"))
 
-    implementation("com.google.protobuf:protobuf-java:3.6.1")
-    implementation("io.grpc:grpc-stub:1.15.1")
-    implementation("io.grpc:grpc-protobuf:1.15.1")
+    junitPlatform()
+    spek2()
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
+    testImplementation("org.assertj:assertj-core:3.11.1")
 }
 
 protobuf.protobuf.run {

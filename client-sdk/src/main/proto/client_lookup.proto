@@ -18,6 +18,31 @@ message ClientLookupResponse {
     repeated string responseTypes = 5;
     repeated string grantTypes = 6;
     repeated string scopes = 7;
+    string applicationType = 8;
+    repeated string contacts = 9;
+    string logoUri = 10;
+    string clientUri = 11;
+    string policyUri = 12;
+    string tosUri = 13;
+    string jwksUri = 14;
+    string jwks = 15;
+    string sectorIdentifierUri = 16;
+    string subjectType = 17;
+    string idTokenSignedResponseAlgorithm = 18;
+    string idTokenEncryptedResponseAlgorithm = 19;
+    string idTokenEncryptedResponseEncoding = 20;
+    string requestObjectSigningAlgorithm = 21;
+    string requestObjectEncryptionAlgorithm = 22;
+    string requestObjectEncryptionEncoding = 23;
+    string userInfoSignedResponseAlgorithm = 24;
+    string userInfoEncryptedResponseAlgorithm = 25;
+    string userInfoEncryptedResponseEncoding = 26;
+    string tokenEndpointAuthenticationMethod = 27;
+    int64 defaultMaxAge = 28;
+    bool requireAuthTime = 29;
+    repeated string defaultAcrValues = 30;
+    string initiateLoginUri = 31;
+    repeated string requestUris = 32;
 }
 
 service ClientLookup {
