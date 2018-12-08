@@ -14,7 +14,7 @@ version = "0.1.0"
 
 dependencies {
     kotlinAndCoroutine()
-    api(project(":oauth"))
+    api(project(":oauth-sdk"))
     implementation("org.mindrot:jbcrypt:${Version.jBCrypt}")
     implementation("org.bitbucket.b_c:jose4j:${Version.jose4j}")
 

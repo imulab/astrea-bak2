@@ -1,0 +1,16 @@
+package io.imulab.astrea.service.client
+
+import io.grpc.stub.StreamObserver
+import io.imulab.astrea.sdk.client.ClientLookupGrpc
+import io.imulab.astrea.sdk.client.ClientLookupRequest
+import io.imulab.astrea.sdk.client.ClientLookupResponse
+import io.imulab.astrea.sdk.client.DummyClientLookupService
+import org.lognet.springboot.grpc.GRpcService
+
+@GRpcService
+class ClientLookupService : ClientLookupGrpc.ClientLookupImplBase() {
+
+    override fun find(request: ClientLookupRequest?, responseObserver: StreamObserver<ClientLookupResponse>?) {
+        return DummyClientLookupService.find(request, responseObserver)
+    }
+}

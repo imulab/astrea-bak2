@@ -24,8 +24,8 @@ version = "0.0.1"
 dependencies {
     kotlinAndCoroutine()
     grpc()
-    implementation(project(":oauth"))
-    implementation(project(":oidc"))
+    implementation(project(":oauth-sdk"))
+    implementation(project(":oidc-sdk"))
 
     junitPlatform()
     spek2()
