@@ -4,7 +4,9 @@ import build.*
 plugins {
     java
     kotlin("jvm") version "1.3.10" apply false
+    id("com.google.protobuf") version "0.8.7" apply false
     id("com.gradle.build-scan") version "1.16"
+    id("com.jfrog.artifactory") version "4.8.1" apply false
 }
 
 configure<JavaPluginConvention> {
@@ -49,4 +51,5 @@ subprojects {
 buildScan {
     setTermsOfServiceUrl("https://gradle.com/terms-of-service")
     setTermsOfServiceAgree("yes")
+    publishAlways()
 }
