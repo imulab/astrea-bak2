@@ -10,6 +10,7 @@ plugins {
     idea
     kotlin("jvm")
     id("com.google.protobuf") version "0.8.7"
+    id("jacoco")
 }
 
 group = "io.imulab.astrea.sdk"
@@ -44,4 +45,8 @@ protobuf.protobuf.run {
         }
     }
     generatedFilesBaseDir = "$projectDir/src/generated"
+}
+
+jacoco {
+    toolVersion = "0.8.2"
 }
