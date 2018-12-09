@@ -1,5 +1,4 @@
 import build.*
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -12,7 +11,7 @@ plugins {
 }
 
 group = "io.imulab.astrea.service"
-version = "0.0.1-SNAPSHOT"
+version = "0.1.0"
 
 repositories {
     maven { url = uri("https://repo.spring.io/milestone") }
@@ -34,7 +33,6 @@ dependencies {
     grpcServerSide()
     springDefaultBundle()
     springGrpc()
-    springMongo()
 
     jBCrypt()
     jose4j()

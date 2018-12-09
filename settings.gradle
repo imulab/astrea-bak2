@@ -6,4 +6,5 @@ findProject(':oidc-sdk')?.name = 'oidc-sdk'
 include 'client-sdk'
 findProject(':client-sdk')?.name = 'client-sdk'
 include 'client-service'
+include 'authorization-service'
 
