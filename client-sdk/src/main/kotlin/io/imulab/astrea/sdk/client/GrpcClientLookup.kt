@@ -40,40 +40,7 @@ class GrpcClientLookup(channel: Channel) : ClientLookup {
         }
 
         return try {
-            Client(
-                id = response.id,
-                name = response.name,
-                type = response.type,
-                redirectUris = response.redirectUrisList.toSet(),
-                responseTypes = response.responseTypesList.toSet(),
-                grantTypes = response.grantTypesList.toSet(),
-                scopes = response.scopesList.toSet(),
-                applicationType = response.applicationType,
-                contacts = LinkedHashSet(response.contactsList),
-                logoUri = response.logoUri,
-                clientUri = response.clientUri,
-                policyUri = response.policyUri,
-                tosUri = response.tosUri,
-                jwksUri = "",
-                jwks = response.jwks,
-                sectorIdentifierUri = response.sectorIdentifierUri,
-                subjectType = response.subjectType,
-                idTokenSignedResponseAlgorithm = JwtSigningAlgorithm.valueOf(response.idTokenSignedResponseAlgorithm),
-                idTokenEncryptedResponseAlgorithm = JweKeyManagementAlgorithm.valueOf(response.idTokenEncryptedResponseAlgorithm),
-                idTokenEncryptedResponseEncoding = JweContentEncodingAlgorithm.valueOf(response.idTokenEncryptedResponseEncoding),
-                requestObjectSigningAlgorithm = JwtSigningAlgorithm.valueOf(response.requestObjectSigningAlgorithm),
-                requestObjectEncryptionAlgorithm = JweKeyManagementAlgorithm.valueOf(response.requestObjectEncryptionAlgorithm),
-                requestObjectEncryptionEncoding = JweContentEncodingAlgorithm.valueOf(response.requestObjectEncryptionEncoding),
-                userInfoSignedResponseAlgorithm = JwtSigningAlgorithm.valueOf(response.userInfoSignedResponseAlgorithm),
-                userInfoEncryptedResponseAlgorithm = JweKeyManagementAlgorithm.valueOf(response.userInfoEncryptedResponseAlgorithm),
-                userInfoEncryptedResponseEncoding = JweContentEncodingAlgorithm.valueOf(response.userInfoEncryptedResponseEncoding),
-                tokenEndpointAuthenticationMethod = response.tokenEndpointAuthenticationMethod,
-                defaultMaxAge = response.defaultMaxAge,
-                requireAuthTime = response.requireAuthTime,
-                defaultAcrValues = response.defaultAcrValuesList,
-                initiateLoginUri = response.initiateLoginUri,
-                requestUris = response.requestUrisList
-            )
+            Client.fromClientLookupResponse(response)
         } catch (e: Exception) {
             throw ServerError.internal(e.localizedMessage)
         }

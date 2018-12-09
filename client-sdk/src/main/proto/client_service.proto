@@ -44,6 +44,15 @@ message ClientLookupResponse {
     repeated string requestUris = 32;
 }
 
+message ClientAuthenticateRequest {
+    string id = 1;
+    string secret = 2;
+}
+
 service ClientLookup {
     rpc Find(ClientLookupRequest) returns (ClientLookupResponse) {}
+}
+
+service ClientAuthentication {
+    rpc Authenticate(ClientAuthenticateRequest) returns (ClientLookupResponse) {}
 }
