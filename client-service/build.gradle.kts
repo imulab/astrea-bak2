@@ -9,7 +9,6 @@ plugins {
     id("org.springframework.boot")
     id("org.jetbrains.kotlin.plugin.spring")
     id("io.spring.dependency-management")
-    id("com.github.johnrengelman.shadow")
 }
 
 group = "io.imulab.astrea.service"
@@ -40,10 +39,4 @@ dependencies {
     spek2()
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
     testImplementation("org.assertj:assertj-core:3.11.1")
-}
-
-tasks.withType<ShadowJar> {
-    baseName = project.name
-    classifier = ""
-    version = project.version.toString()
 }
