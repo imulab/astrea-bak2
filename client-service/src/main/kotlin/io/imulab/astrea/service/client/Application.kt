@@ -1,6 +1,7 @@
 package io.imulab.astrea.service.client
 
 import io.imulab.astrea.sdk.oauth.OAuthContext
+import io.imulab.astrea.sdk.oauth.client.pwd.BCryptPasswordEncoder
 import io.imulab.astrea.sdk.oauth.token.JwtSigningAlgorithm
 import io.imulab.astrea.sdk.oauth.token.strategy.JwtAccessTokenStrategy
 import io.imulab.astrea.sdk.oidc.jwk.JsonWebKeySetRepository
@@ -52,6 +53,9 @@ class Application {
             })
         }
     )
+
+    @Bean
+    fun passwordEncoder() = BCryptPasswordEncoder()
 }
 
 @Configuration

@@ -9,6 +9,5 @@ spring.data.mongodb:
   database: client
 
 service:
-  uriBase: https://astrea.imulab.io/client
   issuerUrl: https://astrea.imulab.io/client
   accessTokenLifespan: 10m

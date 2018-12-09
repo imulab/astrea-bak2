@@ -1,7 +1,8 @@
 package io.imulab.astrea.service.client.rest
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.imulab.astrea.sdk.oauth.client.pwd.BCryptPasswordEncoder
+import io.imulab.astrea.sdk.oauth.OAuthContext
+import io.imulab.astrea.sdk.oauth.client.pwd.PasswordEncoder
 import io.imulab.astrea.sdk.oauth.request.OAuthAccessRequest
 import io.imulab.astrea.sdk.oauth.request.OAuthSession
 import io.imulab.astrea.sdk.oauth.reserved.GrantType
@@ -14,7 +15,6 @@ import io.imulab.astrea.service.client.common.PasswordGenerator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.validation.MapBindingResult
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,9 +30,10 @@ import kotlin.collections.HashMap
 @RequestMapping("/client")
 class ClientRestController {
 
-    @Value("\${service.uriBase}")
-    lateinit var baseUrl: String
-
+    @Autowired
+    lateinit var passwordEncoder: PasswordEncoder
+    @Autowired
+    lateinit var serviceContext: OAuthContext
     @Autowired
     lateinit var repository: ClientRepository
     @Autowired
@@ -42,12 +43,7 @@ class ClientRestController {
     @Autowired
     lateinit var accessTokenStrategy: AccessTokenStrategy
 
-    private val passwordEncoder = BCryptPasswordEncoder()
-
-    @PostMapping(
-        consumes = [MediaType.APPLICATION_JSON_VALUE],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun createClient(@RequestBody request: ClientDTO): CreateClientResponse {
         request.merge(ClientDTO.defaultPrototype)
         MapBindingResult(HashMap<Any, Any>(), "client")
@@ -69,6 +65,7 @@ class ClientRestController {
 
         val client = repository.save(request.buildClient())
 
+        // todo move token issue logic to authorization service, via grpc, so we don't have to re-implement authorization logic here.
         val accessToken = runBlocking {
             accessTokenStrategy.generateToken(OAuthAccessRequest.Builder().also { b ->
                 b.client = client
@@ -84,7 +81,7 @@ class ClientRestController {
         return CreateClientResponse(
             id = client.id,
             secret = plainSecret,
-            uri = "$baseUrl/${client.id}",
+            uri = "${serviceContext.issuerUrl}/${client.id}",
             accessToken = accessToken,
             iat = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
             expiry = 0
