@@ -22,4 +22,12 @@ enum class JweContentEncodingAlgorithm(val spec: String, val algorithmIdentifier
         AlgorithmConstraints.ConstraintType.WHITELIST,
         algorithmIdentifier
     )
+
+    companion object {
+        @JvmStatic
+        fun fromSpec(spec: String): JweContentEncodingAlgorithm {
+            return values().find { it.spec == spec }
+                ?: throw IllegalStateException("Invalid content encoding algorithm $spec.")
+        }
+    }
 }

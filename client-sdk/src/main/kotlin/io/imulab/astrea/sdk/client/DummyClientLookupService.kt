@@ -30,7 +30,7 @@ object DummyClientLookupService : ClientLookupGrpc.ClientLookupImplBase() {
         .addScopes(io.imulab.astrea.sdk.oidc.reserved.StandardScope.openid)
         .setApplicationType(ApplicationType.web)
         .addContacts("imulab@foo.com")
-        .setJwksUri("urn:astrea.jwks.internal:foo")
+        .setJwks("{}")
         .setSectorIdentifierUri("https://foo.imulab.com")
         .setSubjectType(SubjectType.pairwise)
         .setIdTokenSignedResponseAlgorithm(JwtSigningAlgorithm.RS256.name)

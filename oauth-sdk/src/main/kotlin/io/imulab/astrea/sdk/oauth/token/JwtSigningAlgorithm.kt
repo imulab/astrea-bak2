@@ -28,4 +28,12 @@ enum class JwtSigningAlgorithm(
         AlgorithmConstraints.ConstraintType.WHITELIST,
         algorithmIdentifier
     )
+
+    companion object {
+        @JvmStatic
+        fun fromSpec(spec: String): JwtSigningAlgorithm {
+            return values().find { it.spec == spec }
+                ?: throw IllegalStateException("Invalid signing algorithm $spec.")
+        }
+    }
 }

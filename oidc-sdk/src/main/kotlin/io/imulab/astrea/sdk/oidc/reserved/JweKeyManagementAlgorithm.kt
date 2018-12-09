@@ -38,4 +38,12 @@ enum class JweKeyManagementAlgorithm(
         AlgorithmConstraints.ConstraintType.WHITELIST,
         algorithmIdentifier
     )
+
+    companion object {
+        @JvmStatic
+        fun fromSpec(spec: String): JweKeyManagementAlgorithm {
+            return values().find { it.spec == spec }
+                ?: throw IllegalStateException("Invalid key management algorithm $spec.")
+        }
+    }
 }

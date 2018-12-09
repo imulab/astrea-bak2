@@ -63,7 +63,7 @@ object GrpcClientLookupSpec : Spek({
                     assertThat(clientUri).isEqualTo(p.clientUri)
                     assertThat(policyUri).isEqualTo(p.policyUri)
                     assertThat(tosUri).isEqualTo(p.tosUri)
-                    assertThat(jwksUri).isEqualTo(p.jwksUri)
+                    assertThat(jwks).isEqualTo(p.jwks)
                     assertThat(sectorIdentifierUri).isEqualTo(p.sectorIdentifierUri)
                     assertThat(subjectType).isEqualTo(p.subjectType)
                     assertThat(idTokenSignedResponseAlgorithm.name).isEqualTo(p.idTokenSignedResponseAlgorithm)

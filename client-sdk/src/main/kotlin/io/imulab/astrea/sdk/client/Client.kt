@@ -7,9 +7,10 @@ import io.imulab.astrea.sdk.oidc.reserved.JweContentEncodingAlgorithm
 import io.imulab.astrea.sdk.oidc.reserved.JweKeyManagementAlgorithm
 import java.util.*
 
-data class Client(
+open class Client(
     override val id: String = UUID.randomUUID().toString(),
     override val name: String,
+    override val secret: ByteArray = ByteArray(0),
     override val type: String,
     override val redirectUris: Set<String>,
     override val responseTypes: Set<String>,
@@ -22,6 +23,7 @@ data class Client(
     override val policyUri: String,
     override val tosUri: String,
     override val jwksUri: String,
+    override val jwks: String,
     override val sectorIdentifierUri: String,
     override val subjectType: String,
     override val idTokenSignedResponseAlgorithm: JwtSigningAlgorithm,
@@ -45,12 +47,6 @@ data class Client(
         checkEncryptionAlgorithmRelation()
         checkResponseTypeVsIdTokenSigningAlgorithm()
     }
-
-    override val secret: ByteArray
-        get() = ByteArray(0)
-
-    override val jwks: String
-        get() = ""
 
     private fun checkEncryptionAlgorithmRelation() {
         if (requestObjectEncryptionAlgorithm != JweKeyManagementAlgorithm.None)
