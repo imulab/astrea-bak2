@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.client
+package io.imulab.astrea.service.client.grpc
 
 import io.grpc.stub.StreamObserver
 import io.imulab.astrea.sdk.client.ClientLookupGrpc

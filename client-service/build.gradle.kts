@@ -34,6 +34,10 @@ dependencies {
     grpcServerSide()
     springDefaultBundle()
     springGrpc()
+    springMongo()
+
+    jBCrypt()
+    jose4j()
 
     junitPlatform()
     spek2()

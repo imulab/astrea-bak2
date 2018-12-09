@@ -1,2 +1,14 @@
 grpc:
   port: 35027
+server:
+  port: 8081
+
+spring.data.mongodb:
+  host: localhost
+  port: 32768
+  database: client
+
+service:
+  uriBase: https://astrea.imulab.io/client
+  issuerUrl: https://astrea.imulab.io/client
+  accessTokenLifespan: 10m
