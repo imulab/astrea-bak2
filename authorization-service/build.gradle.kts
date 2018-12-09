@@ -32,7 +32,10 @@ dependencies {
     grpc()
     grpcServerSide()
     springDefaultBundle()
+    springWebFlux()
     springGrpc()
+    springSessionRedis()
+    springSessionReactiveRedis()
 
     jBCrypt()
     jose4j()

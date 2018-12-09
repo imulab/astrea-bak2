@@ -1,0 +1,61 @@
+package io.imulab.astrea.service.authorization.authz.consent
+
+import io.imulab.astrea.sdk.oauth.assertType
+import io.imulab.astrea.sdk.oauth.error.AccessDenied
+import io.imulab.astrea.sdk.oauth.reserved.space
+import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
+import io.imulab.astrea.sdk.oidc.request.OidcRequestForm
+import io.imulab.astrea.sdk.oidc.request.OidcSession
+import io.imulab.astrea.sdk.oidc.reserved.ConsentTokenClaim
+import io.imulab.astrea.service.authorization.authz.consent.session.ConsentSession
+import io.imulab.astrea.service.authorization.authz.consent.session.ConsentSessionStrategy
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+
+class ConsentTokenConsentHandler(
+    private val consentTokenStrategy: ConsentTokenStrategy,
+    private val sessionStrategy: ConsentSessionStrategy
+) : ConsentHandler {
+
+    override suspend fun attemptAuthorize(form: OidcRequestForm, request: OidcAuthorizeRequest, rawCall: Any) {
+        if (form.consentToken.isEmpty())
+            return
+
+        checkNotNull(request.session.assertType<OidcSession>().originalRequestTime) {
+            "Original request should have been revived at this point."
+        }
+
+        val consentClaims = try {
+            consentTokenStrategy.decodeConsentTokenResponse(form.consentToken)
+        } catch (e: Exception) {
+            throw AccessDenied.byServer("Consent token is invalid.")
+        }
+
+        if (consentClaims.hasClaim(ConsentTokenClaim.scope))
+            consentClaims.getStringClaimValue(ConsentTokenClaim.scope)
+                .split(space)
+                .filter { it.isNotBlank() }
+                .forEach { request.grantScope(it) }
+
+        // TODO check what's the map structure, and then transfer them to session.idTokenClaims
+
+        if (consentClaims.hasClaim(ConsentTokenClaim.remember)) {
+            val rememberForSeconds = consentClaims.getStringClaimValue(ConsentTokenClaim.remember).toLongOrNull() ?: 0
+            if (rememberForSeconds > 0) {
+                withContext(Dispatchers.IO) {
+                    launch {
+                        sessionStrategy.writeConsent(rawCall, ConsentSession(
+                            subject = request.session.subject,
+                            expiry = LocalDateTime.now().plusSeconds(rememberForSeconds),
+                            grantedScopes = request.session.grantedScopes,
+                            claims = request.session.assertType<OidcSession>().idTokenClaims.toMap()
+                        )
+                        )
+                    }
+                }
+            }
+        }
+    }
+}

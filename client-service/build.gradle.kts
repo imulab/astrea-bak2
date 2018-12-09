@@ -33,6 +33,7 @@ dependencies {
     grpc()
     grpcServerSide()
     springDefaultBundle()
+    springWebMvc()
     springGrpc()
     springMongo()
 

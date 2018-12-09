@@ -1,0 +1,80 @@
+spring.profiles.active: memory
+
+nix:
+  endpoints:
+    issuer: http://localhost:8080
+    jwks: http://localhost:8080/nix.jwks
+    authorize: http://localhost:8080/oauth/authorize
+    token: http://localhost:8080/oauth/token
+    userinfo: http://localhost:8080/userinfo
+    registration: http://localhost:8080/client
+    login: http://localhost:8081/login
+    consent: http://localhost:8081/consent
+  oauth:
+    stateEntropy: 8
+    scopes:
+      - openid
+    responseTypes:
+      - code
+      - token
+      - id_token
+    grantTypes:
+      - authorization_code
+      - implicit
+      - client_credentials
+      - refresh_token
+  oidc:
+    nonceEntropy: 8
+    subjectTypes:
+      - public
+      - pairwise
+    responseModes:
+      - query
+      - fragment
+    display:
+      - page
+  security:
+    tokenEndpointAuth:
+      default: client_secret_basic
+      supported:
+        - client_secret_basic
+        - client_secret_post
+        - client_secret_jwt
+        - private_key_jwt
+      signatureAlgorithms:
+        - RS256
+    subjectSalt: "c2693a2e26a0438a965363d3ba5d12ec"
+    autoLogin: true
+    autoConsent: true
+  authorizeCode:
+    key: "eeb9674cc4d54901bdcf862dd7d46ec87492a99a1ca44d2e9832e841434371f9"
+    expiration: 10m
+  accessToken:
+    expiration: 1h
+  refreshToken:
+    key: "c5fd58c3a56443308adf78e24ff02ad6bf47dc96969546fa8ec3fd4345c088a4"
+    expiration: 14d
+  loginToken:
+    expiration: 10m
+  consentToken:
+    expiration: 10m
+  idToken:
+    expiration: 1h
+    signingAlgorithms:
+      - RS256
+  userInfo:
+    signingAlgorithms:
+      - RS256
+  requestObject:
+    signingAlgorithms:
+      - RS256
+      - none
+    supportRequestParameter: true
+    supportRequestUriParameter: true
+    requireRequestUriRegistration: true
+  claims:
+    supported: true
+    values:
+      - auth_time
+    types:
+      - normal
