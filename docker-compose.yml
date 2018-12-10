@@ -1,0 +1,29 @@
+version: "3"
+
+# =====================================
+# docker file for local run or showcase
+# make sure to run first:
+#   ./gradlew clean bootJar
+# then:
+#   docker-compose up
+# =====================================
+
+services:
+  mongodb:
+    image: "bitnami/mongodb:latest"
+    ports:
+      - "32768:27017"
+    volumes:
+      - "astrea-local-mongodb-data:/bitnami"
+  authorization-service:
+    build: ./authorization-service
+    ports:
+      - "8180:8080"
+  client-service:
+    build: ./client-service
+    ports:
+      - "8280:8080"
+      - "35027:35027"
+
+volumes:
+  astrea-local-mongodb-data:
