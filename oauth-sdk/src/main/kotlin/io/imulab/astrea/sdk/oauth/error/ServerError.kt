@@ -3,7 +3,7 @@ package io.imulab.astrea.sdk.oauth.error
 // server_error
 object ServerError {
     const val code = "server_error"
-    private const val status = 500
+    const val status = 500
 
     val wrapped: (Throwable) -> OAuthException =
         { t -> OAuthException(status, code, t.message ?: t.javaClass.name) }

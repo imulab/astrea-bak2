@@ -21,8 +21,10 @@ version = "0.0.1"
 dependencies {
     kotlin(loadCoroutine = true)
     grpc()
-    projects(loadOAuthSdk = true, loadOidcSdk = true)
     test(loadSpek2 = true, loadMockitoKotlin = true, loadAssertj = true)
+
+    implementation(project(":oauth-sdk"))
+    implementation(project(":oidc-sdk"))
 }
 
 protobuf.protobuf.run {

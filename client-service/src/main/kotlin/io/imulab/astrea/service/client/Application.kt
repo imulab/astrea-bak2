@@ -76,6 +76,6 @@ class ServiceContext: OAuthContext {
     override val stateEntropy: Int = 0
 }
 
-fun main(args: Array<String>) {
-    runApplication<Application>(*args)
-}
+//fun main(args: Array<String>) {
+//    runApplication<Application>(*args)
+//}

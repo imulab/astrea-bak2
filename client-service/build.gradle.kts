@@ -25,11 +25,9 @@ dependencyManagement {
 }
 
 dependencies {
-    projects(
-        loadOAuthSdk = true,
-        loadOidcSdk = true,
-        loadClientSdk = true
-    )
+    implementation(project(":oauth-sdk"))
+    implementation(project(":oidc-sdk"))
+    implementation(project(":client-sdk"))
 
     kotlin(
         loadCoroutine = true
@@ -39,6 +37,7 @@ dependencies {
         loadWeb = true,
         loadWebClient = true,
         loadWebApiContract = true,
+        loadCoroutineSupport = true,
         loadConfig = true,
         loadMongoClient = true,
         loadHealthCheck = true

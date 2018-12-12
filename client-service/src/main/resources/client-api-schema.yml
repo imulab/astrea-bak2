@@ -11,18 +11,8 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.1.0
 
-servers:
-- url: http://{host}:{port}/{basePath}
-  variables:
-    host:
-      default: client-service
-    port:
-      default: "8080"
-    basePath:
-      default: client
-
 paths:
-  /:
+  /client:
     post:
       summary: "Creating an Open ID Connect 1.0 client."
       operationId: client.create
@@ -34,17 +24,17 @@ paths:
               $ref: "#/components/schemas/NewClientRequest"
       responses:
         201:
+          description: "Successfully created a new client"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/NewClientResponse"
         default:
+          description: "Error response"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /{clientId}:
-    foo: bar
 
 components:
   schemas:
@@ -80,8 +70,7 @@ components:
             - code
             - token
             - id_token
-          default:
-          - code
+            default: code
         grant_types:
           type: array
           uniqueItems: true
@@ -92,8 +81,7 @@ components:
             - implicit
             - client_credentials
             - refresh_token
-          default:
-          - authorization_code
+            default: authorization_code
         application_type:
           type: string
           enum:

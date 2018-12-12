@@ -6,8 +6,8 @@ package io.imulab.astrea.sdk.oauth.error
 // invalid parameter value, includes a parameter more than
 // once, or is otherwise malformed.
 object InvalidRequest {
-    private const val code = "invalid_request"
-    private const val status = 400
+    const val code = "invalid_request"
+    const val status = 400
 
     val required: (String) -> Throwable =
         { param -> OAuthException(status, code, "Parameter $param is required.") }
