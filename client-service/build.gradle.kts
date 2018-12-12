@@ -25,23 +25,41 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation(project(":oauth-sdk"))
-    implementation(project(":oidc-sdk"))
-    implementation(project(":client-sdk"))
+    projects(
+        loadOAuthSdk = true,
+        loadOidcSdk = true,
+        loadClientSdk = true
+    )
 
-    kotlinAndCoroutine()
-    grpc()
-    grpcServerSide()
-    springDefaultBundle()
-    springWebMvc()
-    springGrpc()
-    springMongo()
+    kotlin(
+        loadCoroutine = true
+    )
+
+    vertx(
+        loadWeb = true,
+        loadWebClient = true,
+        loadWebApiContract = true,
+        loadConfig = true,
+        loadMongoClient = true,
+        loadHealthCheck = true
+    )
+
+    grpc(
+        loadNetty = true
+    )
 
     jBCrypt()
     jose4j()
 
-    junitPlatform()
-    spek2()
-    mockito()
-    assertj()
+    test(
+        loadSpek2 = true,
+        loadMockitoKotlin = true,
+        loadAssertj = true
+    )
+
+    // throw away
+    springDefaultBundle()
+    springWebMvc()
+    springGrpc()
+    springMongo()
 }

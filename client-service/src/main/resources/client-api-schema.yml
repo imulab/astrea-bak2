@@ -353,3 +353,12 @@ components:
           type: integer
           format: int64
           minimum: 0
+    ErrorResponse:
+      required:
+      - error
+      - error_description
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string

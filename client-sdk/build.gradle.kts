@@ -1,7 +1,4 @@
-import build.junitPlatform
-import build.kotlinAndCoroutine
-import build.spek2
-import build.grpc
+import build.*
 import com.google.protobuf.gradle.*
 import groovy.lang.GroovyObject
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -22,15 +19,10 @@ group = "io.imulab.astrea.sdk"
 version = "0.0.1"
 
 dependencies {
-    kotlinAndCoroutine()
+    kotlin(loadCoroutine = true)
     grpc()
-    implementation(project(":oauth-sdk"))
-    implementation(project(":oidc-sdk"))
-
-    junitPlatform()
-    spek2()
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
-    testImplementation("org.assertj:assertj-core:3.11.1")
+    projects(loadOAuthSdk = true, loadOidcSdk = true)
+    test(loadSpek2 = true, loadMockitoKotlin = true, loadAssertj = true)
 }
 
 protobuf.protobuf.run {
