@@ -41,7 +41,8 @@ data class Client(
     override var requireAuthTime: Boolean = false,
     override var defaultAcrValues: MutableList<String> = mutableListOf(),
     override var initiateLoginUri: String = "",
-    override var requestUris: MutableList<String> = mutableListOf()
+    override var requestUris: MutableList<String> = mutableListOf(),
+    var requests: MutableMap<String, String> = mutableMapOf()
 ) : OidcClient {
 
     override val name: String

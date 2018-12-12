@@ -2,10 +2,7 @@ package io.imulab.astrea.service.client.verticle
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.imulab.astrea.service.client.handlers.addSuspendHandlerByOperationId
-import io.imulab.astrea.service.client.handlers.clientModule
-import io.imulab.astrea.service.client.handlers.createClient
-import io.imulab.astrea.service.client.handlers.errorHandler
+import io.imulab.astrea.service.client.handlers.*
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.core.json.Json
 import io.vertx.ext.web.api.contract.RouterFactoryOptions
@@ -35,8 +32,11 @@ class ClientApiVerticle : CoroutineVerticle() {
                 isRequireSecurityHandlers = false
                 isMountValidationFailureHandler = false
             }
+
             addFailureHandlerByOperationId("client.create", errorHandler)
-            addSuspendHandlerByOperationId("client.create", ::createClient)
+
+            val createClientHandler = CreateClientHandler(vertx)
+            addSuspendHandlerByOperationId("client.create", createClientHandler::createClient)
         }.router
 
         vertx.createHttpServer(HttpServerOptions().apply {
