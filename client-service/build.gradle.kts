@@ -29,9 +29,8 @@ dependencies {
     implementation(project(":oidc-sdk"))
     implementation(project(":client-sdk"))
 
-    kotlin(
-        loadCoroutine = true
-    )
+    kotlin(loadCoroutine = true)
+    kodein(loadErased = false)
 
     vertx(
         loadWeb = true,
@@ -43,9 +42,7 @@ dependencies {
         loadHealthCheck = true
     )
 
-    grpc(
-        loadNetty = true
-    )
+    grpc(loadNetty = true)
 
     jBCrypt()
     jose4j()

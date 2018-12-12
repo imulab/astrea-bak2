@@ -1,9 +1,10 @@
 package io.imulab.astrea.service.client.handlers
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.imulab.astrea.sdk.client.Client
 import io.imulab.astrea.service.client.*
-import io.vertx.core.Vertx
 import io.vertx.core.json.Json
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.mongo.MongoClient
@@ -14,17 +15,14 @@ import io.vertx.kotlin.ext.mongo.insertAwait
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class CreateClientHandler(vertx: Vertx) {
-
-    private val mongoClient: MongoClient = MongoClient.createNonShared(vertx, json {
-        obj(
-            "host" to "localhost",
-            "port" to 32768
-        )
-    })
+class CreateClientHandler(
+    private val mongoClient: MongoClient,
+    private val apiMapper: ObjectMapper,
+    private val dbMapper: ObjectMapper
+) {
 
     suspend fun createClient(rc: RoutingContext) {
-        val client = Json.decodeValue(rc.bodyAsString, Client::class.java)
+        val client = apiMapper.readValue<Client>(rc.bodyAsString)
 
         var plainSecret: String = ""
         client.run {
@@ -37,7 +35,11 @@ class CreateClientHandler(vertx: Vertx) {
             requestResolution(rc.vertx())
         }
 
-        mongoClient.insertAwait("client", JsonObject.mapFrom(client))
+        try {
+            mongoClient.insertAwait("client", JsonObject(dbMapper.convertValue<Map<String, Any>>(client)))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         rc.response().applicationJson {
             json {

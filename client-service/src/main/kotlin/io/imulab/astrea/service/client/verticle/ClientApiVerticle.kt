@@ -13,7 +13,7 @@ import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.ext.web.api.contract.openapi3.OpenAPI3RouterFactory
 import kotlinx.coroutines.cancel
 
-class ClientApiVerticle : CoroutineVerticle() {
+class ClientApiVerticle(private val createClientHandler: CreateClientHandler) : CoroutineVerticle() {
 
     override suspend fun start() {
         Json.mapper.apply {
@@ -34,8 +34,6 @@ class ClientApiVerticle : CoroutineVerticle() {
             }
 
             addFailureHandlerByOperationId("client.create", errorHandler)
-
-            val createClientHandler = CreateClientHandler(vertx)
             addSuspendHandlerByOperationId("client.create", createClientHandler::createClient)
         }.router
 

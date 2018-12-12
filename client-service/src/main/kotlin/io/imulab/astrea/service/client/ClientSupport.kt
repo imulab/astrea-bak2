@@ -110,3 +110,4 @@ suspend fun Client.requestResolution(vertx: Vertx) {
         }.awaitAll()
     }
 }
+
