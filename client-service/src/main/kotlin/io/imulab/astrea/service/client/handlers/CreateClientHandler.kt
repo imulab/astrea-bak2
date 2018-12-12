@@ -1,9 +1,12 @@
 package io.imulab.astrea.service.client.handlers
 
+import io.imulab.astrea.sdk.client.Client
+import io.vertx.core.json.Json
 import io.vertx.ext.web.RoutingContext
-import kotlinx.coroutines.delay
 
 suspend fun createClient(rc: RoutingContext) {
-    delay(200)
-    rc.response().end("hello world")
+    val client = Json.decodeValue(rc.bodyAsString, Client::class.java)
+    println(client)
+    rc.response().end("ok")
+
 }

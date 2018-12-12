@@ -1,89 +1,86 @@
 package io.imulab.astrea.sdk.client
 
-import io.imulab.astrea.sdk.oauth.reserved.ResponseType
+import io.imulab.astrea.sdk.oauth.reserved.AuthenticationMethod
 import io.imulab.astrea.sdk.oauth.token.JwtSigningAlgorithm
 import io.imulab.astrea.sdk.oidc.client.OidcClient
 import io.imulab.astrea.sdk.oidc.reserved.JweContentEncodingAlgorithm
 import io.imulab.astrea.sdk.oidc.reserved.JweKeyManagementAlgorithm
 import java.util.*
+import kotlin.collections.LinkedHashSet
 
-open class Client(
-    override val id: String = UUID.randomUUID().toString(),
-    override val name: String,
-    override val secret: ByteArray = ByteArray(0),
-    override val type: String,
-    override val redirectUris: Set<String>,
-    override val responseTypes: Set<String>,
-    override val grantTypes: Set<String>,
-    override val scopes: Set<String>,
-    override val applicationType: String,
-    override val contacts: LinkedHashSet<String>,
-    override val logoUri: String,
-    override val clientUri: String,
-    override val policyUri: String,
-    override val tosUri: String,
-    override val jwksUri: String,
-    override val jwks: String,
-    override val sectorIdentifierUri: String,
-    override val subjectType: String,
-    override val idTokenSignedResponseAlgorithm: JwtSigningAlgorithm,
-    override val idTokenEncryptedResponseAlgorithm: JweKeyManagementAlgorithm,
-    override val idTokenEncryptedResponseEncoding: JweContentEncodingAlgorithm,
-    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm,
-    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm,
-    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm,
-    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm,
-    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm,
-    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm,
-    override val tokenEndpointAuthenticationMethod: String,
-    override val defaultMaxAge: Long,
-    override val requireAuthTime: Boolean,
-    override val defaultAcrValues: List<String>,
-    override val initiateLoginUri: String,
-    override val requestUris: List<String>
+data class Client(
+    override var id: String = UUID.randomUUID().toString(),
+    var clientName: String = "",
+    var clientSecret: String = "",
+    var clientType: String = "",
+    override var redirectUris: MutableSet<String> = mutableSetOf(),
+    override var responseTypes: MutableSet<String> = mutableSetOf(),
+    override var grantTypes: MutableSet<String> = mutableSetOf(),
+    override var scopes: MutableSet<String> = mutableSetOf(),
+    override var applicationType: String = "",
+    override var contacts: LinkedHashSet<String> = LinkedHashSet(),
+    override var logoUri: String = "",
+    override var clientUri: String = "",
+    override var policyUri: String = "",
+    override var tosUri: String = "",
+    override var jwksUri: String = "",
+    override var jwks: String = "",
+    override var sectorIdentifierUri: String = "",
+    override var subjectType: String = "",
+    var idTokenSignedResponseAlg: String = JwtSigningAlgorithm.RS256.spec,
+    var idTokenEncryptedResponseAlg: String = JweKeyManagementAlgorithm.None.spec,
+    var idTokenEncryptedResponseEnc: String = JweContentEncodingAlgorithm.None.spec,
+    var requestObjectSigningAlg: String = JwtSigningAlgorithm.None.spec,
+    var requestObjectEncryptionAlg: String = JweKeyManagementAlgorithm.None.spec,
+    var requestObjectEncryptionEnc: String = JweContentEncodingAlgorithm.None.spec,
+    var userinfoSignedResponseAlg: String = JwtSigningAlgorithm.None.spec,
+    var userinfoEncryptedResponseAlg: String = JweKeyManagementAlgorithm.None.spec,
+    var userinfoEncryptedResponseEnc: String = JweContentEncodingAlgorithm.None.spec,
+    var tokenEndpointAuthMethod: String = AuthenticationMethod.clientSecretBasic,
+    override var defaultMaxAge: Long = 0,
+    override var requireAuthTime: Boolean = false,
+    override var defaultAcrValues: MutableList<String> = mutableListOf(),
+    override var initiateLoginUri: String = "",
+    override var requestUris: MutableList<String> = mutableListOf()
 ) : OidcClient {
 
-    init {
-        checkEncryptionAlgorithmRelation()
-        checkResponseTypeVsIdTokenSigningAlgorithm()
-    }
-
-    private fun checkEncryptionAlgorithmRelation() {
-        if (requestObjectEncryptionAlgorithm != JweKeyManagementAlgorithm.None)
-            check(requestObjectEncryptionEncoding != JweContentEncodingAlgorithm.None) {
-                "request_object_encryption_alg and request_object_encryption_enc must both be set."
-            }
-        if (userInfoEncryptedResponseAlgorithm != JweKeyManagementAlgorithm.None)
-            check(userInfoEncryptedResponseEncoding != JweContentEncodingAlgorithm.None) {
-                "userinfo_encrypted_response_alg and userinfo_encrypted_response_enc must both be set."
-            }
-        if (idTokenEncryptedResponseAlgorithm != JweKeyManagementAlgorithm.None)
-            check(idTokenEncryptedResponseEncoding != JweContentEncodingAlgorithm.None) {
-                "id_token_encrypted_response_alg and id_token_encrypted_response_enc must both be set."
-            }
-    }
-
-    private fun checkResponseTypeVsIdTokenSigningAlgorithm() {
-        if (idTokenSignedResponseAlgorithm == JwtSigningAlgorithm.None)
-            check(!responseTypes.contains(ResponseType.code)) {
-                """
-                    Client selected response_type=code which is bound to use token endpoint for token issuance.
-                    However, if client needs to use token endpoint, id_token_signed_response_alg cannot be none.
-                """.trimIndent()
-            }
-    }
+    override val name: String
+        get() = clientName
+    override val secret: ByteArray
+        get() = clientSecret.toByteArray()
+    override val type: String
+        get() = clientType
+    override val idTokenSignedResponseAlgorithm: JwtSigningAlgorithm
+        get() = JwtSigningAlgorithm.fromSpec(idTokenSignedResponseAlg)
+    override val idTokenEncryptedResponseAlgorithm: JweKeyManagementAlgorithm
+        get() = JweKeyManagementAlgorithm.fromSpec(idTokenEncryptedResponseAlg)
+    override val idTokenEncryptedResponseEncoding: JweContentEncodingAlgorithm
+        get() = JweContentEncodingAlgorithm.fromSpec(idTokenEncryptedResponseEnc)
+    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm
+        get() = JwtSigningAlgorithm.fromSpec(requestObjectSigningAlg)
+    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm
+        get() = JweKeyManagementAlgorithm.fromSpec(requestObjectEncryptionAlg)
+    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm
+        get() = JweContentEncodingAlgorithm.fromSpec(requestObjectEncryptionEnc)
+    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm
+        get() = JwtSigningAlgorithm.fromSpec(userinfoSignedResponseAlg)
+    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm
+        get() = JweKeyManagementAlgorithm.fromSpec(userinfoEncryptedResponseAlg)
+    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm
+        get() = JweContentEncodingAlgorithm.fromSpec(userinfoEncryptedResponseEnc)
+    override val tokenEndpointAuthenticationMethod: String
+        get() = tokenEndpointAuthMethod
 
     companion object {
-
         fun fromClientLookupResponse(response: ClientLookupResponse): Client {
             return Client(
                 id = response.id,
-                name = response.name,
-                type = response.type,
-                redirectUris = response.redirectUrisList.toSet(),
-                responseTypes = response.responseTypesList.toSet(),
-                grantTypes = response.grantTypesList.toSet(),
-                scopes = response.scopesList.toSet(),
+                clientName = response.name,
+                clientType = response.type,
+                redirectUris = response.redirectUrisList.toMutableSet(),
+                responseTypes = response.responseTypesList.toMutableSet(),
+                grantTypes = response.grantTypesList.toMutableSet(),
+                scopes = response.scopesList.toMutableSet(),
                 applicationType = response.applicationType,
                 contacts = LinkedHashSet(response.contactsList),
                 logoUri = response.logoUri,
@@ -94,16 +91,16 @@ open class Client(
                 jwks = response.jwks,
                 sectorIdentifierUri = response.sectorIdentifierUri,
                 subjectType = response.subjectType,
-                idTokenSignedResponseAlgorithm = JwtSigningAlgorithm.valueOf(response.idTokenSignedResponseAlgorithm),
-                idTokenEncryptedResponseAlgorithm = JweKeyManagementAlgorithm.valueOf(response.idTokenEncryptedResponseAlgorithm),
-                idTokenEncryptedResponseEncoding = JweContentEncodingAlgorithm.valueOf(response.idTokenEncryptedResponseEncoding),
-                requestObjectSigningAlgorithm = JwtSigningAlgorithm.valueOf(response.requestObjectSigningAlgorithm),
-                requestObjectEncryptionAlgorithm = JweKeyManagementAlgorithm.valueOf(response.requestObjectEncryptionAlgorithm),
-                requestObjectEncryptionEncoding = JweContentEncodingAlgorithm.valueOf(response.requestObjectEncryptionEncoding),
-                userInfoSignedResponseAlgorithm = JwtSigningAlgorithm.valueOf(response.userInfoSignedResponseAlgorithm),
-                userInfoEncryptedResponseAlgorithm = JweKeyManagementAlgorithm.valueOf(response.userInfoEncryptedResponseAlgorithm),
-                userInfoEncryptedResponseEncoding = JweContentEncodingAlgorithm.valueOf(response.userInfoEncryptedResponseEncoding),
-                tokenEndpointAuthenticationMethod = response.tokenEndpointAuthenticationMethod,
+                idTokenSignedResponseAlg = JwtSigningAlgorithm.valueOf(response.idTokenSignedResponseAlgorithm).spec,
+                idTokenEncryptedResponseAlg = JweKeyManagementAlgorithm.valueOf(response.idTokenEncryptedResponseAlgorithm).spec,
+                idTokenEncryptedResponseEnc = JweContentEncodingAlgorithm.valueOf(response.idTokenEncryptedResponseEncoding).spec,
+                requestObjectSigningAlg = JwtSigningAlgorithm.valueOf(response.requestObjectSigningAlgorithm).spec,
+                requestObjectEncryptionAlg = JweKeyManagementAlgorithm.valueOf(response.requestObjectEncryptionAlgorithm).spec,
+                requestObjectEncryptionEnc = JweContentEncodingAlgorithm.valueOf(response.requestObjectEncryptionEncoding).spec,
+                userinfoSignedResponseAlg = JwtSigningAlgorithm.valueOf(response.userInfoSignedResponseAlgorithm).spec,
+                userinfoEncryptedResponseAlg = JweKeyManagementAlgorithm.valueOf(response.userInfoEncryptedResponseAlgorithm).spec,
+                userinfoEncryptedResponseEnc = JweContentEncodingAlgorithm.valueOf(response.userInfoEncryptedResponseEncoding).spec,
+                tokenEndpointAuthMethod = response.tokenEndpointAuthenticationMethod,
                 defaultMaxAge = response.defaultMaxAge,
                 requireAuthTime = response.requireAuthTime,
                 defaultAcrValues = response.defaultAcrValuesList,

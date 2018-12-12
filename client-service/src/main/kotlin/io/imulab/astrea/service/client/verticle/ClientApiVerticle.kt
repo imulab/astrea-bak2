@@ -1,6 +1,9 @@
 package io.imulab.astrea.service.client.verticle
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.imulab.astrea.service.client.handlers.addSuspendHandlerByOperationId
+import io.imulab.astrea.service.client.handlers.clientModule
 import io.imulab.astrea.service.client.handlers.createClient
 import io.imulab.astrea.service.client.handlers.errorHandler
 import io.vertx.core.http.HttpServerOptions
@@ -16,6 +19,17 @@ import kotlinx.coroutines.cancel
 class ClientApiVerticle : CoroutineVerticle() {
 
     override suspend fun start() {
+        Json.mapper.apply {
+            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
+            registerModule(clientModule)
+            registerModule(KotlinModule())
+        }
+        Json.prettyMapper.apply {
+            propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
+            registerModule(clientModule)
+            registerModule(KotlinModule())
+        }
+
         val router = OpenAPI3RouterFactory.createAwait(vertx, "client-api-schema.yml").apply {
             options = RouterFactoryOptions().apply {
                 isRequireSecurityHandlers = false
