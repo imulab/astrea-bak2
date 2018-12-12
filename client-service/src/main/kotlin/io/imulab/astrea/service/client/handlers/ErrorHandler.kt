@@ -3,9 +3,8 @@ package io.imulab.astrea.service.client.handlers
 import io.imulab.astrea.sdk.oauth.error.InvalidRequest
 import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.error.ServerError
+import io.imulab.astrea.service.client.support.applicationJson
 import io.vertx.core.Handler
-import io.vertx.core.http.HttpServerResponse
-import io.vertx.core.json.Json
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.api.validation.ValidationException
 import io.vertx.kotlin.core.json.json

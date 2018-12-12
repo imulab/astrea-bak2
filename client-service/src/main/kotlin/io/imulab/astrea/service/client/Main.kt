@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.imulab.astrea.sdk.client.Client
 import io.imulab.astrea.service.client.handlers.CreateClientHandler
-import io.imulab.astrea.service.client.handlers.clientModule
+import io.imulab.astrea.service.client.support.clientModule
 import io.imulab.astrea.service.client.support.ClientDbJsonSupport
 import io.imulab.astrea.service.client.verticle.ClientApiVerticle
 import io.vertx.core.Vertx

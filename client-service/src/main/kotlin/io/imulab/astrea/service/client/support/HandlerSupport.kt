@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.client.handlers
+package io.imulab.astrea.service.client.support
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
@@ -88,13 +88,25 @@ object JweContentEncodingAlgorithmDeserializer : JsonDeserializer<JweContentEnco
 }
 
 val clientModule = SimpleModule("client").apply {
-    addSerializer(JwtSigningAlgorithm::class.java, JwtSigningAlgorithmSerializer)
-    addSerializer(JweKeyManagementAlgorithm::class.java, JweKeyManagementAlgorithmSerializer)
-    addSerializer(JweContentEncodingAlgorithm::class.java, JweContentEncodingAlgorithmSerializer)
+    addSerializer(JwtSigningAlgorithm::class.java,
+        JwtSigningAlgorithmSerializer
+    )
+    addSerializer(JweKeyManagementAlgorithm::class.java,
+        JweKeyManagementAlgorithmSerializer
+    )
+    addSerializer(JweContentEncodingAlgorithm::class.java,
+        JweContentEncodingAlgorithmSerializer
+    )
 
-    addDeserializer(JwtSigningAlgorithm::class.java, JwtSigningAlgorithmDeserializer)
-    addDeserializer(JweKeyManagementAlgorithm::class.java, JweKeyManagementAlgorithmDeserializer)
-    addDeserializer(JweContentEncodingAlgorithm::class.java, JweContentEncodingAlgorithmDeserializer)
+    addDeserializer(JwtSigningAlgorithm::class.java,
+        JwtSigningAlgorithmDeserializer
+    )
+    addDeserializer(JweKeyManagementAlgorithm::class.java,
+        JweKeyManagementAlgorithmDeserializer
+    )
+    addDeserializer(JweContentEncodingAlgorithm::class.java,
+        JweContentEncodingAlgorithmDeserializer
+    )
 }
 
 val sha256: () -> MessageDigest = { MessageDigest.getInstance("SHA-256") }

@@ -52,10 +52,4 @@ dependencies {
         loadMockitoKotlin = true,
         loadAssertj = true
     )
-
-    // throw away
-    springDefaultBundle()
-    springWebMvc()
-    springGrpc()
-    springMongo()
 }

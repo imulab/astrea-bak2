@@ -2,6 +2,7 @@ package io.imulab.astrea.service.client.common
 
 import io.imulab.astrea.service.client.`when`
 import io.imulab.astrea.service.client.given
+import io.imulab.astrea.service.client.support.PasswordGenerator
 import io.imulab.astrea.service.client.then
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek

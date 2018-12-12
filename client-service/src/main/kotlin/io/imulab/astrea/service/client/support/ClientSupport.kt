@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.client
+package io.imulab.astrea.service.client.support
 
 import io.imulab.astrea.sdk.client.Client
 import io.imulab.astrea.sdk.oauth.error.InvalidRequest
@@ -6,8 +6,6 @@ import io.imulab.astrea.sdk.oauth.reserved.GrantType
 import io.imulab.astrea.sdk.oauth.reserved.ResponseType
 import io.imulab.astrea.sdk.oidc.reserved.JweContentEncodingAlgorithm
 import io.imulab.astrea.sdk.oidc.reserved.JweKeyManagementAlgorithm
-import io.imulab.astrea.service.client.handlers.sha256
-import io.imulab.astrea.service.client.handlers.webClient
 import io.vertx.core.Vertx
 import io.vertx.kotlin.coroutines.dispatcher
 import io.vertx.kotlin.ext.web.client.sendAwait
@@ -19,6 +17,7 @@ import org.jose4j.jwk.JsonWebKeySet
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
 fun Client.generateId() {
     id = UUID.randomUUID().toString().replace("-", "").toLowerCase()
@@ -111,3 +110,19 @@ suspend fun Client.requestResolution(vertx: Vertx) {
     }
 }
 
+object PasswordGenerator {
+
+    private val alphaLower: CharArray = "abcdefghijklmnopqrstuvwxyz".toCharArray()
+    private val alphaUpper: CharArray = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()
+    private val numeric: CharArray = "1234567890".toCharArray()
+
+    fun generateAlphaNumericPassword(length: Int): String {
+        val universe = alphaLower.plus(alphaUpper).plus(numeric)
+        val random = ThreadLocalRandom.current()
+        val pwd = CharArray(length)
+        repeat(length) { i ->
+            pwd[i] = universe[random.nextInt(universe.size)]
+        }
+        return String(pwd)
+    }
+}
