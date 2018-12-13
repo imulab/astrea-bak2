@@ -34,10 +34,11 @@ data class Discovery(
     override var requestParameterSupported: Boolean = false,
     override var requestUriParameterSupported: Boolean = false,
     override var requireRequestUriRegistration: Boolean = false,
-    override var opPolicyUri: String = ""
+    override var opPolicyUri: String = "",
+    var opTosUri: String = ""
 ) : io.imulab.astrea.sdk.oidc.discovery.Discovery {
     companion object {
-        fun fromDiscoveryResponse(response: DiscoveryResponse) : Discovery {
+        fun fromDiscoveryResponse(response: DiscoveryResponse): Discovery {
             return Discovery(
                 issuer = response.issuer,
                 authorizationEndpoint = response.authorizationEndpoint,

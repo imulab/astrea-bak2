@@ -11,8 +11,8 @@ version = "0.1.0"
 
 dependencies {
     kotlinAndCoroutine()
-    implementation("org.mindrot:jbcrypt:${Version.jBCrypt}")
-    implementation("org.bitbucket.b_c:jose4j:${Version.jose4j}")
+    api("org.mindrot:jbcrypt:${Version.jBCrypt}")
+    api("org.bitbucket.b_c:jose4j:${Version.jose4j}")
 
     junitPlatform()
     spek2()
