@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.imulab.astrea.sdk.client.Client
+import io.imulab.astrea.sdk.oauth.client.pwd.PasswordEncoder
+import io.imulab.astrea.sdk.oauth.reserved.AuthenticationMethod
 import io.imulab.astrea.service.client.support.*
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.mongo.MongoClient
@@ -17,13 +19,12 @@ import java.time.ZoneOffset
 class CreateClientHandler(
     private val mongoClient: MongoClient,
     private val apiMapper: ObjectMapper,
-    private val dbMapper: ObjectMapper
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     suspend fun createClient(rc: RoutingContext) {
         val client = apiMapper.readValue<Client>(rc.bodyAsString)
 
-        var plainSecret: String = ""
         client.run {
             generateId()
             nameOrDefault()
@@ -33,23 +34,35 @@ class CreateClientHandler(
             encryptionAlgorithmParity()
             requestResolution(rc.vertx())
         }
+        val plainSecret = client.maybeSecret()
 
-        try {
-            mongoClient.insertAwait("client", JsonObject(dbMapper.convertValue<Map<String, Any>>(client)))
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        mongoClient.insertAwait("client", ClientDbJsonSupport.toJsonObject(client))
 
-        rc.response().applicationJson {
+        rc.response().setStatusCode(201).applicationJson {
             json {
-                obj(
+                val fields = mutableListOf(
                     "client_id" to client.id,
-                    "client_secret" to plainSecret,
                     "registration_client_uri" to "/client/${client.id}",
                     "client_id_issued_at" to LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
                     "client_secret_expires_at" to 0
                 )
+                if (plainSecret.isNotEmpty())
+                    fields.add("client_secret" to plainSecret)
+                obj(*fields.toTypedArray())
             }
+        }
+    }
+
+    private fun Client.maybeSecret(): String {
+        return when (tokenEndpointAuthMethod) {
+            AuthenticationMethod.clientSecretBasic,
+            AuthenticationMethod.clientSecretPost,
+            io.imulab.astrea.sdk.oidc.reserved.AuthenticationMethod.clientSecretJwt -> {
+                val plainSecret = PasswordGenerator.generateAlphaNumericPassword(32)
+                clientSecret = passwordEncoder.encode(plainSecret)
+                plainSecret
+            }
+            else -> ""
         }
     }
 }

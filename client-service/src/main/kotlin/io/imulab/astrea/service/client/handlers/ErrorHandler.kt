@@ -17,7 +17,7 @@ val errorHandler: Handler<RoutingContext> = Handler { rc ->
             rc.response().apply {
                 statusCode = ex.status
                 ex.headers.forEach { t, u -> putHeader(t, u) }
-                applicationJson(ex.data)
+                applicationJson(json = ex.data)
             }
         }
         is ValidationException -> {

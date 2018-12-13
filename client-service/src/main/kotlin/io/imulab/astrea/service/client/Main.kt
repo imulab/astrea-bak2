@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.imulab.astrea.sdk.client.Client
+import io.imulab.astrea.sdk.oauth.client.pwd.BCryptPasswordEncoder
 import io.imulab.astrea.service.client.handlers.CreateClientHandler
-import io.imulab.astrea.service.client.support.clientModule
-import io.imulab.astrea.service.client.support.ClientDbJsonSupport
+import io.imulab.astrea.service.client.handlers.ReadClientHandler
+import io.imulab.astrea.service.client.support.ClientApiJsonSupport
 import io.imulab.astrea.service.client.verticle.ClientApiVerticle
 import io.vertx.core.Vertx
 import io.vertx.ext.mongo.MongoClient
@@ -35,19 +36,12 @@ suspend fun main() {
 
 fun wireComponents(vertx: Vertx): Kodein {
     val jsonModule = Kodein.Module("json") {
-        bind<ObjectMapper>(tag = "apiMapper") with singleton {
+        bind<ObjectMapper>() with singleton {
             ObjectMapper().apply {
                 propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
-                registerModule(clientModule)
-                registerModule(KotlinModule())
-            }
-        }
-        bind<ObjectMapper>(tag = "dbMapper") with singleton {
-            ObjectMapper().apply {
                 registerModule(KotlinModule())
                 registerModule(SimpleModule().apply {
-                    addSerializer(Client::class.java, ClientDbJsonSupport.serializer)
-                    addDeserializer(Client::class.java, ClientDbJsonSupport.deserializer)
+                    addSerializer(Client::class.java, ClientApiJsonSupport.serializer)
                 })
             }
         }
@@ -71,8 +65,14 @@ fun wireComponents(vertx: Vertx): Kodein {
         bind<CreateClientHandler>() with singleton {
             CreateClientHandler(
                 mongoClient = instance(),
-                apiMapper = instance("apiMapper"),
-                dbMapper = instance("dbMapper")
+                apiMapper = instance(),
+                passwordEncoder = BCryptPasswordEncoder()
+            )
+        }
+        bind<ReadClientHandler>() with singleton {
+            ReadClientHandler(
+                mongoClient = instance(),
+                apiMapper = instance()
             )
         }
     }
@@ -82,7 +82,8 @@ fun wireComponents(vertx: Vertx): Kodein {
 
         bind<ClientApiVerticle>() with singleton {
             ClientApiVerticle(
-                createClientHandler = instance()
+                createClientHandler = instance(),
+                readClientHandler = instance()
             )
         }
     }

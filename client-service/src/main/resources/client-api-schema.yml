@@ -35,6 +35,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /client/{clientId}:
+    get:
+      summary: "Reading client configuration by its client_id."
+      operationId: client.read
+      parameters:
+      - in: path
+        name: clientId
+        schema:
+          type: string
+        required: true
+      responses:
+        200:
+          description: "Read client is successful"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadClientResponse"
+        default:
+          description: "Error response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
@@ -341,6 +364,9 @@ components:
           type: integer
           format: int64
           minimum: 0
+    ReadClientResponse:
+      allOf:
+      - $ref: "#/components/schemas/NewClientRequest"
     ErrorResponse:
       required:
       - error
