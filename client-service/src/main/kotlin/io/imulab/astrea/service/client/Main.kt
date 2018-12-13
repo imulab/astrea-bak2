@@ -19,6 +19,7 @@ import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
+import org.slf4j.LoggerFactory
 
 suspend fun main() {
     val vertx = Vertx.vertx()
@@ -30,7 +31,7 @@ suspend fun main() {
             vertx.deployVerticle(clientApi, it)
         }
     } catch (e: Throwable) {
-        e.printStackTrace()
+        LoggerFactory.getLogger("main") .error("Server encountered error.", e)
     }
 }
 
