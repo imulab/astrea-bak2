@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.imulab.astrea.sdk.discovery";
+option java_outer_classname = "DiscoveryProto";
+
+package discovery;
+
+message DiscoveryRequest {
+    // empty
+}
+
+message DiscoveryResponse {
+    string issuer = 1;
+    string authorizationEndpoint = 2;
+    string tokenEndpoint = 3;
+    string userInfoEndpoint = 4;
+    string jwksUri = 5;
+    string registrationEndpoint = 6;
+    repeated string scopesSupported = 7;
+    repeated string responseTypesSupported = 8;
+    repeated string responseModeSupported = 9;
+    repeated string grantTypesSupported = 10;
+    repeated string acrValuesSupported = 11;
+    repeated string subjectTypesSupported = 12;
+    repeated string idTokenSigningAlgorithmValuesSupported = 13;
+    repeated string idTokenEncryptionAlgorithmValuesSupported = 14;
+    repeated string idTokenEncryptionEncodingValuesSupported = 15;
+    repeated string userInfoSigningAlgorithmValuesSupported = 16;
+    repeated string userInfoEncryptionAlgorithmValuesSupported = 17;
+    repeated string userInfoEncryptionEncodingValuesSupported = 18;
+    repeated string requestObjectSigningAlgorithmValuesSupported = 19;
+    repeated string requestObjectEncryptionAlgorithmValuesSupported = 20;
+    repeated string requestObjectEncryptionEncodingValuesSupported = 21;
+    repeated string tokenEndpointAuthenticationMethodsSupported = 22;
+    repeated string tokenEndpointAuthenticationSigningAlgorithmValuesSupported = 23;
+    repeated string displayValuesSupported = 24;
+    repeated string claimTypesSupported = 25;
+    repeated string claimsSupported = 26;
+    string serviceDocumentation = 27;
+    repeated string claimsLocalesSupported = 28;
+    repeated string uiLocalesSupported = 29;
+    bool claimsParameterSupported = 30;
+    bool requestParameterSupported = 31;
+    bool requestUriParameterSupported = 32;
+    bool requireRequestUriRegistration = 33;
+    string opPolicyUri = 34;
+}
+
+service Discovery {
+    rpc Get(DiscoveryRequest) returns (DiscoveryResponse);
+}

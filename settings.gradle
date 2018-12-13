@@ -4,4 +4,5 @@ include 'oidc-sdk'
 include 'client-sdk'
 include 'client-service'
 include 'authorization-service'
+include 'discovery-sdk'
 
