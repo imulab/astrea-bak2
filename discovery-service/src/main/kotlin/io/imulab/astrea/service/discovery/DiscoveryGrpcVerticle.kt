@@ -1,5 +1,6 @@
 package io.imulab.astrea.service.discovery
 
+import com.typesafe.config.Config
 import io.grpc.stub.StreamObserver
 import io.imulab.astrea.sdk.discovery.Discovery
 import io.imulab.astrea.sdk.discovery.DiscoveryGrpc
@@ -11,7 +12,7 @@ import io.vertx.grpc.VertxServerBuilder
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
-class DiscoveryGrpcVerticle(discovery: Discovery) : AbstractVerticle() {
+class DiscoveryGrpcVerticle(discovery: Discovery, private val appConfig: Config) : AbstractVerticle() {
 
     private val discoveryResponse = DiscoveryResponse.newBuilder()
         .setIssuer(discovery.issuer)
@@ -40,6 +41,8 @@ class DiscoveryGrpcVerticle(discovery: Discovery) : AbstractVerticle() {
         .addAllDisplayValuesSupported(discovery.displayValuesSupported)
         .addAllClaimTypesSupported(discovery.claimTypesSupported)
         .addAllClaimsSupported(discovery.claimsSupported)
+        .setServiceDocumentation(discovery.serviceDocumentation)
+        .addAllClaimsLocalesSupported(discovery.claimsLocalesSupported)
         .addAllUiLocalesSupported(discovery.uiLocalesSupported)
         .setClaimsParameterSupported(discovery.claimsParameterSupported)
         .setRequestParameterSupported(discovery.requestParameterSupported)
@@ -50,7 +53,7 @@ class DiscoveryGrpcVerticle(discovery: Discovery) : AbstractVerticle() {
 
     override fun start(startFuture: Future<Void>?) {
         val server = VertxServerBuilder
-            .forPort(vertx, 35028)
+            .forPort(vertx, appConfig.getInt("service.grpcPort"))
             .addService(service)
             .build()
 

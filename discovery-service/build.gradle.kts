@@ -1,4 +1,5 @@
 import build.*
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -34,4 +35,15 @@ dependencies {
         loadMockitoKotlin = true,
         loadAssertj = true
     )
+}
+
+application {
+    mainClassName = "io.imulab.astrea.service.discovery.MainKt"
+}
+
+tasks.withType<ShadowJar> {
+    classifier = ""
+    mergeServiceFiles {
+        include("META-INF/services/io.vertx.core.spi.VerticleFactory")
+    }
 }

@@ -32,7 +32,7 @@ fun main() {
     val config = ConfigFactory.load()
     val discovery = readDiscovery(vertx, config)
 
-    vertx.deployVerticle(DiscoveryHttpVerticle(discovery)) { ar ->
+    vertx.deployVerticle(DiscoveryHttpVerticle(discovery, config)) { ar ->
         if (ar.failed()) {
             rootLogger.error("Server encountered error.", ar.cause())
         } else {
@@ -40,7 +40,7 @@ fun main() {
         }
     }
 
-    vertx.deployVerticle(DiscoveryGrpcVerticle(discovery)) { ar ->
+    vertx.deployVerticle(DiscoveryGrpcVerticle(discovery, config)) { ar ->
         if (ar.failed()) {
             rootLogger.error("Server encountered error.", ar.cause())
         } else {

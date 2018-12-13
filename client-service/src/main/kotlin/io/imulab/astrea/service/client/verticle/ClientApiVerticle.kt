@@ -36,7 +36,6 @@ class ClientApiVerticle(
         }.router
 
         vertx.createHttpServer(HttpServerOptions().apply {
-            host = "localhost"
             port = appConfig.getInt("service.restPort")
         }).requestHandler(router).listenAwait()
 
