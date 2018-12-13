@@ -5,7 +5,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     idea
+    application
     kotlin("jvm")
+    id("com.github.johnrengelman.shadow")
 }
 
 group = "io.imulab.astrea.service"
@@ -29,7 +31,8 @@ dependencies {
         loadWebApiContract = true,
         loadCoroutineSupport = true,
         loadMongoClient = true,
-        loadHealthCheck = true
+        loadHealthCheck = true,
+        loadGrpc = true
     )
     grpc(loadNetty = true)
     typeSafeConfig()
@@ -43,4 +46,15 @@ dependencies {
         loadMockitoKotlin = true,
         loadAssertj = true
     )
+}
+
+application {
+    mainClassName = "io.imulab.astrea.service.client.MainKt"
+}
+
+tasks.withType<ShadowJar> {
+    classifier = ""
+    mergeServiceFiles {
+        include("META-INF/services/io.vertx.core.spi.VerticleFactory")
+    }
 }

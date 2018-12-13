@@ -6,16 +6,16 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="io.imulab.astrea" level="debug">
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="io.netty" level="info">
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Logger name="io.vertx" level="info">
-            <AppenderRef ref="Console"/>
-        </Logger>
-        <Root level="error">
+        <!--<Logger name="io.imulab.astrea" level="debug">-->
+            <!--<AppenderRef ref="Console"/>-->
+        <!--</Logger>-->
+        <!--<Logger name="io.netty" level="info">-->
+            <!--<AppenderRef ref="Console"/>-->
+        <!--</Logger>-->
+        <!--<Logger name="io.vertx" level="info">-->
+            <!--<AppenderRef ref="Console"/>-->
+        <!--</Logger>-->
+        <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

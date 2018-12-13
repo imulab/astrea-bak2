@@ -13,13 +13,6 @@ class ReadClientHandler(
     private val mongoClient: MongoClient,
     private val apiMapper: ObjectMapper
 ) {
-    val notFound: (String) -> OAuthException = { id ->
-        OAuthException(404, "unknown_client", "Client wit id $id is not found.", mapOf(
-            "Cache-Control" to "no-store",
-            "Pragma" to "no-cache"
-        ))
-    }
-
     suspend fun readClient(rc: RoutingContext) {
         val clientId = rc.pathParam("clientId")
         val dbObj = awaitResult<JsonObject?>{
@@ -34,4 +27,11 @@ class ReadClientHandler(
             .putHeader("Pragma", "no-cache")
             .applicationJson(apiMapper, client)
     }
+}
+
+val notFound: (String) -> OAuthException = { id ->
+    OAuthException(404, "unknown_client", "Client wit id $id is not found.", mapOf(
+        "Cache-Control" to "no-store",
+        "Pragma" to "no-cache"
+    ))
 }
