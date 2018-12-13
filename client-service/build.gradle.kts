@@ -28,13 +28,11 @@ dependencies {
         loadWebClient = true,
         loadWebApiContract = true,
         loadCoroutineSupport = true,
-        loadConfig = true,
         loadMongoClient = true,
         loadHealthCheck = true
     )
-
     grpc(loadNetty = true)
-
+    typeSafeConfig()
     jBCrypt()
     jose4j()
 

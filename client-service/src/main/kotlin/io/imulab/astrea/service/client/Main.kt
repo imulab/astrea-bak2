@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 import io.imulab.astrea.sdk.client.Client
 import io.imulab.astrea.sdk.oauth.client.pwd.BCryptPasswordEncoder
 import io.imulab.astrea.service.client.handlers.CreateClientHandler
@@ -36,7 +38,25 @@ suspend fun main() {
 }
 
 fun wireComponents(vertx: Vertx): Kodein {
-    val jsonModule = Kodein.Module("json") {
+    val appModule = Kodein.Module("app") {
+        bind<Config>() with singleton {
+            ConfigFactory.load()
+        }
+
+        bind<MongoClient>() with singleton {
+            MongoClient.createNonShared(vertx, json {
+                obj(
+                    "host" to instance<Config>().getString("mongo.host"),
+                    "port" to instance<Config>().getLong("mongo.port"),
+                    "db_name" to instance<Config>().getString("mongo.db")
+                )
+            })
+        }
+    }
+
+    val restApiModule = Kodein.Module("restApi") {
+        importOnce(appModule)
+
         bind<ObjectMapper>() with singleton {
             ObjectMapper().apply {
                 propertyNamingStrategy = PropertyNamingStrategy.SNAKE_CASE
@@ -46,23 +66,6 @@ fun wireComponents(vertx: Vertx): Kodein {
                 })
             }
         }
-    }
-
-    val dbModule = Kodein.Module("db") {
-        bind<MongoClient>() with singleton {
-            MongoClient.createNonShared(vertx, json {
-                obj(
-                    "host" to "localhost",
-                    "port" to 32768,
-                    "db_name" to "client"
-                )
-            })
-        }
-    }
-
-    val handlerModule = Kodein.Module("handler") {
-        importOnce(jsonModule)
-        importOnce(dbModule)
 
         bind<CreateClientHandler>() with singleton {
             CreateClientHandler(
@@ -80,7 +83,7 @@ fun wireComponents(vertx: Vertx): Kodein {
     }
 
     return Kodein {
-        importOnce(handlerModule)
+        importOnce(restApiModule)
 
         bind<ClientApiVerticle>() with singleton {
             ClientApiVerticle(
