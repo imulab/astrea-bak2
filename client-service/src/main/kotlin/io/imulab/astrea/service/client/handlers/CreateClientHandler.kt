@@ -43,7 +43,7 @@ class CreateClientHandler(
                 val fields = mutableListOf(
                     "client_id" to client.id,
                     "registration_client_uri" to "/client/${client.id}",
-                    "client_id_issued_at" to LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
+                    "client_id_issued_at" to client.creationTime.toEpochSecond(ZoneOffset.UTC),
                     "client_secret_expires_at" to 0
                 )
                 if (plainSecret.isNotEmpty())

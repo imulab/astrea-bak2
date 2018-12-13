@@ -8,12 +8,15 @@ import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
 import io.vertx.kotlin.core.json.json
 import io.vertx.kotlin.core.json.obj
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 object ClientDbJsonSupport {
 
     // field names
     private object Field {
         const val id = "_id"
+        const val creationTime = "create_at"
         const val clientName = "name"
         const val clientSecret = "secret"
         const val clientType = "type"
@@ -53,6 +56,7 @@ object ClientDbJsonSupport {
         val c = Client()
         json.run {
             setStr(Field.id) { c.id = it }
+            setLong(Field.creationTime) { c.creationTime = LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC) }
             setStr(Field.clientName) { c.clientName = it }
             setStr(Field.clientSecret) { c.clientSecret = it }
             setStr(Field.clientType) { c.clientType = it }
@@ -94,6 +98,7 @@ object ClientDbJsonSupport {
         return json {
             obj {
                 str(Field.id, value.id)
+                put(Field.creationTime, value.creationTime.toEpochSecond(ZoneOffset.UTC))
                 str(Field.clientName, value.clientName)
                 str(Field.clientSecret, value.clientSecret)
                 str(Field.clientType, value.type)

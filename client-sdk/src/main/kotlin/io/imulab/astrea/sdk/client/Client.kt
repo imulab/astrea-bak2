@@ -5,11 +5,13 @@ import io.imulab.astrea.sdk.oauth.token.JwtSigningAlgorithm
 import io.imulab.astrea.sdk.oidc.client.OidcClient
 import io.imulab.astrea.sdk.oidc.reserved.JweContentEncodingAlgorithm
 import io.imulab.astrea.sdk.oidc.reserved.JweKeyManagementAlgorithm
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.LinkedHashSet
 
 data class Client(
     override var id: String = UUID.randomUUID().toString(),
+    var creationTime: LocalDateTime = LocalDateTime.now(),
     var clientName: String = "",
     var clientSecret: String = "",
     var clientType: String = "",

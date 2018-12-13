@@ -52,7 +52,8 @@ fun wireComponents(vertx: Vertx): Kodein {
             MongoClient.createNonShared(vertx, json {
                 obj(
                     "host" to "localhost",
-                    "port" to 32768
+                    "port" to 32768,
+                    "db_name" to "client"
                 )
             })
         }

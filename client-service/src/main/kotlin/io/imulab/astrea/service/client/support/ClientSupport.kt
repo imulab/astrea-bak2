@@ -16,11 +16,13 @@ import kotlinx.coroutines.withContext
 import org.jose4j.jwk.JsonWebKeySet
 import java.net.URI
 import java.nio.charset.StandardCharsets
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 fun Client.generateId() {
     id = UUID.randomUUID().toString().replace("-", "").toLowerCase()
+    creationTime = LocalDateTime.now()
 }
 
 fun Client.nameOrDefault() {
