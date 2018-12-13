@@ -21,9 +21,14 @@ services:
       - "8180:8080"
   client-service:
     build: ./client-service
+    depends_on:
+      - mongodb
     ports:
       - "8280:8080"
       - "35027:35027"
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
 
 volumes:
   astrea-local-mongodb-data:

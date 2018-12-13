@@ -117,13 +117,15 @@ fun wireComponents(vertx: Vertx): Kodein {
         bind<ClientApiVerticle>() with singleton {
             ClientApiVerticle(
                 createClientHandler = instance(),
-                readClientHandler = instance()
+                readClientHandler = instance(),
+                appConfig = instance()
             )
         }
 
         bind<ClientGrpcVerticle>() with singleton {
             ClientGrpcVerticle(
-                clientLookupService = instance()
+                clientLookupService = instance(),
+                appConfig = instance()
             )
         }
     }

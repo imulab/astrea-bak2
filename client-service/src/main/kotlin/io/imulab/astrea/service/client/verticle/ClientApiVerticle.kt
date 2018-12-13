@@ -1,5 +1,6 @@
 package io.imulab.astrea.service.client.verticle
 
+import com.typesafe.config.Config
 import io.imulab.astrea.service.client.handlers.CreateClientHandler
 import io.imulab.astrea.service.client.handlers.ReadClientHandler
 import io.imulab.astrea.service.client.handlers.errorHandler
@@ -13,6 +14,7 @@ import kotlinx.coroutines.cancel
 import org.slf4j.LoggerFactory
 
 class ClientApiVerticle(
+    private val appConfig: Config,
     private val createClientHandler: CreateClientHandler,
     private val readClientHandler: ReadClientHandler
 ) : CoroutineVerticle() {
@@ -35,7 +37,7 @@ class ClientApiVerticle(
 
         vertx.createHttpServer(HttpServerOptions().apply {
             host = "localhost"
-            port = 8080
+            port = appConfig.getInt("service.restPort")
         }).requestHandler(router).listenAwait()
 
         logger.info("Http server started.")
