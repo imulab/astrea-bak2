@@ -6,3 +6,7 @@ zuul:
     tokenEndpoint:
       path: /
       url: http://${token.endpoint.host:localhost}:${token.endpoint.port:8080}/oauth/token
+
+ribbon:
+  okhttp:
+    enabled: true

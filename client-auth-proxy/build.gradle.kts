@@ -41,6 +41,7 @@ dependencies {
     )
 
     resilience4j(loadRetry = true)
+    okHttp()
 
     test(
         loadSpek2 = true,
