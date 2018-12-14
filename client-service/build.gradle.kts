@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":oauth-sdk"))
     implementation(project(":oidc-sdk"))
     implementation(project(":client-sdk"))
+    implementation(project(":discovery-sdk"))
 
     kotlin(loadCoroutine = true)
     kodein(loadErased = false)
@@ -38,6 +39,8 @@ dependencies {
     typeSafeConfig()
     jBCrypt()
     jose4j()
+
+    resilience4j(loadRetry = true)
 
     logging()
 

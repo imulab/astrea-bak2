@@ -30,6 +30,8 @@ services:
     environment:
       - MONGO_HOST=mongodb
       - MONGO_PORT=27017
+      - DISCOVERY_HOST=discovery-service
+      - DISCOVERY_PORT=35028
   discovery-service:
     build: ./discovery-service
     ports:

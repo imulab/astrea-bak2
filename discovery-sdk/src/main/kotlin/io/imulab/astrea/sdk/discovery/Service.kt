@@ -18,7 +18,7 @@ class GrpcDiscoveryService(channel: Channel) : DiscoveryService {
 
     override suspend fun getDiscovery(): Discovery {
         val response = try {
-            stub.withDeadlineAfter(5, TimeUnit.SECONDS).get(DiscoveryRequest.getDefaultInstance())
+            stub.withDeadlineAfter(30, TimeUnit.SECONDS).get(DiscoveryRequest.getDefaultInstance())
         } catch (e : Exception) {
             throw ServerError.internal("Cannot obtain discovery configuration.")
         }
