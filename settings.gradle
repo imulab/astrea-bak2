@@ -6,4 +6,5 @@ include 'client-service'
 include 'authorization-service'
 include 'discovery-sdk'
 include 'discovery-service'
+include 'client-auth-proxy'
 
