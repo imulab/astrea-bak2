@@ -10,7 +10,7 @@ plugins {
     id("io.spring.dependency-management")
 }
 
-group = "io.imulab.astrea.service"
+group = "io.imulab.astrea.service.proxy"
 version = "0.0.1-SNAPSHOT"
 
 repositories {
@@ -33,7 +33,6 @@ dependencies {
     grpc()
     jBCrypt()
     jose4j()
-    logging()
 
     springBoot(
         loadKotlinSupport = true,

@@ -1,0 +1,8 @@
+server:
+  port: ${proxy.port:8080}
+
+zuul:
+  routes:
+    tokenEndpoint:
+      path: /
+      url: http://${token.endpoint.host:localhost}:${token.endpoint.port:8080}/oauth/token
