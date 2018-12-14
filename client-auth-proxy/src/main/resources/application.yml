@@ -1,5 +1,11 @@
+spring.profiles.active: dummy
+
 server:
   port: ${proxy.port:8080}
+
+client:
+  host: ${client.service.host:localhost}
+  port: ${client.service.port:35027}
 
 zuul:
   routes:

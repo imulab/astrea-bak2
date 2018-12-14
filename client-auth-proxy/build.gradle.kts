@@ -29,13 +29,14 @@ dependencies {
     implementation(project(":client-sdk"))
     implementation(project(":discovery-sdk"))
 
-    kotlin()
-    grpc()
+    kotlin(loadCoroutine = true)
+    grpc(loadNetty = true)
     jBCrypt()
     jose4j()
 
     springBoot(
         loadKotlinSupport = true,
+        loadConfigProcessor = true,
         loadTestSupport = true,
         loadZuul = true
     )

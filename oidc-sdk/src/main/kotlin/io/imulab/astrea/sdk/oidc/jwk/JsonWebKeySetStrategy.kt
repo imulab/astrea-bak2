@@ -23,12 +23,12 @@ import org.jose4j.lang.JoseException
  * Note that this strategy DOES NOT take care of removing the old jwks cache in the case of client updating the
  * registered jwks_uri value. Client registration process must tend to that.
  */
-class JsonWebKeySetStrategy(
+open class JsonWebKeySetStrategy(
     private val jsonWebKeySetRepository: JsonWebKeySetRepository,
     private val httpClient: SimpleHttpClient
 ) {
 
-    suspend fun resolveKeySet(client: io.imulab.astrea.sdk.oidc.client.OidcClient): JsonWebKeySet = try {
+    open suspend fun resolveKeySet(client: io.imulab.astrea.sdk.oidc.client.OidcClient): JsonWebKeySet = try {
         doResolveKeySet(client)
     } catch (e: JoseException) {
         throw ServerError.internal("Invalid json web key set.")

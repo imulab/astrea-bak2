@@ -4,7 +4,6 @@ import io.imulab.astrea.sdk.oauth.assertType
 import io.imulab.astrea.sdk.oauth.client.ClientLookup
 import io.imulab.astrea.sdk.oauth.client.authn.ClientAuthenticator
 import io.imulab.astrea.sdk.oauth.client.authn.ClientAuthenticators
-import io.imulab.astrea.sdk.oidc.client.OidcClient
 
 /**
  * Simple override of [ClientAuthenticators] to use the client pre-registered value of token endpoint authentication

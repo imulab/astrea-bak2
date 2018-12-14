@@ -12,6 +12,10 @@ class BCryptPasswordEncoder(private val complexity: Int = 10) : PasswordEncoder 
     }
 
     override fun matches(raw: String, encoded: String): Boolean {
-        return BCrypt.checkpw(raw, encoded)
+        return try {
+            BCrypt.checkpw(raw, encoded)
+        } catch (e: Exception) {
+            false
+        }
     }
 }
