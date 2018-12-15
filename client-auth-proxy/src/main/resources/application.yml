@@ -7,6 +7,10 @@ client:
   host: ${client.service.host:localhost}
   port: ${client.service.port:35027}
 
+discovery:
+  host: ${discovery.service.host:localhost}
+  port: ${discovery.service.port:35028}
+
 zuul:
   routes:
     tokenEndpoint:
