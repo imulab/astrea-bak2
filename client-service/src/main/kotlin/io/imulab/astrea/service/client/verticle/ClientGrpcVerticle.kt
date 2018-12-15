@@ -1,6 +1,7 @@
 package io.imulab.astrea.service.client.verticle
 
 import com.typesafe.config.Config
+import io.imulab.astrea.service.client.grpc.ClientAuthenticationService
 import io.imulab.astrea.service.client.grpc.ClientLookupService
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
@@ -10,13 +11,15 @@ import kotlin.concurrent.thread
 
 class ClientGrpcVerticle(
     private val appConfig: Config,
-    private val clientLookupService: ClientLookupService
+    private val clientLookupService: ClientLookupService,
+    private val clientAuthenticationService: ClientAuthenticationService
 ) : AbstractVerticle() {
 
     override fun start(startFuture: Future<Void>?) {
         val server = VertxServerBuilder
             .forAddress(vertx, "localhost", appConfig.getInt("service.grpcPort"))
             .addService(clientLookupService)
+            .addService(clientAuthenticationService)
             .build()
 
         Runtime.getRuntime().addShutdownHook(thread(start = false) {

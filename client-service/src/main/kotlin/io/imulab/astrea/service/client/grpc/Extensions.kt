@@ -1,0 +1,40 @@
+package io.imulab.astrea.service.client.grpc
+
+import io.imulab.astrea.sdk.client.Client
+import io.imulab.astrea.sdk.client.ClientLookupResponse
+
+fun Client.toClientLookupResponse() : ClientLookupResponse =
+    ClientLookupResponse
+        .newBuilder()
+        .setId(id)
+        .setName(name)
+        .setType(type)
+        .addAllRedirectUris(redirectUris)
+        .addAllResponseTypes(responseTypes)
+        .addAllGrantTypes(grantTypes)
+        .addAllScopes(scopes)
+        .setApplicationType(applicationType)
+        .addAllContacts(contacts)
+        .setLogoUri(logoUri)
+        .setClientUri(clientUri)
+        .setPolicyUri(policyUri)
+        .setTosUri(tosUri)
+        .setJwks(jwks)
+        .setSectorIdentifierUri(sectorIdentifierUri)
+        .setSubjectType(subjectType)
+        .setIdTokenSignedResponseAlgorithm(idTokenSignedResponseAlg)
+        .setIdTokenEncryptedResponseAlgorithm(idTokenEncryptedResponseAlg)
+        .setIdTokenEncryptedResponseEncoding(idTokenEncryptedResponseEnc)
+        .setRequestObjectSigningAlgorithm(requestObjectSigningAlg)
+        .setRequestObjectEncryptionAlgorithm(requestObjectEncryptionAlg)
+        .setRequestObjectEncryptionEncoding(requestObjectEncryptionEnc)
+        .setUserInfoSignedResponseAlgorithm(userinfoSignedResponseAlg)
+        .setUserInfoEncryptedResponseAlgorithm(userinfoEncryptedResponseAlg)
+        .setUserInfoEncryptedResponseEncoding(userinfoEncryptedResponseEnc)
+        .setTokenEndpointAuthenticationMethod(tokenEndpointAuthMethod)
+        .setDefaultMaxAge(defaultMaxAge)
+        .setRequireAuthTime(requireAuthTime)
+        .addAllDefaultAcrValues(defaultAcrValues)
+        .setInitiateLoginUri(initiateLoginUri)
+        .addAllRequestUris(requestUris)
+        .build()

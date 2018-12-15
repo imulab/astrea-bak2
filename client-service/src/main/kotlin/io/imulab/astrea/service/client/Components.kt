@@ -13,8 +13,10 @@ import io.grpc.ManagedChannelBuilder
 import io.imulab.astrea.sdk.client.Client
 import io.imulab.astrea.sdk.discovery.GrpcDiscoveryService
 import io.imulab.astrea.sdk.oauth.client.pwd.BCryptPasswordEncoder
+import io.imulab.astrea.sdk.oauth.client.pwd.PasswordEncoder
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oidc.discovery.Discovery
+import io.imulab.astrea.service.client.grpc.ClientAuthenticationService
 import io.imulab.astrea.service.client.grpc.ClientLookupService
 import io.imulab.astrea.service.client.handlers.CreateClientHandler
 import io.imulab.astrea.service.client.handlers.ReadClientHandler
@@ -37,10 +39,10 @@ import org.kodein.di.generic.singleton
 import java.time.Duration
 
 fun wireComponents(vertx: Vertx): Kodein {
+
     val appModule = Kodein.Module("app") {
-        bind<Config>() with singleton {
-            ConfigFactory.load()
-        }
+
+        bind<Config>() with singleton { ConfigFactory.load() }
 
         bind<MongoClient>() with singleton {
             val client = MongoClient.createNonShared(vertx, json {
@@ -81,11 +83,19 @@ fun wireComponents(vertx: Vertx): Kodein {
 
             Try.ofSupplier(discovery).getOrElse { throw ServerError.internal("Cannot obtain discovery.") }
         }
+
+        bind<PasswordEncoder>() with singleton { BCryptPasswordEncoder() }
     }
 
     val grpcApiModule = Kodein.Module("grpcApi") {
+        importOnce(appModule)
+
         bind<ClientLookupService>() with singleton {
             ClientLookupService(mongoClient = instance())
+        }
+
+        bind<ClientAuthenticationService>() with singleton {
+            ClientAuthenticationService(mongoClient = instance(), passwordEncoder = instance())
         }
     }
 
@@ -106,17 +116,11 @@ fun wireComponents(vertx: Vertx): Kodein {
         }
 
         bind<CreateClientHandler>() with singleton {
-            CreateClientHandler(
-                mongoClient = instance(),
-                apiMapper = instance(),
-                passwordEncoder = BCryptPasswordEncoder()
-            )
+            CreateClientHandler(mongoClient = instance(), apiMapper = instance(), passwordEncoder = instance())
         }
+
         bind<ReadClientHandler>() with singleton {
-            ReadClientHandler(
-                mongoClient = instance(),
-                apiMapper = instance()
-            )
+            ReadClientHandler(mongoClient = instance(), apiMapper = instance())
         }
     }
 
@@ -125,16 +129,13 @@ fun wireComponents(vertx: Vertx): Kodein {
         importOnce(grpcApiModule)
 
         bind<ClientApiVerticle>() with singleton {
-            ClientApiVerticle(
-                createClientHandler = instance(),
-                readClientHandler = instance(),
-                appConfig = instance()
-            )
+            ClientApiVerticle(createClientHandler = instance(), readClientHandler = instance(), appConfig = instance())
         }
 
         bind<ClientGrpcVerticle>() with singleton {
             ClientGrpcVerticle(
                 clientLookupService = instance(),
+                clientAuthenticationService = instance(),
                 appConfig = instance()
             )
         }
