@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.proxy.auth.client.config
+package io.imulab.astrea.service.proxy.config
 
 import io.github.resilience4j.retry.Retry
 import io.github.resilience4j.retry.RetryConfig

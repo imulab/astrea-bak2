@@ -11,9 +11,9 @@ discovery:
 
 zuul:
   routes:
-    tokenEndpoint:
+    authorizeEndpoint:
       path: /
-      url: http://${token.endpoint.host:localhost}:${token.endpoint.port:8080}/oauth/token
+      url: http://${authorize.endpoint.host:localhost}:${authorize.endpoint.port:8080}/oauth/authorize
 
 ribbon:
   okhttp:

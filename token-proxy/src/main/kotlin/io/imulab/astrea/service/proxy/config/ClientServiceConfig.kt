@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.proxy.auth.client.config
+package io.imulab.astrea.service.proxy.config
 
 import io.grpc.ManagedChannelBuilder
 import io.imulab.astrea.sdk.client.GrpcClientBasicAuthenticator

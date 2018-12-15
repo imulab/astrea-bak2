@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.proxy.auth.client
+package io.imulab.astrea.service.proxy
 
 import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.error.ServerError

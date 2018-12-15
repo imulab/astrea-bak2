@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.proxy.auth.client
+package io.imulab.astrea.service.proxy
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

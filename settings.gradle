@@ -7,4 +7,5 @@ include 'authorization-service'
 include 'discovery-sdk'
 include 'discovery-service'
 include 'token-proxy'
+include 'authorize-proxy'
 

@@ -1,4 +1,4 @@
-package io.imulab.astrea.service.proxy.auth.client
+package io.imulab.astrea.service.proxy
 
 import com.netflix.zuul.exception.ZuulException
 import io.imulab.astrea.sdk.oauth.error.OAuthException
