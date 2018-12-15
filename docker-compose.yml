@@ -19,8 +19,8 @@ services:
     build: ./authorization-service
     ports:
       - "8180:8080"
-  client-auth-proxy:
-    build: ./client-auth-proxy
+  token-proxy:
+    build: ./token-proxy
     depends_on:
       - client-service
       - discovery-service
