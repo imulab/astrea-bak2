@@ -27,7 +27,7 @@ class AuthenticationFilter(private val clientAuthenticators: OidcClientAuthentic
 
         val client = runBlocking { clientAuthenticators.authenticate(OidcRequestForm(params)) }
 
-        RequestContext.getCurrentContext().addZuulRequestHeader("X-ASTREA-AUTHENTICATED-CLIENT", client.id)
+        RequestContext.getCurrentContext().addZuulRequestHeader("X-ASTREA-CLIENT", client.id)
 
         return Unit
     }

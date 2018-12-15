@@ -6,8 +6,8 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 
 @SpringBootApplication
 @EnableZuulProxy
-class TokenEndpointProxy
+class AuthorizeEndpointProxy
 
 fun main(args: Array<String>) {
-    runApplication<TokenEndpointProxy>(*args)
+    runApplication<AuthorizeEndpointProxy>(*args)
 }
