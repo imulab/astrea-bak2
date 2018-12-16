@@ -26,10 +26,6 @@ class LoginVerificationFilter : LoginFilter() {
     @Autowired @Qualifier("loginProviderJwks")
     lateinit var loginProviderJwks: JsonWebKeySet
 
-    companion object {
-        const val LoginClaims = "LoginClaims"
-    }
-
     override fun shouldFilter(): Boolean {
         return super.shouldFilter() && hasLoginToken()
     }
@@ -52,11 +48,12 @@ class LoginVerificationFilter : LoginFilter() {
             if (claims.subject.isEmpty())
                 throw AccessDenied.byServer("authentication failed.")
 
-            context.set(LoginClaims, claims)
-            setApproved()
+            setLoginClaims(claims)
         } catch (e: JoseException) {
             logger.debug("Verification encountered error, authentication assumed to have failed.", e)
             throw AccessDenied.byServer("authentication failed.")
+        } finally {
+            context.requestQueryParams.remove(LoginToken)
         }
 
         return Unit

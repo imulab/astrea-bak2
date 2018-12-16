@@ -7,7 +7,9 @@ import io.imulab.astrea.service.proxy.XNonceStrategy
 import okhttp3.HttpUrl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
+@Component
 class ConsentRedirectionFilter : ConsentFilter() {
 
     @Value("\${consent.url}")

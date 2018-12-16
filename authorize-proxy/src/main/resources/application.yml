@@ -18,7 +18,7 @@ login:
   jwks: ${login.service.jwks}
 
 consent:
-  url: ${consent.service.url:http://localhost:8888}
+  url: ${consent.service.url:http://localhost:9999}
   jwks: ${consent.service.jwks}
 
 authorize:

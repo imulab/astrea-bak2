@@ -25,10 +25,6 @@ class ConsentAcquireFilter : ConsentFilter() {
     @Qualifier("consentProviderJwks")
     lateinit var consentProviderJwks: JsonWebKeySet
 
-    companion object {
-        const val ConsentClaims = "ConsentClaims"
-    }
-
     override fun shouldFilter(): Boolean {
         return super.shouldFilter() && hasConsentToken()
     }
@@ -48,12 +44,13 @@ class ConsentAcquireFilter : ConsentFilter() {
                 .build()
                 .processToClaims(context.requestQueryParams[ConsentToken]!![0]!!)
 
-            context.set(ConsentClaims, claims)
-
-            setAcquired()
+            setConsentClaims(claims)
         } catch (e: Exception) {
             logger.debug("Verification encountered error, consent assumed to have not been obtained.", e)
-            context.set(ConsentClaims, JwtClaims())
+
+            setConsentClaims(JwtClaims())
+        } finally {
+            context.requestQueryParams.remove(ConsentToken)
         }
 
         return Unit

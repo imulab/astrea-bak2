@@ -2,11 +2,13 @@ package io.imulab.astrea.service.proxy.filters
 
 import com.netflix.zuul.ZuulFilter
 import com.netflix.zuul.context.RequestContext
-import io.imulab.astrea.service.proxy.filters.login.LoginFilter
-import io.imulab.astrea.service.proxy.filters.login.LoginVerificationFilter.Companion.LoginTokenParam
-import org.jose4j.jwt.consumer.JwtConsumerBuilder
+import io.imulab.astrea.service.proxy.filters.consent.ConsentFilter.Companion.ConsentClaims
+import io.imulab.astrea.service.proxy.filters.login.LoginFilter.Companion.LoginClaims
+import org.jose4j.jwt.JwtClaims
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants
+import org.springframework.stereotype.Component
 
+@Component
 class SetAuthorizationFilter : ZuulFilter() {
 
     companion object {
@@ -15,29 +17,15 @@ class SetAuthorizationFilter : ZuulFilter() {
     }
 
     override fun run(): Any {
-        setLoginClaimsToHeader()
-
-        return Unit
-    }
-
-    private fun setLoginClaimsToHeader() {
         val context = RequestContext.getCurrentContext()
 
-        check(context.getBoolean(LoginFilter.LoginApproved, false))
-        check(context.requestQueryParams.containsKey(LoginTokenParam))
+        check(context[LoginClaims] is JwtClaims)
+        check(context[ConsentClaims] is JwtClaims)
 
-        val loginToken = context.requestQueryParams[LoginTokenParam]!![0]!!
-        val claims = JwtConsumerBuilder()
-            .also { b ->
-                // skip all validations since it has been verified by a previous filter.
-                b.setDisableRequireSignature()
-                b.setSkipSignatureVerification()
-                b.setSkipAllValidators()
-            }
-            .build()
-            .processToClaims(loginToken)
+        context.addZuulRequestHeader(LoginHeader, (context[LoginClaims] as JwtClaims).toJson())
+        context.addZuulRequestHeader(ConsentHeader, (context[ConsentClaims] as JwtClaims).toJson())
 
-        context.addZuulRequestHeader(LoginHeader, claims.toJson())
+        return Unit
     }
 
     override fun shouldFilter(): Boolean = true
