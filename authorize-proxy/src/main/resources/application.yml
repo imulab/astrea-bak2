@@ -1,5 +1,9 @@
 server:
-  port: ${proxy.port:8080}
+  port: ${service.port:8080}
+
+service:
+  name: AuthorizeProxy
+  signingKey: ${service.secret:NjhhMjJjMGFkZjhkNDA5MThlYTVkMTMzMmNhZGNiNTY=}
 
 client:
   host: ${client.service.host:localhost}
@@ -8,6 +12,12 @@ client:
 discovery:
   host: ${discovery.service.host:localhost}
   port: ${discovery.service.port:35028}
+
+login:
+  url: ${login.service.url:http://localhost:8888}
+
+authorize:
+  jwks: ${authorize.service.jwks}
 
 zuul:
   routes:
