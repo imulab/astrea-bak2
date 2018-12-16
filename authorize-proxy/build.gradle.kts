@@ -38,7 +38,8 @@ dependencies {
         loadKotlinSupport = true,
         loadConfigProcessor = true,
         loadTestSupport = true,
-        loadZuul = true
+        loadZuul = true,
+        loadRedisSessionSupport = true
     )
 
     resilience4j(loadRetry = true)

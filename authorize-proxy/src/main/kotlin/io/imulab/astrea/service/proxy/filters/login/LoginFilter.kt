@@ -22,4 +22,8 @@ abstract class LoginFilter : ZuulFilter() {
     protected fun setLoginClaims(claims: JwtClaims) {
         RequestContext.getCurrentContext().set(LoginClaims, claims)
     }
+
+    protected fun getLoginClaims(): JwtClaims? {
+        return RequestContext.getCurrentContext()[LoginClaims] as? JwtClaims
+    }
 }
