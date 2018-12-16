@@ -1,6 +1,7 @@
 package io.imulab.astrea.service.proxy.login
 
 import com.netflix.zuul.context.RequestContext
+import io.imulab.astrea.sdk.oauth.error.AccessDenied
 import io.imulab.astrea.sdk.oauth.token.JwtSigningAlgorithm
 import okhttp3.HttpUrl
 import org.jose4j.jws.JsonWebSignature
@@ -48,10 +49,15 @@ class LoginRedirectionFilter : LoginFilter() {
 
     companion object {
         const val RequestHashClaim = "req_hash"
-        const val RequestHashNonce = "x_nonce"
     }
 
     override fun run(): Any {
+        // Assume authentication failure when x_nonce parameter is already present
+        // It means we have received response from login provider but still failed
+        // to establish authentication status.
+        if (hasXNonce())
+            throw AccessDenied.byServer("user authentication failed.")
+
         val nonce = JsonWebSignature().also { jws ->
             jws.payload = JwtClaims().also { c ->
                 c.setGeneratedJwtId()
@@ -67,7 +73,7 @@ class LoginRedirectionFilter : LoginFilter() {
 
         RequestContext.getCurrentContext().run {
             setSendZuulResponse(false)
-            requestQueryParams[RequestHashNonce] = listOf(nonce)
+            requestQueryParams[XNonceParam] = listOf(nonce)
             response.sendRedirect(
                 HttpUrl.parse(loginServiceUrl)!!
                     .newBuilder()

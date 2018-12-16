@@ -15,6 +15,7 @@ discovery:
 
 login:
   url: ${login.service.url:http://localhost:8888}
+  jwks: ${login.service.jwks}
 
 authorize:
   jwks: ${authorize.service.jwks}
