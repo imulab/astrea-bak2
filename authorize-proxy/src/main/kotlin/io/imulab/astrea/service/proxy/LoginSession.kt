@@ -1,38 +1,32 @@
 package io.imulab.astrea.service.proxy
 
-import org.springframework.session.MapSession
 import org.springframework.session.Session
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class LoginSession(private val mapSession: Session = MapSession()) : Session by mapSession {
+private const val AuthExpiry = "auth_exp"
+private const val AuthSubject = "auth_subj"
+private const val AuthTime = "auth_time"
 
-    companion object {
-        const val AuthExpiry = "auth_exp"
-        const val AuthSubject = "auth_subj"
-        const val AuthTime = "auth_time"
+internal var Session.authenticationExpiry: LocalDateTime
+    get() = LocalDateTime.ofEpochSecond(getAttributeOrDefault(AuthExpiry, 0), 0, ZoneOffset.UTC)
+    set(value) {
+        setAttribute(AuthExpiry, value.toEpochSecond(ZoneOffset.UTC))
+        maxInactiveInterval = Duration.between(LocalDateTime.now(ZoneOffset.UTC), value)
     }
 
-    var authenticationExpiry: LocalDateTime
-        get() = LocalDateTime.ofEpochSecond(mapSession.getAttributeOrDefault(AuthExpiry, 0), 0, ZoneOffset.UTC)
-        set(value) {
-            mapSession.setAttribute(AuthExpiry, value.toEpochSecond(ZoneOffset.UTC))
-            mapSession.maxInactiveInterval = Duration.between(LocalDateTime.now(ZoneOffset.UTC), value)
-        }
+internal var Session.subject: String
+    get() = getAttributeOrDefault(AuthSubject, "")
+    set(value) {
+        setAttribute(AuthSubject, value)
+    }
 
-    var subject: String
-        get() = mapSession.getAttributeOrDefault(AuthSubject, "")
-        set(value) {
-            mapSession.setAttribute(AuthSubject, value)
-        }
+internal var Session.authTime: LocalDateTime
+    get() = LocalDateTime.ofEpochSecond(getAttributeOrDefault(AuthTime, 0), 0, ZoneOffset.UTC)
+    set(value) {
+        setAttribute(AuthTime, value.toEpochSecond(ZoneOffset.UTC))
+    }
 
-    var authTime: LocalDateTime
-        get() = LocalDateTime.ofEpochSecond(mapSession.getAttributeOrDefault(AuthTime, 0), 0, ZoneOffset.UTC)
-        set(value) {
-            mapSession.setAttribute(AuthTime, value.toEpochSecond(ZoneOffset.UTC))
-        }
-
-    fun hasAuthenticationExpired(): Boolean =
-        authenticationExpiry.isBefore(LocalDateTime.now(ZoneOffset.UTC))
-}
+fun Session.hasAuthenticationExpired(): Boolean =
+    authenticationExpiry.isBefore(LocalDateTime.now(ZoneOffset.UTC))

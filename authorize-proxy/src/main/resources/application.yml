@@ -1,5 +1,5 @@
 server:
-  port: ${service.port:8080}
+  port: ${service.port:8081}
 
 spring:
   redis:

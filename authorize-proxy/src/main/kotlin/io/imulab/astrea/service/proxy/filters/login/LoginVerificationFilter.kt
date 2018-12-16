@@ -6,8 +6,7 @@ import io.imulab.astrea.sdk.oauth.token.JwtSigningAlgorithm
 import io.imulab.astrea.sdk.oidc.jwk.JwtVerificationKeyResolver
 import io.imulab.astrea.sdk.oidc.jwk.authTime
 import io.imulab.astrea.sdk.oidc.jwk.toLocalDateTime
-import io.imulab.astrea.service.proxy.LoginSession
-import io.imulab.astrea.service.proxy.LoginToken
+import io.imulab.astrea.service.proxy.*
 import org.jose4j.jwk.JsonWebKeySet
 import org.jose4j.jwt.JwtClaims
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.session.Session
 import org.springframework.session.SessionRepository
 import org.springframework.stereotype.Component
 import java.time.Duration
@@ -37,7 +37,7 @@ class LoginVerificationFilter : LoginFilter() {
     lateinit var loginProviderJwks: JsonWebKeySet
 
     @Autowired
-    lateinit var sessionRepository: SessionRepository<LoginSession>
+    lateinit var sessionRepository: SessionRepositoryAdapter
 
     override fun shouldFilter(): Boolean {
         return super.shouldFilter() && hasLoginToken()
@@ -82,7 +82,7 @@ class LoginVerificationFilter : LoginFilter() {
         val claims = getLoginClaims() ?: return
         val rememberForDuration = claims.rememberFor()
         if (!rememberForDuration.isZero) {
-            val session = LoginSession(sessionRepository.createSession()).apply {
+            val session = sessionRepository.createSession().apply {
                 subject = claims.subject
                 authTime = claims.authTime() ?: claims.issuedAt.toLocalDateTime()
                 authenticationExpiry = LocalDateTime.now(ZoneOffset.UTC).plus(rememberForDuration)
