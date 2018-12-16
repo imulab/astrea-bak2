@@ -1,9 +1,9 @@
-package io.imulab.astrea.service.proxy
+package io.imulab.astrea.service.proxy.filters
 
 import com.netflix.zuul.ZuulFilter
 import com.netflix.zuul.context.RequestContext
-import io.imulab.astrea.service.proxy.login.LoginFilter
-import io.imulab.astrea.service.proxy.login.LoginVerificationFilter.Companion.LoginTokenParam
+import io.imulab.astrea.service.proxy.filters.login.LoginFilter
+import io.imulab.astrea.service.proxy.filters.login.LoginVerificationFilter.Companion.LoginTokenParam
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants
 
