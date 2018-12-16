@@ -9,10 +9,14 @@ import org.springframework.context.annotation.Configuration
 class ProxyConfiguration {
 
     @Bean("loginProviderJwks")
-    fun loginProviderJwks(@Value("\${login.service.jwks}") jwksJson: String) =
-        jwksJson.takeIf { it.isNotEmpty() }?.let { JsonWebKeySet(it) } ?: JsonWebKeySet()
+    fun loginProviderJwks(@Value("\${login.service.jwks}") jwksJson: String) = jwksJson.asJwks()
 
     @Bean("consentProviderJwks")
-    fun consentProviderJwks(@Value("\${consent.service.jwks}") jwksJson: String) =
-        jwksJson.takeIf { it.isNotEmpty() }?.let { JsonWebKeySet(it) } ?: JsonWebKeySet()
+    fun consentProviderJwks(@Value("\${consent.service.jwks}") jwksJson: String) = jwksJson.asJwks()
+
+    @Bean("authorizeProviderJwks")
+    fun authorizeProviderJwks(@Value("\${authorize.service.jwks}") jwksJson: String) = jwksJson.asJwks()
+
+    private fun String.asJwks(): JsonWebKeySet =
+        takeIf { it.isNotEmpty() }?.let { JsonWebKeySet(it) } ?: JsonWebKeySet()
 }
