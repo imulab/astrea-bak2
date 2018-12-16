@@ -15,14 +15,14 @@ discovery:
 
 login:
   url: ${login.service.url:http://localhost:8888}
-  jwks: ${login.service.jwks}
+  jwks: ${login.service.jwks:}
 
 consent:
   url: ${consent.service.url:http://localhost:9999}
-  jwks: ${consent.service.jwks}
+  jwks: ${consent.service.jwks:}
 
 authorize:
-  jwks: ${authorize.service.jwks}
+  jwks: ${authorize.service.jwks:}
 
 zuul:
   routes:
