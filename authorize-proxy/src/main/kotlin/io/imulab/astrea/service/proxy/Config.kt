@@ -11,4 +11,8 @@ class ProxyConfiguration {
     @Bean("loginProviderJwks")
     fun loginProviderJwks(@Value("\${login.service.jwks}") jwksJson: String) =
         jwksJson.takeIf { it.isNotEmpty() }?.let { JsonWebKeySet(it) } ?: JsonWebKeySet()
+
+    @Bean("consentProviderJwks")
+    fun consentProviderJwks(@Value("\${consent.service.jwks}") jwksJson: String) =
+        jwksJson.takeIf { it.isNotEmpty() }?.let { JsonWebKeySet(it) } ?: JsonWebKeySet()
 }

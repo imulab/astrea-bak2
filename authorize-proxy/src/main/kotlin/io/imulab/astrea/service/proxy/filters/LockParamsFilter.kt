@@ -8,7 +8,6 @@ import io.imulab.astrea.service.proxy.XNonceStrategy
 import org.jose4j.lang.JoseException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants
 import org.springframework.stereotype.Component
 
@@ -16,12 +15,6 @@ import org.springframework.stereotype.Component
 class LockParamsFilter: ZuulFilter() {
 
     private val logger = LoggerFactory.getLogger(LockParamsFilter::class.java)
-
-    @Value("\${service.name}")
-    var serviceName: String = ""
-
-    @Value("\${service.signingKey}")
-    var signingKey: String = ""
 
     @Autowired
     lateinit var xNonceStrategy: XNonceStrategy
