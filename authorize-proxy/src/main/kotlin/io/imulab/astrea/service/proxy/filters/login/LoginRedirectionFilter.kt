@@ -1,7 +1,6 @@
 package io.imulab.astrea.service.proxy.filters.login
 
 import com.netflix.zuul.context.RequestContext
-import io.imulab.astrea.sdk.oauth.error.AccessDenied
 import io.imulab.astrea.service.proxy.XNonce
 import io.imulab.astrea.service.proxy.XNonceStrategy
 import okhttp3.HttpUrl
@@ -31,11 +30,6 @@ class LoginRedirectionFilter : LoginFilter() {
 
     override fun run(): Any {
         val context = RequestContext.getCurrentContext()
-
-        // Assume authentication failure when x_nonce parameter is already present
-        // It means we were redirected before, but still failed to confirm authentication.
-        if (context.requestQueryParams.containsKey(XNonce))
-            throw AccessDenied.byServer("user authentication failed.")
 
         context.run {
             setSendZuulResponse(false)

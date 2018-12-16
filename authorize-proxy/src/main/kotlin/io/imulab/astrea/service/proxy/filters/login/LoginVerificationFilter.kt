@@ -5,8 +5,10 @@ import io.imulab.astrea.sdk.oauth.error.AccessDenied
 import io.imulab.astrea.sdk.oauth.token.JwtSigningAlgorithm
 import io.imulab.astrea.sdk.oidc.jwk.JwtVerificationKeyResolver
 import io.imulab.astrea.service.proxy.LoginToken
+import io.imulab.astrea.service.proxy.XNonce
 import org.jose4j.jwk.JsonWebKeySet
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
+import org.jose4j.lang.JoseException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -47,10 +49,12 @@ class LoginVerificationFilter : LoginFilter() {
                 .build()
                 .processToClaims(context.requestQueryParams[LoginToken]!![0]!!)
 
-            context.set(LoginClaims, claims)
+            if (claims.subject.isEmpty())
+                throw AccessDenied.byServer("authentication failed.")
 
+            context.set(LoginClaims, claims)
             setApproved()
-        } catch (e: Exception) {
+        } catch (e: JoseException) {
             logger.debug("Verification encountered error, authentication assumed to have failed.", e)
             throw AccessDenied.byServer("authentication failed.")
         }

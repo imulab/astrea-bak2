@@ -29,8 +29,10 @@ class LockParamsFilter: ZuulFilter() {
         val hash = xNonceStrategy.calculateHash()
         context.set(ParameterHash, hash)
 
-        if (context.requestQueryParams.containsKey(XNonce))
+        if (context.requestQueryParams.containsKey(XNonce)) {
             ensureNotTempered(hash)
+            context.requestQueryParams.remove(XNonce)
+        }
 
         return Unit
     }
