@@ -9,4 +9,5 @@ include 'discovery-service'
 include 'token-proxy'
 include 'authorize-proxy'
 include 'login-fake-service'
+include 'consent-fake-service'
 
