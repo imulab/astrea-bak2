@@ -95,13 +95,4 @@ class LoginVerificationFilter : LoginFilter() {
     override fun filterOrder(): Int = BaseOrder + 10
 
     private fun hasLoginToken() = RequestContext.getCurrentContext().containsKey(LoginToken)
-
-    private fun JwtClaims.rememberFor(): Duration {
-        return if (!hasClaim("remember_for"))
-            Duration.ZERO
-        else
-            getStringClaimValue("remember_for").toLongOrNull()
-                ?.let { Duration.ofSeconds(it) }
-                ?: Duration.ZERO
-    }
 }

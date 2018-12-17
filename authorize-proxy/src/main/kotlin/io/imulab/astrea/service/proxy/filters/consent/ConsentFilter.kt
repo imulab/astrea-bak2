@@ -21,4 +21,8 @@ abstract class ConsentFilter : ZuulFilter() {
     protected fun setConsentClaims(claims: JwtClaims) {
         RequestContext.getCurrentContext().set(ConsentClaims, claims)
     }
+
+    protected fun getConsentClaims(): JwtClaims? {
+        return RequestContext.getCurrentContext()[ConsentClaims] as? JwtClaims
+    }
 }

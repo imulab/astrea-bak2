@@ -44,5 +44,5 @@ class ConsentRedirectionFilter : ConsentFilter() {
         return Unit
     }
 
-    override fun filterOrder(): Int = BaseOrder + 30
+    override fun filterOrder(): Int = BaseOrder + 20
 }
