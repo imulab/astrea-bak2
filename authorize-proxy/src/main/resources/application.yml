@@ -34,7 +34,7 @@ zuul:
   routes:
     authorizeEndpoint:
       path: /
-      url: http://${authorize.endpoint.host:localhost}:${authorize.endpoint.port:8080}/oauth/authorize
+      url: ${authorize.endpoint.url:http://localhost:8080/oauth/authorize}
 
 ribbon:
   okhttp:

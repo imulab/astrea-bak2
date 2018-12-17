@@ -62,8 +62,6 @@ class ConsentAcquireFilter : ConsentFilter() {
         } catch (e: Exception) {
             logger.debug("Verification encountered error, consent assumed to have not been obtained.", e)
             setConsentClaims(JwtClaims())
-        } finally {
-            context.requestQueryParams.remove(ConsentToken)
         }
     }
 

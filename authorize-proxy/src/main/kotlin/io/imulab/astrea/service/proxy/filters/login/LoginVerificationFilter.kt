@@ -71,11 +71,10 @@ class LoginVerificationFilter : LoginFilter() {
                 throw AccessDenied.byServer("authentication failed.")
 
             setLoginClaims(claims)
+            logger.info("Authentication verified.")
         } catch (e: Exception) {
-            logger.debug("Verification encountered error, authentication assumed to have failed.", e)
+            logger.error("Verification encountered error, authentication assumed to have failed.", e)
             throw AccessDenied.byServer("authentication failed.")
-        } finally {
-            context.requestQueryParams.remove(LoginToken)
         }
     }
 

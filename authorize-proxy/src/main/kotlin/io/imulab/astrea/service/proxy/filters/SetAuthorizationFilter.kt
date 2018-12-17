@@ -2,6 +2,8 @@ package io.imulab.astrea.service.proxy.filters
 
 import com.netflix.zuul.ZuulFilter
 import com.netflix.zuul.context.RequestContext
+import io.imulab.astrea.service.proxy.ConsentToken
+import io.imulab.astrea.service.proxy.LoginToken
 import io.imulab.astrea.service.proxy.filters.consent.ConsentFilter.Companion.ConsentClaims
 import io.imulab.astrea.service.proxy.filters.login.LoginFilter.Companion.LoginClaims
 import org.jose4j.jwt.JwtClaims
@@ -21,6 +23,9 @@ class SetAuthorizationFilter : ZuulFilter() {
 
         context.addZuulRequestHeader(LoginHeader, (context[LoginClaims] as JwtClaims).toJson())
         context.addZuulRequestHeader(ConsentHeader, (context[ConsentClaims] as JwtClaims).toJson())
+
+        context.requestQueryParams.remove(LoginToken)
+        context.requestQueryParams.remove(ConsentToken)
 
         return Unit
     }

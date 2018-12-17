@@ -47,9 +47,10 @@ class LoginVerticle(private val appConfig: Config) : AbstractVerticle() {
                     algorithmHeaderValue = AlgorithmIdentifiers.RSA_USING_SHA256
                     payload = JwtClaims().also { c ->
                         c.setGeneratedJwtId()
-                        c.setExpirationTimeMinutesInTheFuture(10f)
+                        c.setExpirationTimeMinutesInTheFuture(60f)
                         c.setIssuedAtToNow()
                         c.issuer = appConfig.getString("service.url")
+                        c.setAudience(appConfig.getString("authorizeProxy.name"))
                         c.subject = appConfig.getString("service.subject")
                         c.setNumericDateClaim("auth_time", NumericDate.now())
                     }.toJson()
