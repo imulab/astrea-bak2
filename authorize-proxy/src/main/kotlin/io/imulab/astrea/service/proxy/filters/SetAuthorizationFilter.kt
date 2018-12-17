@@ -19,16 +19,16 @@ class SetAuthorizationFilter : ZuulFilter() {
     override fun run(): Any {
         val context = RequestContext.getCurrentContext()
 
-        check(context[LoginClaims] is JwtClaims)
-        check(context[ConsentClaims] is JwtClaims)
-
         context.addZuulRequestHeader(LoginHeader, (context[LoginClaims] as JwtClaims).toJson())
         context.addZuulRequestHeader(ConsentHeader, (context[ConsentClaims] as JwtClaims).toJson())
 
         return Unit
     }
 
-    override fun shouldFilter(): Boolean = true
+    override fun shouldFilter(): Boolean {
+        val context = RequestContext.getCurrentContext()
+        return (context[LoginClaims] is JwtClaims) && (context[ConsentClaims] is JwtClaims)
+    }
 
     override fun filterType(): String = FilterConstants.PRE_TYPE
 

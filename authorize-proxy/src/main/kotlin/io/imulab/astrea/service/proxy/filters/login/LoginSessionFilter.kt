@@ -19,7 +19,7 @@ class LoginSessionFilter : LoginFilter() {
     override fun run(): Any {
         val context = RequestContext.getCurrentContext()
 
-        val sessionCookie = context.request.cookies.find { it.name == "ASTREA_LOGIN_SESSION" } ?: return Unit
+        val sessionCookie = context.request.cookies?.find { it.name == "ASTREA_LOGIN_SESSION" } ?: return Unit
         val session = sessionRepository.findById(sessionCookie.value) ?: return Unit
 
         if (session.hasAuthenticationExpired()) {

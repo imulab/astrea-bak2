@@ -83,5 +83,5 @@ class ConsentAcquireFilter : ConsentFilter() {
 
     override fun filterOrder(): Int = BaseOrder + 10
 
-    private fun hasConsentToken() = RequestContext.getCurrentContext().containsKey(ConsentToken)
+    private fun hasConsentToken() = RequestContext.getCurrentContext().requestQueryParams.containsKey(ConsentToken)
 }

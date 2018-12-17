@@ -4,6 +4,7 @@ import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.servlet.error.ErrorController
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -28,6 +29,9 @@ class OAuthErrorController : ErrorController {
             HttpStatus.BAD_GATEWAY.value(),
             HttpStatus.SERVICE_UNAVAILABLE.value() -> throwable = ServerError.internal("service temporarily unavailable.")  // todo replace with proper error
         }
+
+        if (throwable is RedirectionSignal)
+            return ResponseEntity.status(throwable.status).header(HttpHeaders.LOCATION, throwable.url).build()
 
         if (throwable !is OAuthException)
             throwable = ServerError.wrapped(throwable)

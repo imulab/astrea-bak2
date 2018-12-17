@@ -17,7 +17,7 @@ class ConsentSessionFilter : ConsentFilter() {
     override fun run(): Any {
         val context = RequestContext.getCurrentContext()
 
-        val sessionCookie = context.request.cookies.find { it.name == ConsentSessionName } ?: return Unit
+        val sessionCookie = context.request.cookies?.find { it.name == ConsentSessionName } ?: return Unit
         val session = sessionRepository.findById(sessionCookie.value) ?: return Unit
 
         if ((context[LoginClaims] as? JwtClaims)?.subject != session.subject)

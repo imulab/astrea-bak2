@@ -16,7 +16,7 @@ abstract class LoginFilter : ZuulFilter() {
 
     override fun shouldFilter(): Boolean {
         val context = RequestContext.getCurrentContext()
-        return context.containsKey(LoginClaims)
+        return !context.containsKey(LoginClaims)
     }
 
     protected fun setLoginClaims(claims: JwtClaims) {

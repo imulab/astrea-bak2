@@ -15,7 +15,7 @@ abstract class ConsentFilter : ZuulFilter() {
     override fun filterType(): String = FilterConstants.PRE_TYPE
 
     override fun shouldFilter(): Boolean {
-        return RequestContext.getCurrentContext().containsKey(ConsentClaims)
+        return !RequestContext.getCurrentContext().containsKey(ConsentClaims)
     }
 
     protected fun setConsentClaims(claims: JwtClaims) {

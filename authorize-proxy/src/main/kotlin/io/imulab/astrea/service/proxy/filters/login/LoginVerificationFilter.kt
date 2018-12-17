@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.session.Session
 import org.springframework.session.SessionRepository
 import org.springframework.stereotype.Component
+import java.lang.Exception
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -70,7 +71,7 @@ class LoginVerificationFilter : LoginFilter() {
                 throw AccessDenied.byServer("authentication failed.")
 
             setLoginClaims(claims)
-        } catch (e: JoseException) {
+        } catch (e: Exception) {
             logger.debug("Verification encountered error, authentication assumed to have failed.", e)
             throw AccessDenied.byServer("authentication failed.")
         } finally {
@@ -94,5 +95,5 @@ class LoginVerificationFilter : LoginFilter() {
 
     override fun filterOrder(): Int = BaseOrder + 10
 
-    private fun hasLoginToken() = RequestContext.getCurrentContext().containsKey(LoginToken)
+    private fun hasLoginToken() = RequestContext.getCurrentContext().requestQueryParams.containsKey(LoginToken)
 }

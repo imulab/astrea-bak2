@@ -24,9 +24,8 @@ class XNonceStrategy {
     @Value("\${service.signingKey}")
     var signingKey: String = ""
 
-    fun calculateHash(): String {
-        return RequestContext.getCurrentContext()
-            .requestQueryParams
+    fun calculateHash(ctx: RequestContext): String {
+        return ctx.requestQueryParams
             .filterKeys { !reservedParams.contains(it) }
             .toSortedMap().entries
             .joinToString { it.key + ":" + it.value.joinToString() }
@@ -34,14 +33,14 @@ class XNonceStrategy {
             .let { b -> Base64.getEncoder().withoutPadding().encodeToString(b) }
     }
 
-    fun encode(): String {
+    fun encode(ctx: RequestContext): String {
         return JsonWebSignature().also { jws ->
             jws.payload = JwtClaims().also { c ->
                 c.setGeneratedJwtId()
                 c.setIssuedAtToNow()
                 c.setExpirationTimeMinutesInTheFuture(10f)
                 c.issuer = serviceName
-                c.setClaim(RequestHashClaim, calculateHash())
+                c.setClaim(RequestHashClaim, calculateHash(ctx))
             }.toJson()
             jws.key = AesKey(Base64.getDecoder().decode(signingKey))
             jws.algorithmHeaderValue = JwtSigningAlgorithm.HS256.algorithmIdentifier
