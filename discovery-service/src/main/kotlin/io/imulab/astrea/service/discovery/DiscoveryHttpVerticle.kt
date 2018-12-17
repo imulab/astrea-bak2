@@ -14,7 +14,7 @@ class DiscoveryHttpVerticle(discovery: Discovery, private val appConfig: Config)
     override fun start() {
         val router = Router.router(vertx).apply {
             get("/").handler { rc ->
-                rc.response().putHeader("Content-Type", "application/discoveryJson").end(discoveryJson)
+                rc.response().putHeader("Content-Type", "application/json").end(discoveryJson)
             }
         }
 

@@ -43,7 +43,7 @@ services:
       - CLIENT_SERVICE_PORT=35027
       - DISCOVERY_SERVICE_HOST=discovery-service
       - DISCOVERY_SERVICE_PORT=35028
-      - LOGIN_SERVICE_URL=http://localhost:8888
+      - LOGIN_SERVICE_URL=http://login-fake-service:8080
       - LOGIN_SERVICE_JWKS={"keys":[{"kty":"RSA","kid":"8d0547f397b1482cb2240e9d53b34f2a","use":"sig","alg":"RS256","n":"tYHJZpiQk0h1OHYi8gNnaUYHdLh7jE9Vh2bFAa1R34DRfVR3JJRePzWVv_pOSGSH4JXuvoVbBqSmZGl6UnVncVNcd9BS9GJviGzrnUNuonYXtENIZh0xwf5nGWr5YNwSOcq0nlLYHEhv6F_xXrAhUNWLlaDuw_-HPw_Bk24_Fo430fLdzZdFQEKagThbL_h3tPK-Wc-wXwU8WTSpI5HYG5b8GdyB9KJL9C5Xh60iV04qZJUYAdiotwcvDFiF-xAAkRFR18zoiMiENBQZKij8LglsgszZEk5cwZOQmtDLA1upAx9SzKqW79wDM1P9o84jrNysaQbvZ6xcCnNoAVlfOw","e":"AQAB"}]}
       - CONSENT_SERVICE_URL=http://localhost:9999
       - CONSENT_SERVICE_JWKS={"keys":[{"kty":"RSA","kid":"ebd0434e94d542629699e90dc75e9e54","use":"sig","alg":"RS256","n":"inXpeqx1btmL5Fliy4AWbz5TCxHYCqtP9xj4EL2s8SLPdikCV734TuPs1rFI340r2YQW-_ycW98syw10VSDgbKPbdTOY0SsSbnqt0NjM1JZq-Kl2SXlkgNdfnlI-d-S3QlufcxiubqZgztMWwrDFkERt-57s_zc04skiIJdPsHQ2XgwWq7kRrBmjnnvd0-QVgptWYbFwrmDY_nAaR0Is6uVM-lrRZf1MzhCt-oHDv4gSqEWxFegAD0iJKCZX77L0Yd9wulR2Rj0UYrzfkSuh2Yyqo9PuEsAgqsq1MaTysZPHjwiqeL5Fkmlzu_UjvzFNpL2eOa0y1xiZ3uqrXP1AJQ","e":"AQAB"}]}
@@ -89,6 +89,15 @@ services:
     ports:
       - "8380:8080"
       - "35028:35028"
+  login-fake-service:
+    build: ./login-fake-service
+    ports:
+      - "10010:8080"
+    environment:
+      - SERVICE_URL=http://login-fake-service:8080
+      - SERVICE_FAKE_SUBJECT=foo@bar.com
+      - SERVICE_KEY_SET={"keys":[{"kty":"RSA","kid":"8d0547f397b1482cb2240e9d53b34f2a","use":"sig","alg":"RS256","n":"tYHJZpiQk0h1OHYi8gNnaUYHdLh7jE9Vh2bFAa1R34DRfVR3JJRePzWVv_pOSGSH4JXuvoVbBqSmZGl6UnVncVNcd9BS9GJviGzrnUNuonYXtENIZh0xwf5nGWr5YNwSOcq0nlLYHEhv6F_xXrAhUNWLlaDuw_-HPw_Bk24_Fo430fLdzZdFQEKagThbL_h3tPK-Wc-wXwU8WTSpI5HYG5b8GdyB9KJL9C5Xh60iV04qZJUYAdiotwcvDFiF-xAAkRFR18zoiMiENBQZKij8LglsgszZEk5cwZOQmtDLA1upAx9SzKqW79wDM1P9o84jrNysaQbvZ6xcCnNoAVlfOw","e":"AQAB","d":"bG-CVAHXdbY3GakyTWWNNU56C9hfLz8COOdD0TGrlRxPi1GX8EmXWKn5sfynIga1So4oWLgw3nIlWh3Nz0-GoiSMPKQ_uvLH8TgpNwXfJb3pgW8k5KSSYnRLQdsv6xbu6InaiC-0HomEGc6f09LjxHgfcR_5JS0Wrq0KF7sog58nBVCqnWh-Uehfu8Zas2dj_zI89JgSasyfawsBfUjkcFgfRZ2Yru3KcoCjiaMrtj_NvX5YgfHNtYhiWVKCNQw8QwJ750xNY0oJaylT_tzJmhPqmoaQsx3OcTM21VgxHHWJrijJdvG2jtDdrDaTlYx4cuj9xUw-njI6pKTAfOdJKQ","p":"6YCK6MZ3Hb4kM4fsFGPTx6b0cpIe8sZsfq65Jo2RNqT7wZlH_5Gobjn6BcqqNFgLyXRh5PM0o_FcYSGCqv1qrCwRPBWWvFRx-WxOnWadedgOO538SqMcCEyPmHSUTfF38cqyV2C5cGn3ncCUrCo6VfmfOSeiP6FE9i-Lu10LGpc","q":"xv7BbFj5Jc_r-uRp333Rj89JvgIFDcqBH2D2GkNXQq4sSV2qZ5avgHla_nTNfRaf1TP9d2iEJwm4A0eQi1yliXB7x62JInVSKctRIXQY_4j29MbBnVMSSAOuI4xGcz6vzlekzad8jAdt4IplMY2pwnidCAk4q5nA-cgoGnobqP0","dp":"krwUjvMpJ6e1WCyyTp3tGCnys4zfpfDLfVCPSYrtFknXa3HHrPL7xUjptXoGO56YyaA5ZIbxLZUfWGqWkp1ty4Rl0DxA3Vizxuoo_QDfNRJw30YIpV6a3xw9oLCiAdkcZvXZ3M8LuXjeAmRjCU4AGscjJ-egLhxKGesHBFcUA0E","dq":"rWhW-anXA4Ja63mcYSttMNq8Mh3kdY4gU03VaDGCmxLYeN5snnSLX3NhPhhe8UCD6_CwUhv7_WDUv9bfOPJ1Nn2U__5TYHnILa-FdZeMKTIbslZ5ZjV72tGKMGQPCGJ6JV_ut1_agtP-hgtT_4iphFRC0zvl7HPB3Gj1uYzrCak","qi":"EnH-Eg4ApW0gsrGQxyGlUjimBs0ZY9JoSlrMvAXXazq9SIcRPfziNXCIGOvXy1SGv7Pu8veimkahVG7m9l1wGEGGOgE8xWqjq08Og2qtSyFARfIjdV1feNl8M_f-xgz5OkQS3QWOfLlc35LpnskCWmPCgZKK6yf1rEWKBZTwzoI"}]}
+      - AUTHORIZE_PROXY_URL=http://authorize-proxy:8080
 
 volumes:
   astrea-local-mongodb-data:
