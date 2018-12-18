@@ -22,6 +22,8 @@ dependencies {
     resilience4j(loadRetry = true)
     logging()
     okHttp()
+    jose4j()
+    jBCrypt()
     vertx(
         loadWeb = true,
         loadCoroutineSupport = true,

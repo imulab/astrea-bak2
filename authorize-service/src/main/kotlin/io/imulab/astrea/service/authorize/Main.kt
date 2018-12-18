@@ -5,9 +5,10 @@ import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
 import io.vertx.kotlin.coroutines.awaitResult
 import org.kodein.di.generic.instance
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-private val rootLogger = LoggerFactory.getLogger("io.imulab.astrea.service.authorize.Main")
+val rootLogger: Logger = LoggerFactory.getLogger("io.imulab.astrea.service.authorize.Main")
 
 suspend fun main() {
     val vertx = Vertx.vertx(VertxOptions().apply {

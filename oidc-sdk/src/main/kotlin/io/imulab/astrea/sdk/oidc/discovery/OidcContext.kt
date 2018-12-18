@@ -31,7 +31,6 @@ interface OidcContext : OAuthContext, Discovery {
         super<Discovery>.validate()
 
         check(!idTokenLifespan.isZero) { "idTokenLifespan must not be zero." }
-
         check(nonceEntropy >= 0) { "nonce entropy must not be negative." }
     }
 }
