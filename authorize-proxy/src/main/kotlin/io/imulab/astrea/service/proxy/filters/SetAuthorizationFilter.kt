@@ -21,8 +21,8 @@ class SetAuthorizationFilter : ZuulFilter() {
     override fun run(): Any {
         val context = RequestContext.getCurrentContext()
 
-        context.addZuulRequestHeader(LoginHeader, (context[LoginClaims] as JwtClaims).toJson())
-        context.addZuulRequestHeader(ConsentHeader, (context[ConsentClaims] as JwtClaims).toJson())
+        context.addZuulRequestHeader(LoginHeader, (context[LoginClaims] as? JwtClaims ?: JwtClaims()).toJson())
+        context.addZuulRequestHeader(ConsentHeader, (context[ConsentClaims] as? JwtClaims ?: JwtClaims()).toJson())
 
         context.requestQueryParams.remove(LoginToken)
         context.requestQueryParams.remove(ConsentToken)
@@ -30,10 +30,7 @@ class SetAuthorizationFilter : ZuulFilter() {
         return Unit
     }
 
-    override fun shouldFilter(): Boolean {
-        val context = RequestContext.getCurrentContext()
-        return (context[LoginClaims] is JwtClaims) && (context[ConsentClaims] is JwtClaims)
-    }
+    override fun shouldFilter(): Boolean = true
 
     override fun filterType(): String = FilterConstants.PRE_TYPE
 
