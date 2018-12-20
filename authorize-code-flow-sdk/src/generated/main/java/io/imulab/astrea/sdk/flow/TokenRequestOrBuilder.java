@@ -51,4 +51,17 @@ public interface TokenRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getRedirectUriBytes();
+
+  /**
+   * <code>.client.TokenRequest.Client client = 6;</code>
+   */
+  boolean hasClient();
+  /**
+   * <code>.client.TokenRequest.Client client = 6;</code>
+   */
+  io.imulab.astrea.sdk.flow.TokenRequest.Client getClient();
+  /**
+   * <code>.client.TokenRequest.Client client = 6;</code>
+   */
+  io.imulab.astrea.sdk.flow.TokenRequest.ClientOrBuilder getClientOrBuilder();
 }

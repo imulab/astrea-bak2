@@ -13,7 +13,7 @@ open class OidcSession(
     var acrValues: MutableList<String> = mutableListOf(),
     // authorize request should set this value
     var nonce: String = "",
-    val idTokenClaims: MutableMap<String, Any> = mutableMapOf()
+    var idTokenClaims: MutableMap<String, Any> = mutableMapOf()
 ) : OAuthSession(subject) {
 
     override fun merge(another: OAuthSession) {

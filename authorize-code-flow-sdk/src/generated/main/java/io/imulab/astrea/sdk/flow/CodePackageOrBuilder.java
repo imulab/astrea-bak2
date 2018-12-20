@@ -18,65 +18,21 @@ public interface CodePackageOrBuilder extends
       getCodeBytes();
 
   /**
-   * <code>string status = 2;</code>
-   */
-  java.lang.String getStatus();
-  /**
-   * <code>string status = 2;</code>
-   */
-  com.google.protobuf.ByteString
-      getStatusBytes();
-
-  /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   java.util.List<java.lang.String>
       getScopesList();
   /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   int getScopesCount();
   /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   java.lang.String getScopes(int index);
   /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   com.google.protobuf.ByteString
       getScopesBytes(int index);
-
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-  int getHeadersCount();
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-  boolean containsHeaders(
-      java.lang.String key);
-  /**
-   * Use {@link #getHeadersMap()} instead.
-   */
-  @java.lang.Deprecated
-  java.util.Map<java.lang.String, java.lang.String>
-  getHeaders();
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-  java.util.Map<java.lang.String, java.lang.String>
-  getHeadersMap();
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-
-  java.lang.String getHeadersOrDefault(
-      java.lang.String key,
-      java.lang.String defaultValue);
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-
-  java.lang.String getHeadersOrThrow(
-      java.lang.String key);
 }

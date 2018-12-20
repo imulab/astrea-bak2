@@ -92,4 +92,17 @@ public interface CodeRequestOrBuilder extends
    * <code>.client.CodeRequest.Client client = 7;</code>
    */
   io.imulab.astrea.sdk.flow.CodeRequest.ClientOrBuilder getClientOrBuilder();
+
+  /**
+   * <code>.client.CodeRequest.Session session = 8;</code>
+   */
+  boolean hasSession();
+  /**
+   * <code>.client.CodeRequest.Session session = 8;</code>
+   */
+  io.imulab.astrea.sdk.flow.CodeRequest.Session getSession();
+  /**
+   * <code>.client.CodeRequest.Session session = 8;</code>
+   */
+  io.imulab.astrea.sdk.flow.CodeRequest.SessionOrBuilder getSessionOrBuilder();
 }

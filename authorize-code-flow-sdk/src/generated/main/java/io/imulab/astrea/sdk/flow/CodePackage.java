@@ -17,7 +17,6 @@ private static final long serialVersionUID = 0L;
   }
   private CodePackage() {
     code_ = "";
-    status_ = "";
     scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
@@ -53,30 +52,11 @@ private static final long serialVersionUID = 0L;
           }
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
-
-            status_ = s;
-            break;
-          }
-          case 34: {
-            java.lang.String s = input.readStringRequireUtf8();
-            if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+            if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
               scopes_ = new com.google.protobuf.LazyStringArrayList();
-              mutable_bitField0_ |= 0x00000004;
+              mutable_bitField0_ |= 0x00000002;
             }
             scopes_.add(s);
-            break;
-          }
-          case 802: {
-            if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-              headers_ = com.google.protobuf.MapField.newMapField(
-                  HeadersDefaultEntryHolder.defaultEntry);
-              mutable_bitField0_ |= 0x00000008;
-            }
-            com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-            headers__ = input.readMessage(
-                HeadersDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-            headers_.getMutableMap().put(
-                headers__.getKey(), headers__.getValue());
             break;
           }
           default: {
@@ -94,7 +74,7 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
         scopes_ = scopes_.getUnmodifiableView();
       }
       this.unknownFields = unknownFields.build();
@@ -106,18 +86,6 @@ private static final long serialVersionUID = 0L;
     return io.imulab.astrea.sdk.flow.AuthorizeCodeFlowProto.internal_static_client_CodePackage_descriptor;
   }
 
-  @SuppressWarnings({"rawtypes"})
-  @java.lang.Override
-  protected com.google.protobuf.MapField internalGetMapField(
-      int number) {
-    switch (number) {
-      case 100:
-        return internalGetHeaders();
-      default:
-        throw new RuntimeException(
-            "Invalid map field number: " + number);
-    }
-  }
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
@@ -161,143 +129,33 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int STATUS_FIELD_NUMBER = 2;
-  private volatile java.lang.Object status_;
-  /**
-   * <code>string status = 2;</code>
-   */
-  public java.lang.String getStatus() {
-    java.lang.Object ref = status_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      status_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string status = 2;</code>
-   */
-  public com.google.protobuf.ByteString
-      getStatusBytes() {
-    java.lang.Object ref = status_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      status_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int SCOPES_FIELD_NUMBER = 4;
+  public static final int SCOPES_FIELD_NUMBER = 2;
   private com.google.protobuf.LazyStringList scopes_;
   /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   public com.google.protobuf.ProtocolStringList
       getScopesList() {
     return scopes_;
   }
   /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   public int getScopesCount() {
     return scopes_.size();
   }
   /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   public java.lang.String getScopes(int index) {
     return scopes_.get(index);
   }
   /**
-   * <code>repeated string scopes = 4;</code>
+   * <code>repeated string scopes = 2;</code>
    */
   public com.google.protobuf.ByteString
       getScopesBytes(int index) {
     return scopes_.getByteString(index);
-  }
-
-  public static final int HEADERS_FIELD_NUMBER = 100;
-  private static final class HeadersDefaultEntryHolder {
-    static final com.google.protobuf.MapEntry<
-        java.lang.String, java.lang.String> defaultEntry =
-            com.google.protobuf.MapEntry
-            .<java.lang.String, java.lang.String>newDefaultInstance(
-                io.imulab.astrea.sdk.flow.AuthorizeCodeFlowProto.internal_static_client_CodePackage_HeadersEntry_descriptor, 
-                com.google.protobuf.WireFormat.FieldType.STRING,
-                "",
-                com.google.protobuf.WireFormat.FieldType.STRING,
-                "");
-  }
-  private com.google.protobuf.MapField<
-      java.lang.String, java.lang.String> headers_;
-  private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-  internalGetHeaders() {
-    if (headers_ == null) {
-      return com.google.protobuf.MapField.emptyMapField(
-          HeadersDefaultEntryHolder.defaultEntry);
-    }
-    return headers_;
-  }
-
-  public int getHeadersCount() {
-    return internalGetHeaders().getMap().size();
-  }
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-
-  public boolean containsHeaders(
-      java.lang.String key) {
-    if (key == null) { throw new java.lang.NullPointerException(); }
-    return internalGetHeaders().getMap().containsKey(key);
-  }
-  /**
-   * Use {@link #getHeadersMap()} instead.
-   */
-  @java.lang.Deprecated
-  public java.util.Map<java.lang.String, java.lang.String> getHeaders() {
-    return getHeadersMap();
-  }
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-
-  public java.util.Map<java.lang.String, java.lang.String> getHeadersMap() {
-    return internalGetHeaders().getMap();
-  }
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-
-  public java.lang.String getHeadersOrDefault(
-      java.lang.String key,
-      java.lang.String defaultValue) {
-    if (key == null) { throw new java.lang.NullPointerException(); }
-    java.util.Map<java.lang.String, java.lang.String> map =
-        internalGetHeaders().getMap();
-    return map.containsKey(key) ? map.get(key) : defaultValue;
-  }
-  /**
-   * <code>map&lt;string, string&gt; headers = 100;</code>
-   */
-
-  public java.lang.String getHeadersOrThrow(
-      java.lang.String key) {
-    if (key == null) { throw new java.lang.NullPointerException(); }
-    java.util.Map<java.lang.String, java.lang.String> map =
-        internalGetHeaders().getMap();
-    if (!map.containsKey(key)) {
-      throw new java.lang.IllegalArgumentException();
-    }
-    return map.get(key);
   }
 
   private byte memoizedIsInitialized = -1;
@@ -317,18 +175,9 @@ private static final long serialVersionUID = 0L;
     if (!getCodeBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, code_);
     }
-    if (!getStatusBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, status_);
-    }
     for (int i = 0; i < scopes_.size(); i++) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, scopes_.getRaw(i));
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, scopes_.getRaw(i));
     }
-    com.google.protobuf.GeneratedMessageV3
-      .serializeStringMapTo(
-        output,
-        internalGetHeaders(),
-        HeadersDefaultEntryHolder.defaultEntry,
-        100);
     unknownFields.writeTo(output);
   }
 
@@ -341,9 +190,6 @@ private static final long serialVersionUID = 0L;
     if (!getCodeBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, code_);
     }
-    if (!getStatusBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, status_);
-    }
     {
       int dataSize = 0;
       for (int i = 0; i < scopes_.size(); i++) {
@@ -351,16 +197,6 @@ private static final long serialVersionUID = 0L;
       }
       size += dataSize;
       size += 1 * getScopesList().size();
-    }
-    for (java.util.Map.Entry<java.lang.String, java.lang.String> entry
-         : internalGetHeaders().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.String, java.lang.String>
-      headers__ = HeadersDefaultEntryHolder.defaultEntry.newBuilderForType()
-          .setKey(entry.getKey())
-          .setValue(entry.getValue())
-          .build();
-      size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(100, headers__);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -380,12 +216,8 @@ private static final long serialVersionUID = 0L;
     boolean result = true;
     result = result && getCode()
         .equals(other.getCode());
-    result = result && getStatus()
-        .equals(other.getStatus());
     result = result && getScopesList()
         .equals(other.getScopesList());
-    result = result && internalGetHeaders().equals(
-        other.internalGetHeaders());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -399,15 +231,9 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + CODE_FIELD_NUMBER;
     hash = (53 * hash) + getCode().hashCode();
-    hash = (37 * hash) + STATUS_FIELD_NUMBER;
-    hash = (53 * hash) + getStatus().hashCode();
     if (getScopesCount() > 0) {
       hash = (37 * hash) + SCOPES_FIELD_NUMBER;
       hash = (53 * hash) + getScopesList().hashCode();
-    }
-    if (!internalGetHeaders().getMap().isEmpty()) {
-      hash = (37 * hash) + HEADERS_FIELD_NUMBER;
-      hash = (53 * hash) + internalGetHeaders().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -516,28 +342,6 @@ private static final long serialVersionUID = 0L;
       return io.imulab.astrea.sdk.flow.AuthorizeCodeFlowProto.internal_static_client_CodePackage_descriptor;
     }
 
-    @SuppressWarnings({"rawtypes"})
-    protected com.google.protobuf.MapField internalGetMapField(
-        int number) {
-      switch (number) {
-        case 100:
-          return internalGetHeaders();
-        default:
-          throw new RuntimeException(
-              "Invalid map field number: " + number);
-      }
-    }
-    @SuppressWarnings({"rawtypes"})
-    protected com.google.protobuf.MapField internalGetMutableMapField(
-        int number) {
-      switch (number) {
-        case 100:
-          return internalGetMutableHeaders();
-        default:
-          throw new RuntimeException(
-              "Invalid map field number: " + number);
-      }
-    }
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
@@ -566,11 +370,8 @@ private static final long serialVersionUID = 0L;
       super.clear();
       code_ = "";
 
-      status_ = "";
-
       scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000004);
-      internalGetMutableHeaders().clear();
+      bitField0_ = (bitField0_ & ~0x00000002);
       return this;
     }
 
@@ -600,14 +401,11 @@ private static final long serialVersionUID = 0L;
       int from_bitField0_ = bitField0_;
       int to_bitField0_ = 0;
       result.code_ = code_;
-      result.status_ = status_;
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         scopes_ = scopes_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
       }
       result.scopes_ = scopes_;
-      result.headers_ = internalGetHeaders();
-      result.headers_.makeImmutable();
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -661,22 +459,16 @@ private static final long serialVersionUID = 0L;
         code_ = other.code_;
         onChanged();
       }
-      if (!other.getStatus().isEmpty()) {
-        status_ = other.status_;
-        onChanged();
-      }
       if (!other.scopes_.isEmpty()) {
         if (scopes_.isEmpty()) {
           scopes_ = other.scopes_;
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           ensureScopesIsMutable();
           scopes_.addAll(other.scopes_);
         }
         onChanged();
       }
-      internalGetMutableHeaders().mergeFrom(
-          other.internalGetHeaders());
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -776,110 +568,41 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object status_ = "";
-    /**
-     * <code>string status = 2;</code>
-     */
-    public java.lang.String getStatus() {
-      java.lang.Object ref = status_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        status_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string status = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getStatusBytes() {
-      java.lang.Object ref = status_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        status_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string status = 2;</code>
-     */
-    public Builder setStatus(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      status_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string status = 2;</code>
-     */
-    public Builder clearStatus() {
-      
-      status_ = getDefaultInstance().getStatus();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string status = 2;</code>
-     */
-    public Builder setStatusBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      status_ = value;
-      onChanged();
-      return this;
-    }
-
     private com.google.protobuf.LazyStringList scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     private void ensureScopesIsMutable() {
-      if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (!((bitField0_ & 0x00000002) == 0x00000002)) {
         scopes_ = new com.google.protobuf.LazyStringArrayList(scopes_);
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000002;
        }
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public com.google.protobuf.ProtocolStringList
         getScopesList() {
       return scopes_.getUnmodifiableView();
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public int getScopesCount() {
       return scopes_.size();
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public java.lang.String getScopes(int index) {
       return scopes_.get(index);
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public com.google.protobuf.ByteString
         getScopesBytes(int index) {
       return scopes_.getByteString(index);
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public Builder setScopes(
         int index, java.lang.String value) {
@@ -892,7 +615,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public Builder addScopes(
         java.lang.String value) {
@@ -905,7 +628,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public Builder addAllScopes(
         java.lang.Iterable<java.lang.String> values) {
@@ -916,16 +639,16 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public Builder clearScopes() {
       scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000004);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
     /**
-     * <code>repeated string scopes = 4;</code>
+     * <code>repeated string scopes = 2;</code>
      */
     public Builder addScopesBytes(
         com.google.protobuf.ByteString value) {
@@ -936,129 +659,6 @@ private static final long serialVersionUID = 0L;
       ensureScopesIsMutable();
       scopes_.add(value);
       onChanged();
-      return this;
-    }
-
-    private com.google.protobuf.MapField<
-        java.lang.String, java.lang.String> headers_;
-    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-    internalGetHeaders() {
-      if (headers_ == null) {
-        return com.google.protobuf.MapField.emptyMapField(
-            HeadersDefaultEntryHolder.defaultEntry);
-      }
-      return headers_;
-    }
-    private com.google.protobuf.MapField<java.lang.String, java.lang.String>
-    internalGetMutableHeaders() {
-      onChanged();;
-      if (headers_ == null) {
-        headers_ = com.google.protobuf.MapField.newMapField(
-            HeadersDefaultEntryHolder.defaultEntry);
-      }
-      if (!headers_.isMutable()) {
-        headers_ = headers_.copy();
-      }
-      return headers_;
-    }
-
-    public int getHeadersCount() {
-      return internalGetHeaders().getMap().size();
-    }
-    /**
-     * <code>map&lt;string, string&gt; headers = 100;</code>
-     */
-
-    public boolean containsHeaders(
-        java.lang.String key) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      return internalGetHeaders().getMap().containsKey(key);
-    }
-    /**
-     * Use {@link #getHeadersMap()} instead.
-     */
-    @java.lang.Deprecated
-    public java.util.Map<java.lang.String, java.lang.String> getHeaders() {
-      return getHeadersMap();
-    }
-    /**
-     * <code>map&lt;string, string&gt; headers = 100;</code>
-     */
-
-    public java.util.Map<java.lang.String, java.lang.String> getHeadersMap() {
-      return internalGetHeaders().getMap();
-    }
-    /**
-     * <code>map&lt;string, string&gt; headers = 100;</code>
-     */
-
-    public java.lang.String getHeadersOrDefault(
-        java.lang.String key,
-        java.lang.String defaultValue) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetHeaders().getMap();
-      return map.containsKey(key) ? map.get(key) : defaultValue;
-    }
-    /**
-     * <code>map&lt;string, string&gt; headers = 100;</code>
-     */
-
-    public java.lang.String getHeadersOrThrow(
-        java.lang.String key) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      java.util.Map<java.lang.String, java.lang.String> map =
-          internalGetHeaders().getMap();
-      if (!map.containsKey(key)) {
-        throw new java.lang.IllegalArgumentException();
-      }
-      return map.get(key);
-    }
-
-    public Builder clearHeaders() {
-      internalGetMutableHeaders().getMutableMap()
-          .clear();
-      return this;
-    }
-    /**
-     * <code>map&lt;string, string&gt; headers = 100;</code>
-     */
-
-    public Builder removeHeaders(
-        java.lang.String key) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      internalGetMutableHeaders().getMutableMap()
-          .remove(key);
-      return this;
-    }
-    /**
-     * Use alternate mutation accessors instead.
-     */
-    @java.lang.Deprecated
-    public java.util.Map<java.lang.String, java.lang.String>
-    getMutableHeaders() {
-      return internalGetMutableHeaders().getMutableMap();
-    }
-    /**
-     * <code>map&lt;string, string&gt; headers = 100;</code>
-     */
-    public Builder putHeaders(
-        java.lang.String key,
-        java.lang.String value) {
-      if (key == null) { throw new java.lang.NullPointerException(); }
-      if (value == null) { throw new java.lang.NullPointerException(); }
-      internalGetMutableHeaders().getMutableMap()
-          .put(key, value);
-      return this;
-    }
-    /**
-     * <code>map&lt;string, string&gt; headers = 100;</code>
-     */
-
-    public Builder putAllHeaders(
-        java.util.Map<java.lang.String, java.lang.String> values) {
-      internalGetMutableHeaders().getMutableMap()
-          .putAll(values);
       return this;
     }
     @java.lang.Override

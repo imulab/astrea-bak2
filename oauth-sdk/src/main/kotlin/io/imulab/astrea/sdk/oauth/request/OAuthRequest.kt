@@ -8,8 +8,8 @@ import java.util.*
  * Super class of all OAuthConfig requests.
  */
 open class OAuthRequest(
-    val id: String = UUID.randomUUID().toString(),
-    val requestTime: LocalDateTime = LocalDateTime.now(),
+    var id: String = UUID.randomUUID().toString(),
+    var requestTime: LocalDateTime = LocalDateTime.now(),
     val client: OAuthClient,
     val scopes: Set<String>,
     val session: OAuthSession = OAuthSession()

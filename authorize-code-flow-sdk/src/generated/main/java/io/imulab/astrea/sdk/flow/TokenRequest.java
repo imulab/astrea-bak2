@@ -76,6 +76,19 @@ private static final long serialVersionUID = 0L;
             redirectUri_ = s;
             break;
           }
+          case 50: {
+            io.imulab.astrea.sdk.flow.TokenRequest.Client.Builder subBuilder = null;
+            if (client_ != null) {
+              subBuilder = client_.toBuilder();
+            }
+            client_ = input.readMessage(io.imulab.astrea.sdk.flow.TokenRequest.Client.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(client_);
+              client_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -2008,6 +2021,27 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int CLIENT_FIELD_NUMBER = 6;
+  private io.imulab.astrea.sdk.flow.TokenRequest.Client client_;
+  /**
+   * <code>.client.TokenRequest.Client client = 6;</code>
+   */
+  public boolean hasClient() {
+    return client_ != null;
+  }
+  /**
+   * <code>.client.TokenRequest.Client client = 6;</code>
+   */
+  public io.imulab.astrea.sdk.flow.TokenRequest.Client getClient() {
+    return client_ == null ? io.imulab.astrea.sdk.flow.TokenRequest.Client.getDefaultInstance() : client_;
+  }
+  /**
+   * <code>.client.TokenRequest.Client client = 6;</code>
+   */
+  public io.imulab.astrea.sdk.flow.TokenRequest.ClientOrBuilder getClientOrBuilder() {
+    return getClient();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -2037,6 +2071,9 @@ private static final long serialVersionUID = 0L;
     if (!getRedirectUriBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 5, redirectUri_);
     }
+    if (client_ != null) {
+      output.writeMessage(6, getClient());
+    }
     unknownFields.writeTo(output);
   }
 
@@ -2061,6 +2098,10 @@ private static final long serialVersionUID = 0L;
     }
     if (!getRedirectUriBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, redirectUri_);
+    }
+    if (client_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(6, getClient());
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -2088,6 +2129,11 @@ private static final long serialVersionUID = 0L;
         .equals(other.getCode());
     result = result && getRedirectUri()
         .equals(other.getRedirectUri());
+    result = result && (hasClient() == other.hasClient());
+    if (hasClient()) {
+      result = result && getClient()
+          .equals(other.getClient());
+    }
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -2110,6 +2156,10 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getCode().hashCode();
     hash = (37 * hash) + REDIRECTURI_FIELD_NUMBER;
     hash = (53 * hash) + getRedirectUri().hashCode();
+    if (hasClient()) {
+      hash = (37 * hash) + CLIENT_FIELD_NUMBER;
+      hash = (53 * hash) + getClient().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -2253,6 +2303,12 @@ private static final long serialVersionUID = 0L;
 
       redirectUri_ = "";
 
+      if (clientBuilder_ == null) {
+        client_ = null;
+      } else {
+        client_ = null;
+        clientBuilder_ = null;
+      }
       return this;
     }
 
@@ -2284,6 +2340,11 @@ private static final long serialVersionUID = 0L;
       result.grantType_ = grantType_;
       result.code_ = code_;
       result.redirectUri_ = redirectUri_;
+      if (clientBuilder_ == null) {
+        result.client_ = client_;
+      } else {
+        result.client_ = clientBuilder_.build();
+      }
       onBuilt();
       return result;
     }
@@ -2350,6 +2411,9 @@ private static final long serialVersionUID = 0L;
       if (!other.getRedirectUri().isEmpty()) {
         redirectUri_ = other.redirectUri_;
         onChanged();
+      }
+      if (other.hasClient()) {
+        mergeClient(other.getClient());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -2680,6 +2744,123 @@ private static final long serialVersionUID = 0L;
       redirectUri_ = value;
       onChanged();
       return this;
+    }
+
+    private io.imulab.astrea.sdk.flow.TokenRequest.Client client_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        io.imulab.astrea.sdk.flow.TokenRequest.Client, io.imulab.astrea.sdk.flow.TokenRequest.Client.Builder, io.imulab.astrea.sdk.flow.TokenRequest.ClientOrBuilder> clientBuilder_;
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public boolean hasClient() {
+      return clientBuilder_ != null || client_ != null;
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public io.imulab.astrea.sdk.flow.TokenRequest.Client getClient() {
+      if (clientBuilder_ == null) {
+        return client_ == null ? io.imulab.astrea.sdk.flow.TokenRequest.Client.getDefaultInstance() : client_;
+      } else {
+        return clientBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public Builder setClient(io.imulab.astrea.sdk.flow.TokenRequest.Client value) {
+      if (clientBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        client_ = value;
+        onChanged();
+      } else {
+        clientBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public Builder setClient(
+        io.imulab.astrea.sdk.flow.TokenRequest.Client.Builder builderForValue) {
+      if (clientBuilder_ == null) {
+        client_ = builderForValue.build();
+        onChanged();
+      } else {
+        clientBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public Builder mergeClient(io.imulab.astrea.sdk.flow.TokenRequest.Client value) {
+      if (clientBuilder_ == null) {
+        if (client_ != null) {
+          client_ =
+            io.imulab.astrea.sdk.flow.TokenRequest.Client.newBuilder(client_).mergeFrom(value).buildPartial();
+        } else {
+          client_ = value;
+        }
+        onChanged();
+      } else {
+        clientBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public Builder clearClient() {
+      if (clientBuilder_ == null) {
+        client_ = null;
+        onChanged();
+      } else {
+        client_ = null;
+        clientBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public io.imulab.astrea.sdk.flow.TokenRequest.Client.Builder getClientBuilder() {
+      
+      onChanged();
+      return getClientFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    public io.imulab.astrea.sdk.flow.TokenRequest.ClientOrBuilder getClientOrBuilder() {
+      if (clientBuilder_ != null) {
+        return clientBuilder_.getMessageOrBuilder();
+      } else {
+        return client_ == null ?
+            io.imulab.astrea.sdk.flow.TokenRequest.Client.getDefaultInstance() : client_;
+      }
+    }
+    /**
+     * <code>.client.TokenRequest.Client client = 6;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        io.imulab.astrea.sdk.flow.TokenRequest.Client, io.imulab.astrea.sdk.flow.TokenRequest.Client.Builder, io.imulab.astrea.sdk.flow.TokenRequest.ClientOrBuilder> 
+        getClientFieldBuilder() {
+      if (clientBuilder_ == null) {
+        clientBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            io.imulab.astrea.sdk.flow.TokenRequest.Client, io.imulab.astrea.sdk.flow.TokenRequest.Client.Builder, io.imulab.astrea.sdk.flow.TokenRequest.ClientOrBuilder>(
+                getClient(),
+                getParentForChildren(),
+                isClean());
+        client_ = null;
+      }
+      return clientBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

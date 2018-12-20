@@ -6,8 +6,8 @@ open class OAuthSession(
     var subject: String = "",
     var originalRequestId: String = "",
     var originalRequestTime: LocalDateTime? = null,
-    val grantedScopes: MutableSet<String> = mutableSetOf(),
-    val accessTokenClaims: MutableMap<String, Any> = mutableMapOf()
+    var grantedScopes: MutableSet<String> = mutableSetOf(),
+    var accessTokenClaims: MutableMap<String, Any> = mutableMapOf()
 ) {
 
     open fun merge(another: OAuthSession) {

@@ -6,7 +6,7 @@ import io.imulab.astrea.sdk.oauth.response.OAuthResponse
 class OAuthException(
     override val status: Int,
     val error: String,
-    private val description: String,
+    val description: String,
     override val headers: Map<String, String> = emptyMap()
 ) : RuntimeException("$error: $description"), OAuthResponse {
 

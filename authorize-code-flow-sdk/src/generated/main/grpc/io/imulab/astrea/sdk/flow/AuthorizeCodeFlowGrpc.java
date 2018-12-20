@@ -59,6 +59,38 @@ public final class AuthorizeCodeFlowGrpc {
      return getAuthorizeMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.TokenRequest,
+      io.imulab.astrea.sdk.flow.TokenResponse> getExchangeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "Exchange",
+      requestType = io.imulab.astrea.sdk.flow.TokenRequest.class,
+      responseType = io.imulab.astrea.sdk.flow.TokenResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.TokenRequest,
+      io.imulab.astrea.sdk.flow.TokenResponse> getExchangeMethod() {
+    io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.TokenRequest, io.imulab.astrea.sdk.flow.TokenResponse> getExchangeMethod;
+    if ((getExchangeMethod = AuthorizeCodeFlowGrpc.getExchangeMethod) == null) {
+      synchronized (AuthorizeCodeFlowGrpc.class) {
+        if ((getExchangeMethod = AuthorizeCodeFlowGrpc.getExchangeMethod) == null) {
+          AuthorizeCodeFlowGrpc.getExchangeMethod = getExchangeMethod = 
+              io.grpc.MethodDescriptor.<io.imulab.astrea.sdk.flow.TokenRequest, io.imulab.astrea.sdk.flow.TokenResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "client.AuthorizeCodeFlow", "Exchange"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  io.imulab.astrea.sdk.flow.TokenRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  io.imulab.astrea.sdk.flow.TokenResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new AuthorizeCodeFlowMethodDescriptorSupplier("Exchange"))
+                  .build();
+          }
+        }
+     }
+     return getExchangeMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -93,6 +125,13 @@ public final class AuthorizeCodeFlowGrpc {
       asyncUnimplementedUnaryCall(getAuthorizeMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void exchange(io.imulab.astrea.sdk.flow.TokenRequest request,
+        io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.TokenResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getExchangeMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -102,6 +141,13 @@ public final class AuthorizeCodeFlowGrpc {
                 io.imulab.astrea.sdk.flow.CodeRequest,
                 io.imulab.astrea.sdk.flow.CodeResponse>(
                   this, METHODID_AUTHORIZE)))
+          .addMethod(
+            getExchangeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                io.imulab.astrea.sdk.flow.TokenRequest,
+                io.imulab.astrea.sdk.flow.TokenResponse>(
+                  this, METHODID_EXCHANGE)))
           .build();
     }
   }
@@ -131,6 +177,14 @@ public final class AuthorizeCodeFlowGrpc {
       asyncUnaryCall(
           getChannel().newCall(getAuthorizeMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void exchange(io.imulab.astrea.sdk.flow.TokenRequest request,
+        io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.TokenResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getExchangeMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -156,6 +210,13 @@ public final class AuthorizeCodeFlowGrpc {
     public io.imulab.astrea.sdk.flow.CodeResponse authorize(io.imulab.astrea.sdk.flow.CodeRequest request) {
       return blockingUnaryCall(
           getChannel(), getAuthorizeMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public io.imulab.astrea.sdk.flow.TokenResponse exchange(io.imulab.astrea.sdk.flow.TokenRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getExchangeMethod(), getCallOptions(), request);
     }
   }
 
@@ -184,9 +245,18 @@ public final class AuthorizeCodeFlowGrpc {
       return futureUnaryCall(
           getChannel().newCall(getAuthorizeMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<io.imulab.astrea.sdk.flow.TokenResponse> exchange(
+        io.imulab.astrea.sdk.flow.TokenRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getExchangeMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_AUTHORIZE = 0;
+  private static final int METHODID_EXCHANGE = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -208,6 +278,10 @@ public final class AuthorizeCodeFlowGrpc {
         case METHODID_AUTHORIZE:
           serviceImpl.authorize((io.imulab.astrea.sdk.flow.CodeRequest) request,
               (io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.CodeResponse>) responseObserver);
+          break;
+        case METHODID_EXCHANGE:
+          serviceImpl.exchange((io.imulab.astrea.sdk.flow.TokenRequest) request,
+              (io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.TokenResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -271,6 +345,7 @@ public final class AuthorizeCodeFlowGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new AuthorizeCodeFlowFileDescriptorSupplier())
               .addMethod(getAuthorizeMethod())
+              .addMethod(getExchangeMethod())
               .build();
         }
       }

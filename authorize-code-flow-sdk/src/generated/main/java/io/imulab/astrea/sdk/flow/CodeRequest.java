@@ -102,6 +102,19 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
+          case 66: {
+            io.imulab.astrea.sdk.flow.CodeRequest.Session.Builder subBuilder = null;
+            if (session_ != null) {
+              subBuilder = session_.toBuilder();
+            }
+            session_ = input.readMessage(io.imulab.astrea.sdk.flow.CodeRequest.Session.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(session_);
+              session_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -2587,6 +2600,27 @@ private static final long serialVersionUID = 0L;
     return getClient();
   }
 
+  public static final int SESSION_FIELD_NUMBER = 8;
+  private io.imulab.astrea.sdk.flow.CodeRequest.Session session_;
+  /**
+   * <code>.client.CodeRequest.Session session = 8;</code>
+   */
+  public boolean hasSession() {
+    return session_ != null;
+  }
+  /**
+   * <code>.client.CodeRequest.Session session = 8;</code>
+   */
+  public io.imulab.astrea.sdk.flow.CodeRequest.Session getSession() {
+    return session_ == null ? io.imulab.astrea.sdk.flow.CodeRequest.Session.getDefaultInstance() : session_;
+  }
+  /**
+   * <code>.client.CodeRequest.Session session = 8;</code>
+   */
+  public io.imulab.astrea.sdk.flow.CodeRequest.SessionOrBuilder getSessionOrBuilder() {
+    return getSession();
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -2621,6 +2655,9 @@ private static final long serialVersionUID = 0L;
     }
     if (client_ != null) {
       output.writeMessage(7, getClient());
+    }
+    if (session_ != null) {
+      output.writeMessage(8, getSession());
     }
     unknownFields.writeTo(output);
   }
@@ -2664,6 +2701,10 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(7, getClient());
     }
+    if (session_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(8, getSession());
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -2697,6 +2738,11 @@ private static final long serialVersionUID = 0L;
       result = result && getClient()
           .equals(other.getClient());
     }
+    result = result && (hasSession() == other.hasSession());
+    if (hasSession()) {
+      result = result && getSession()
+          .equals(other.getSession());
+    }
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -2728,6 +2774,10 @@ private static final long serialVersionUID = 0L;
     if (hasClient()) {
       hash = (37 * hash) + CLIENT_FIELD_NUMBER;
       hash = (53 * hash) + getClient().hashCode();
+    }
+    if (hasSession()) {
+      hash = (37 * hash) + SESSION_FIELD_NUMBER;
+      hash = (53 * hash) + getSession().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -2880,6 +2930,12 @@ private static final long serialVersionUID = 0L;
         client_ = null;
         clientBuilder_ = null;
       }
+      if (sessionBuilder_ == null) {
+        session_ = null;
+      } else {
+        session_ = null;
+        sessionBuilder_ = null;
+      }
       return this;
     }
 
@@ -2926,6 +2982,11 @@ private static final long serialVersionUID = 0L;
         result.client_ = client_;
       } else {
         result.client_ = clientBuilder_.build();
+      }
+      if (sessionBuilder_ == null) {
+        result.session_ = session_;
+      } else {
+        result.session_ = sessionBuilder_.build();
       }
       result.bitField0_ = to_bitField0_;
       onBuilt();
@@ -3013,6 +3074,9 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasClient()) {
         mergeClient(other.getClient());
+      }
+      if (other.hasSession()) {
+        mergeSession(other.getSession());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -3580,6 +3644,123 @@ private static final long serialVersionUID = 0L;
         client_ = null;
       }
       return clientBuilder_;
+    }
+
+    private io.imulab.astrea.sdk.flow.CodeRequest.Session session_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        io.imulab.astrea.sdk.flow.CodeRequest.Session, io.imulab.astrea.sdk.flow.CodeRequest.Session.Builder, io.imulab.astrea.sdk.flow.CodeRequest.SessionOrBuilder> sessionBuilder_;
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public boolean hasSession() {
+      return sessionBuilder_ != null || session_ != null;
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public io.imulab.astrea.sdk.flow.CodeRequest.Session getSession() {
+      if (sessionBuilder_ == null) {
+        return session_ == null ? io.imulab.astrea.sdk.flow.CodeRequest.Session.getDefaultInstance() : session_;
+      } else {
+        return sessionBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public Builder setSession(io.imulab.astrea.sdk.flow.CodeRequest.Session value) {
+      if (sessionBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        session_ = value;
+        onChanged();
+      } else {
+        sessionBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public Builder setSession(
+        io.imulab.astrea.sdk.flow.CodeRequest.Session.Builder builderForValue) {
+      if (sessionBuilder_ == null) {
+        session_ = builderForValue.build();
+        onChanged();
+      } else {
+        sessionBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public Builder mergeSession(io.imulab.astrea.sdk.flow.CodeRequest.Session value) {
+      if (sessionBuilder_ == null) {
+        if (session_ != null) {
+          session_ =
+            io.imulab.astrea.sdk.flow.CodeRequest.Session.newBuilder(session_).mergeFrom(value).buildPartial();
+        } else {
+          session_ = value;
+        }
+        onChanged();
+      } else {
+        sessionBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public Builder clearSession() {
+      if (sessionBuilder_ == null) {
+        session_ = null;
+        onChanged();
+      } else {
+        session_ = null;
+        sessionBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public io.imulab.astrea.sdk.flow.CodeRequest.Session.Builder getSessionBuilder() {
+      
+      onChanged();
+      return getSessionFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    public io.imulab.astrea.sdk.flow.CodeRequest.SessionOrBuilder getSessionOrBuilder() {
+      if (sessionBuilder_ != null) {
+        return sessionBuilder_.getMessageOrBuilder();
+      } else {
+        return session_ == null ?
+            io.imulab.astrea.sdk.flow.CodeRequest.Session.getDefaultInstance() : session_;
+      }
+    }
+    /**
+     * <code>.client.CodeRequest.Session session = 8;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        io.imulab.astrea.sdk.flow.CodeRequest.Session, io.imulab.astrea.sdk.flow.CodeRequest.Session.Builder, io.imulab.astrea.sdk.flow.CodeRequest.SessionOrBuilder> 
+        getSessionFieldBuilder() {
+      if (sessionBuilder_ == null) {
+        sessionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            io.imulab.astrea.sdk.flow.CodeRequest.Session, io.imulab.astrea.sdk.flow.CodeRequest.Session.Builder, io.imulab.astrea.sdk.flow.CodeRequest.SessionOrBuilder>(
+                getSession(),
+                getParentForChildren(),
+                isClean());
+        session_ = null;
+      }
+      return sessionBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

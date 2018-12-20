@@ -8,6 +8,7 @@ package client;
 
 service AuthorizeCodeFlow {
     rpc Authorize (CodeRequest) returns (CodeResponse);
+    rpc Exchange (TokenRequest) returns (TokenResponse);
 }
 
 message CodeRequest {
@@ -18,6 +19,7 @@ message CodeRequest {
     string state = 5;
     repeated string scopes = 6;
     Client client = 7;
+    Session session = 8;
 
     message Client {
         string id = 1;
@@ -47,6 +49,7 @@ message TokenRequest {
     string grantType = 3;
     string code = 4;
     string redirectUri = 5;
+    Client client = 6;
 
     message Client {
         string id = 1;
@@ -69,9 +72,7 @@ message TokenResponse {
 
 message CodePackage {
     string code = 1;
-    string status = 2;
-    repeated string scopes = 4;
-    map<string, string> headers = 100;
+    repeated string scopes = 2;
 }
 
 message TokenPackage {
