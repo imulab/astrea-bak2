@@ -11,4 +11,5 @@ include 'authorize-proxy'
 include 'login-fake-service'
 include 'consent-fake-service'
 include 'authorize-service'
+include 'authorize-code-hybrid-service'
 
