@@ -14,4 +14,5 @@ include 'authorize-service'
 include 'authorize-code-hybrid-service'
 include 'flow-service-sdk'
 include 'token-service'
+include 'authorize-code-flow-sdk'
 
