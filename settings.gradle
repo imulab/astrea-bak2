@@ -12,4 +12,6 @@ include 'login-fake-service'
 include 'consent-fake-service'
 include 'authorize-service'
 include 'authorize-code-hybrid-service'
+include 'flow-service-sdk'
+include 'token-service'
 
