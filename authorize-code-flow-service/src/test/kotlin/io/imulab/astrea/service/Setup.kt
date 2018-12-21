@@ -80,7 +80,8 @@ class IntegrationTest(vertx: Vertx, config: Config) : Components(vertx, config) 
                         instance<OidcAuthorizeCodeHandler>()
                     ),
                     redisAuthorizeCodeRepository = mock(),
-                    validation = instance()
+                    authorizeValidation = instance("authorizeValidation"),
+                    exchangeValidation = instance("exchangeValidation")
                 )
             }
         }

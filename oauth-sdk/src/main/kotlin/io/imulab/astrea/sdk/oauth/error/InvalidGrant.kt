@@ -8,8 +8,8 @@ package io.imulab.astrea.sdk.oauth.error
 // URI used in the authorization request, or was issued to
 // another client.
 object InvalidGrant {
-    private const val code = "invalid_grant"
-    private const val status = 400
+    const val code = "invalid_grant"
+    const val status = 400
 
     val invalid: () -> Throwable =
         { OAuthException(status, code, "Presented grant is invalid.") }

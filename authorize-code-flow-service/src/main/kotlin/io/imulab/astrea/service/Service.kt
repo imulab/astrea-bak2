@@ -8,7 +8,6 @@ import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.handler.AccessRequestHandler
 import io.imulab.astrea.sdk.oauth.handler.AuthorizeRequestHandler
 import io.imulab.astrea.sdk.oauth.request.OAuthAccessRequest
-import io.imulab.astrea.sdk.oauth.validation.OAuthRequestValidation
 import io.imulab.astrea.sdk.oauth.validation.OAuthRequestValidationChain
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
 import io.imulab.astrea.sdk.oidc.request.OidcSession
@@ -62,7 +61,8 @@ class AuthorizeCodeFlowService(
     private val authorizeHandlers: List<AuthorizeRequestHandler>,
     private val exchangeHandlers: List<AccessRequestHandler>,
     private val redisAuthorizeCodeRepository: RedisAuthorizeCodeRepository,
-    private val validation: OAuthRequestValidationChain
+    private val authorizeValidation: OAuthRequestValidationChain,
+    private val exchangeValidation: OAuthRequestValidationChain
 ) : AuthorizeCodeFlowGrpc.AuthorizeCodeFlowImplBase(), CoroutineScope {
 
     override fun authorize(request: CodeRequest?, responseObserver: StreamObserver<CodeResponse>?) {
@@ -90,7 +90,7 @@ class AuthorizeCodeFlowService(
         val authorizeResponse = OidcAuthorizeEndpointResponse()
 
         launch(job) {
-            validation.validate(authorizeRequest)
+            authorizeValidation.validate(authorizeRequest)
 
             authorizeHandlers.forEach { h ->
                 h.handleAuthorizeRequest(authorizeRequest, authorizeResponse)
@@ -141,6 +141,8 @@ class AuthorizeCodeFlowService(
         val tokenResponse = OidcTokenEndpointResponse()
 
         launch(job) {
+            exchangeValidation.validate(tokenRequest)
+
             exchangeHandlers.forEach { h -> h.updateSession(tokenRequest) }
             exchangeHandlers.forEach { h -> h.handleAccessRequest(tokenRequest, tokenResponse) }
 

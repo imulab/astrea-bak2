@@ -52,7 +52,8 @@ open class Components(vertx: Vertx, private val config: Config) {
                         instance<OidcAuthorizeCodeHandler>()
                     ),
                     redisAuthorizeCodeRepository = instance(),
-                    validation = instance()
+                    authorizeValidation = instance("authorizeValidation"),
+                    exchangeValidation = instance("exchangeValidation")
                 )
             }
 
@@ -104,7 +105,7 @@ open class Components(vertx: Vertx, private val config: Config) {
     }
 
     val validation = Kodein.Module("validation") {
-        bind<OAuthRequestValidationChain>() with singleton {
+        bind<OAuthRequestValidationChain>("authorizeValidation") with singleton {
             OAuthRequestValidationChain(listOf(
                 StateValidator(instance()),
                 NonceValidator(instance()),
@@ -112,6 +113,11 @@ open class Components(vertx: Vertx, private val config: Config) {
                 GrantedScopeValidator,
                 RedirectUriValidator,
                 OidcResponseTypeValidator
+            ))
+        }
+        bind<OAuthRequestValidationChain>("exchangeValidation") with singleton {
+            OAuthRequestValidationChain(listOf(
+                OAuthGrantTypeValidator
             ))
         }
     }
