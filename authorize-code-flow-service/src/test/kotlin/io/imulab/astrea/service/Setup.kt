@@ -65,6 +65,7 @@ class IntegrationTest(vertx: Vertx, config: Config) : Components(vertx, config) 
         return Kodein {
             importOnce(testDiscovery)
             importOnce(testPersistence)
+            importOnce(validation)
             importOnce(app)
 
             bind<AuthorizeCodeFlowService>() with singleton {
@@ -78,7 +79,8 @@ class IntegrationTest(vertx: Vertx, config: Config) : Components(vertx, config) 
                         instance<OAuthAuthorizeCodeHandler>(),
                         instance<OidcAuthorizeCodeHandler>()
                     ),
-                    redisAuthorizeCodeRepository = mock()
+                    redisAuthorizeCodeRepository = mock(),
+                    validation = instance()
                 )
             }
         }

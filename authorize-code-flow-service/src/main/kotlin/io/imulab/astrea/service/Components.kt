@@ -13,10 +13,13 @@ import io.imulab.astrea.sdk.oauth.token.JwtSigningAlgorithm
 import io.imulab.astrea.sdk.oauth.token.storage.AccessTokenRepository
 import io.imulab.astrea.sdk.oauth.token.storage.RefreshTokenRepository
 import io.imulab.astrea.sdk.oauth.token.strategy.*
+import io.imulab.astrea.sdk.oauth.validation.*
 import io.imulab.astrea.sdk.oidc.discovery.Discovery
 import io.imulab.astrea.sdk.oidc.handler.OidcAuthorizeCodeHandler
 import io.imulab.astrea.sdk.oidc.token.IdTokenStrategy
 import io.imulab.astrea.sdk.oidc.token.JwxIdTokenStrategy
+import io.imulab.astrea.sdk.oidc.validation.NonceValidator
+import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
 import io.vavr.control.Try
 import io.vertx.core.Vertx
 import io.vertx.redis.RedisClient
@@ -35,6 +38,7 @@ open class Components(vertx: Vertx, private val config: Config) {
         return Kodein {
             importOnce(discovery)
             importOnce(persistence)
+            importOnce(validation)
             importOnce(app)
 
             bind<AuthorizeCodeFlowService>() with singleton {
@@ -47,7 +51,8 @@ open class Components(vertx: Vertx, private val config: Config) {
                         instance<OAuthAuthorizeCodeHandler>(),
                         instance<OidcAuthorizeCodeHandler>()
                     ),
-                    redisAuthorizeCodeRepository = instance()
+                    redisAuthorizeCodeRepository = instance(),
+                    validation = instance()
                 )
             }
 
@@ -96,6 +101,19 @@ open class Components(vertx: Vertx, private val config: Config) {
         }
 
         bind<RefreshTokenRepository>() with singleton { PublishingRefreshTokenRepository() }
+    }
+
+    val validation = Kodein.Module("validation") {
+        bind<OAuthRequestValidationChain>() with singleton {
+            OAuthRequestValidationChain(listOf(
+                StateValidator(instance()),
+                NonceValidator(instance()),
+                ScopeValidator,
+                GrantedScopeValidator,
+                RedirectUriValidator,
+                OidcResponseTypeValidator
+            ))
+        }
     }
 
     val app = Kodein.Module("app") {

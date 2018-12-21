@@ -8,6 +8,8 @@ import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.handler.AccessRequestHandler
 import io.imulab.astrea.sdk.oauth.handler.AuthorizeRequestHandler
 import io.imulab.astrea.sdk.oauth.request.OAuthAccessRequest
+import io.imulab.astrea.sdk.oauth.validation.OAuthRequestValidation
+import io.imulab.astrea.sdk.oauth.validation.OAuthRequestValidationChain
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
 import io.imulab.astrea.sdk.oidc.request.OidcSession
 import io.imulab.astrea.sdk.oidc.response.OidcAuthorizeEndpointResponse
@@ -59,7 +61,8 @@ class AuthorizeCodeFlowService(
     override val coroutineContext: CoroutineContext = Executors.newFixedThreadPool(concurrency).asCoroutineDispatcher(),
     private val authorizeHandlers: List<AuthorizeRequestHandler>,
     private val exchangeHandlers: List<AccessRequestHandler>,
-    private val redisAuthorizeCodeRepository: RedisAuthorizeCodeRepository
+    private val redisAuthorizeCodeRepository: RedisAuthorizeCodeRepository,
+    private val validation: OAuthRequestValidationChain
 ) : AuthorizeCodeFlowGrpc.AuthorizeCodeFlowImplBase(), CoroutineScope {
 
     override fun authorize(request: CodeRequest?, responseObserver: StreamObserver<CodeResponse>?) {
@@ -87,7 +90,12 @@ class AuthorizeCodeFlowService(
         val authorizeResponse = OidcAuthorizeEndpointResponse()
 
         launch(job) {
-            authorizeHandlers.forEach { h -> h.handleAuthorizeRequest(authorizeRequest, authorizeResponse) }
+            validation.validate(authorizeRequest)
+
+            authorizeHandlers.forEach { h ->
+                h.handleAuthorizeRequest(authorizeRequest, authorizeResponse)
+            }
+
             if (!authorizeResponse.handledResponseTypes.containsAll(authorizeRequest.responseTypes))
                 throw ServerError.internal("Some response types were not handled.")
         }.invokeOnCompletion { t ->
@@ -113,6 +121,7 @@ class AuthorizeCodeFlowService(
                         .build()
                 )
             }
+
             responseObserver.onCompleted()
         }
     }
