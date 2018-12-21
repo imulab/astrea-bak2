@@ -29,13 +29,37 @@ import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
 import java.time.Duration
 
-internal fun components(vertx: Vertx, config: Config): Kodein {
+open class Components(vertx: Vertx, private val config: Config) {
 
-    val app = Kodein.Module("app") {
+    open fun bootstrap(): Kodein {
+        return Kodein {
+            importOnce(discovery)
+            importOnce(persistence)
+            importOnce(app)
+
+            bind<AuthorizeCodeFlowService>() with singleton {
+                AuthorizeCodeFlowService(
+                    authorizeHandlers = listOf(
+                        instance<OAuthAuthorizeCodeHandler>(),
+                        instance<OidcAuthorizeCodeHandler>()
+                    ),
+                    exchangeHandlers = listOf(
+                        instance<OAuthAuthorizeCodeHandler>(),
+                        instance<OidcAuthorizeCodeHandler>()
+                    ),
+                    redisAuthorizeCodeRepository = instance()
+                )
+            }
+
+            bind<GrpcVerticle>() with singleton { GrpcVerticle(instance(), config) }
+        }
+    }
+
+    val discovery = Kodein.Module("discovery") {
         bind<Discovery>() with eagerSingleton {
             val channel = ManagedChannelBuilder.forAddress(
-                instance<Config>().getString("discovery.host"),
-                instance<Config>().getInt("discovery.port")
+                config.getString("discovery.host"),
+                config.getInt("discovery.port")
             ).enableRetry().maxRetryAttempts(10).usePlaintext().build()
 
             val retry = Retry.of(
@@ -57,7 +81,24 @@ internal fun components(vertx: Vertx, config: Config): Kodein {
             Try.ofSupplier(discovery)
                 .getOrElse { throw ServerError.internal("Cannot obtain discovery.") }
         }
+    }
 
+    val persistence = Kodein.Module("persistence") {
+        bind<RedisAuthorizeCodeRepository>() with singleton {
+            RedisAuthorizeCodeRepository(
+                RedisClient.create(vertx, RedisOptions().apply {
+                    host = config.getString("redis.host")
+                    port = config.getInt("redis.port")
+                    select = config.getInt("redis.db")
+                }),
+                instance<ServiceContext>().authorizeCodeLifespan
+            )
+        }
+
+        bind<RefreshTokenRepository>() with singleton { PublishingRefreshTokenRepository() }
+    }
+
+    val app = Kodein.Module("app") {
         bind<ServiceContext>() with singleton {
             ServiceContext(
                 config,
@@ -70,17 +111,6 @@ internal fun components(vertx: Vertx, config: Config): Kodein {
                 instance<ServiceContext>().authorizeCodeKey,
                 JwtSigningAlgorithm.HS256
             ).enableServiceAware(config.getString("service.id"))
-        }
-
-        bind<RedisAuthorizeCodeRepository>() with singleton {
-            RedisAuthorizeCodeRepository(
-                RedisClient.create(vertx, RedisOptions().apply {
-                    host = config.getString("redis.host")
-                    port = config.getInt("redis.port")
-                    select = config.getInt("redis.db")
-                }),
-                instance<ServiceContext>().authorizeCodeLifespan
-            )
         }
 
         bind<AccessTokenStrategy>() with singleton {
@@ -99,8 +129,6 @@ internal fun components(vertx: Vertx, config: Config): Kodein {
                 JwtSigningAlgorithm.HS256
             )
         }
-
-        bind<RefreshTokenRepository>() with singleton { PublishingRefreshTokenRepository() }
 
         bind<IdTokenStrategy>() with singleton {
             JwxIdTokenStrategy(
@@ -128,23 +156,5 @@ internal fun components(vertx: Vertx, config: Config): Kodein {
                 oidcSessionRepository = instance()
             )
         }
-    }
-
-    return Kodein {
-        bind<AuthorizeCodeFlowService>() with singleton {
-            AuthorizeCodeFlowService(
-                authorizeHandlers = listOf(
-                    instance<OAuthAuthorizeCodeHandler>(),
-                    instance<OidcAuthorizeCodeHandler>()
-                ),
-                exchangeHandlers = listOf(
-                    instance<OAuthAuthorizeCodeHandler>(),
-                    instance<OidcAuthorizeCodeHandler>()
-                ),
-                redisAuthorizeCodeRepository = instance()
-            )
-        }
-
-        bind<GrpcVerticle>() with singleton { GrpcVerticle(instance(), config) }
     }
 }

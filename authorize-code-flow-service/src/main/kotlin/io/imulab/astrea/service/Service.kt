@@ -33,7 +33,7 @@ class GrpcVerticle(
 
     override fun start(startFuture: Future<Void>?) {
         val server = VertxServerBuilder
-            .forPort(vertx, appConfig.getInt("service.grpcPort"))
+            .forPort(vertx, appConfig.getInt("service.port"))
             .addService(flowService)
             .build()
 
@@ -56,13 +56,11 @@ class GrpcVerticle(
 
 class AuthorizeCodeFlowService(
     private val concurrency: Int = 4,
+    override val coroutineContext: CoroutineContext = Executors.newFixedThreadPool(concurrency).asCoroutineDispatcher(),
     private val authorizeHandlers: List<AuthorizeRequestHandler>,
     private val exchangeHandlers: List<AccessRequestHandler>,
     private val redisAuthorizeCodeRepository: RedisAuthorizeCodeRepository
 ) : AuthorizeCodeFlowGrpc.AuthorizeCodeFlowImplBase(), CoroutineScope {
-
-    override val coroutineContext: CoroutineContext
-        get() = Executors.newFixedThreadPool(concurrency).asCoroutineDispatcher()
 
     override fun authorize(request: CodeRequest?, responseObserver: StreamObserver<CodeResponse>?) {
         if (request == null || responseObserver == null)
@@ -88,15 +86,21 @@ class AuthorizeCodeFlowService(
         }.build()
         val authorizeResponse = OidcAuthorizeEndpointResponse()
 
-        try {
-            launch(job) {
-                authorizeHandlers.forEach { h ->
-                    h.handleAuthorizeRequest(authorizeRequest, authorizeResponse)
-                }
-
-                if (!authorizeResponse.handledResponseTypes.containsAll(authorizeRequest.responseTypes))
-                    throw ServerError.internal("Some response types were not handled.")
-
+        launch(job) {
+            authorizeHandlers.forEach { h -> h.handleAuthorizeRequest(authorizeRequest, authorizeResponse) }
+            if (!authorizeResponse.handledResponseTypes.containsAll(authorizeRequest.responseTypes))
+                throw ServerError.internal("Some response types were not handled.")
+        }.invokeOnCompletion { t ->
+            if (t != null) {
+                job.cancel()
+                val e: OAuthException = if (t is OAuthException) t else ServerError.wrapped(t)
+                responseObserver.onNext(
+                    CodeResponse.newBuilder()
+                        .setSuccess(false)
+                        .setFailure(e.toFailure())
+                        .build()
+                )
+            } else {
                 responseObserver.onNext(
                     CodeResponse.newBuilder()
                         .setSuccess(true)
@@ -109,16 +113,6 @@ class AuthorizeCodeFlowService(
                         .build()
                 )
             }
-        } catch (t: Throwable) {
-            job.cancel()
-            val e: OAuthException = if (t is OAuthException) t else ServerError.wrapped(t)
-            responseObserver.onNext(
-                CodeResponse.newBuilder()
-                    .setSuccess(false)
-                    .setFailure(e.toFailure())
-                    .build()
-            )
-        } finally {
             responseObserver.onCompleted()
         }
     }
@@ -137,17 +131,26 @@ class AuthorizeCodeFlowService(
         }.build()
         val tokenResponse = OidcTokenEndpointResponse()
 
-        try {
-            launch(job) {
-                exchangeHandlers.forEach { h -> h.updateSession(tokenRequest) }
-                exchangeHandlers.forEach { h -> h.handleAccessRequest(tokenRequest, tokenResponse) }
+        launch(job) {
+            exchangeHandlers.forEach { h -> h.updateSession(tokenRequest) }
+            exchangeHandlers.forEach { h -> h.handleAccessRequest(tokenRequest, tokenResponse) }
 
-                // safety mechanism in case the incoming request is OAuth only.
-                // since the repository impl waits for the oidc handler to delete session, we may neglect
-                // session deletion if the request is not OIDC scoped.
-                // hence, as a safety, we force delete again here.
-                redisAuthorizeCodeRepository.deleteOidcSession(tokenRequest.code)
-
+            // safety mechanism in case the incoming request is OAuth only.
+            // since the repository impl waits for the oidc handler to delete session, we may neglect
+            // session deletion if the request is not OIDC scoped.
+            // hence, as a safety, we force delete again here.
+            redisAuthorizeCodeRepository.deleteOidcSession(tokenRequest.code)
+        }.invokeOnCompletion { t ->
+            if (t != null) {
+                job.cancel()
+                val e: OAuthException = if (t is OAuthException) t else ServerError.wrapped(t)
+                responseObserver.onNext(
+                    TokenResponse.newBuilder()
+                        .setSuccess(false)
+                        .setFailure(e.toFailure())
+                        .build()
+                )
+            } else {
                 responseObserver.onNext(
                     TokenResponse.newBuilder()
                         .setSuccess(true)
@@ -163,16 +166,6 @@ class AuthorizeCodeFlowService(
                         .build()
                 )
             }
-        } catch (t: Throwable) {
-            job.cancel()
-            val e: OAuthException = if (t is OAuthException) t else ServerError.wrapped(t)
-            responseObserver.onNext(
-                TokenResponse.newBuilder()
-                    .setSuccess(false)
-                    .setFailure(e.toFailure())
-                    .build()
-            )
-        } finally {
             responseObserver.onCompleted()
         }
     }

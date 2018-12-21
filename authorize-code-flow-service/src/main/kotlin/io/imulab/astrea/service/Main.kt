@@ -11,7 +11,7 @@ internal val logger: Logger = LoggerFactory.getLogger("io.imulab.astrea.service.
 fun main(args: Array<String>) {
     val vertx = Vertx.vertx()
     val config = ConfigFactory.load()
-    val components = components(vertx, config)
+    val components = Components(vertx, config).bootstrap()
 
     val grpcVerticle by components.instance<GrpcVerticle>()
     vertx.deployVerticle(grpcVerticle) { ar ->

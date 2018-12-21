@@ -22,35 +22,35 @@ class CodeFlowAuthorizeLegClient(source: CodeRequest.Client) : OidcClient {
     override val scopes: Set<String> = source.scopesList.toSet()
 
     // not needed fields
-    override val applicationType: String = notImplemented()
-    override val contacts: LinkedHashSet<String> = notImplemented()
-    override val logoUri: String = notImplemented()
-    override val clientUri: String = notImplemented()
-    override val policyUri: String = notImplemented()
-    override val tosUri: String = notImplemented()
-    override val jwksUri: String = notImplemented()
-    override val jwks: String = notImplemented()
-    override val sectorIdentifierUri: String = notImplemented()
-    override val subjectType: String = notImplemented()
-    override val idTokenSignedResponseAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val idTokenEncryptedResponseAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val idTokenEncryptedResponseEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val tokenEndpointAuthenticationMethod: String = notImplemented()
-    override val defaultMaxAge: Long = notImplemented()
-    override val requireAuthTime: Boolean = notImplemented()
-    override val defaultAcrValues: List<String> = notImplemented()
-    override val initiateLoginUri: String = notImplemented()
-    override val requestUris: List<String> = notImplemented()
-    override val secret: ByteArray = notImplemented()
-    override val name: String = notImplemented()
-    override val type: String = notImplemented()
-    override val grantTypes: Set<String> = notImplemented()
+    override val applicationType: String by lazy { notImplemented() }
+    override val contacts: LinkedHashSet<String> by lazy { notImplemented() }
+    override val logoUri: String by lazy { notImplemented() }
+    override val clientUri: String by lazy { notImplemented() }
+    override val policyUri: String by lazy { notImplemented() }
+    override val tosUri: String by lazy { notImplemented() }
+    override val jwksUri: String by lazy { notImplemented() }
+    override val jwks: String by lazy { notImplemented() }
+    override val sectorIdentifierUri: String by lazy { notImplemented() }
+    override val subjectType: String by lazy { notImplemented() }
+    override val idTokenSignedResponseAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val idTokenEncryptedResponseAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val idTokenEncryptedResponseEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val tokenEndpointAuthenticationMethod: String by lazy { notImplemented() }
+    override val defaultMaxAge: Long by lazy { notImplemented() }
+    override val requireAuthTime: Boolean by lazy { notImplemented() }
+    override val defaultAcrValues: List<String> by lazy { notImplemented() }
+    override val initiateLoginUri: String by lazy { notImplemented() }
+    override val requestUris: List<String> by lazy { notImplemented() }
+    override val secret: ByteArray by lazy { notImplemented() }
+    override val name: String by lazy { notImplemented() }
+    override val type: String by lazy { notImplemented() }
+    override val grantTypes: Set<String> by lazy { notImplemented() }
 }
 
 /**
@@ -74,30 +74,30 @@ class ClientFlowTokenLegClient(source: TokenRequest.Client) : OidcClient {
         JweContentEncodingAlgorithm.fromSpec(source.idTokenEncryptedResponseEncoding)
 
     // not needed fields
-    override val applicationType: String = notImplemented()
-    override val contacts: LinkedHashSet<String> = notImplemented()
-    override val logoUri: String = notImplemented()
-    override val clientUri: String = notImplemented()
-    override val policyUri: String = notImplemented()
-    override val tosUri: String = notImplemented()
-    override val jwksUri: String = notImplemented()
-    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val tokenEndpointAuthenticationMethod: String = notImplemented()
-    override val defaultMaxAge: Long = notImplemented()
-    override val requireAuthTime: Boolean = notImplemented()
-    override val defaultAcrValues: List<String> = notImplemented()
-    override val initiateLoginUri: String = notImplemented()
-    override val requestUris: List<String> = notImplemented()
-    override val secret: ByteArray = notImplemented()
-    override val name: String = notImplemented()
-    override val type: String = notImplemented()
-    override val responseTypes: Set<String> = notImplemented()
-    override val scopes: Set<String> = notImplemented()
+    override val applicationType: String by lazy { notImplemented() }
+    override val contacts: LinkedHashSet<String> by lazy { notImplemented() }
+    override val logoUri: String by lazy { notImplemented() }
+    override val clientUri: String by lazy { notImplemented() }
+    override val policyUri: String by lazy { notImplemented() }
+    override val tosUri: String by lazy { notImplemented() }
+    override val jwksUri: String by lazy { notImplemented() }
+    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val tokenEndpointAuthenticationMethod: String by lazy { notImplemented() }
+    override val defaultMaxAge: Long by lazy { notImplemented() }
+    override val requireAuthTime: Boolean by lazy { notImplemented() }
+    override val defaultAcrValues: List<String> by lazy { notImplemented() }
+    override val initiateLoginUri: String by lazy { notImplemented() }
+    override val requestUris: List<String> by lazy { notImplemented() }
+    override val secret: ByteArray by lazy { notImplemented() }
+    override val name: String by lazy { notImplemented() }
+    override val type: String by lazy { notImplemented() }
+    override val responseTypes: Set<String> by lazy { notImplemented() }
+    override val scopes: Set<String> by lazy { notImplemented() }
 }
 
 /**
@@ -105,36 +105,36 @@ class ClientFlowTokenLegClient(source: TokenRequest.Client) : OidcClient {
  */
 class IdOnlyClient(override val id: String) : OidcClient {
     // not needed fields
-    override val applicationType: String = notImplemented()
-    override val contacts: LinkedHashSet<String> = notImplemented()
-    override val logoUri: String = notImplemented()
-    override val clientUri: String = notImplemented()
-    override val policyUri: String = notImplemented()
-    override val tosUri: String = notImplemented()
-    override val jwksUri: String = notImplemented()
-    override val jwks: String = notImplemented()
-    override val sectorIdentifierUri: String = notImplemented()
-    override val subjectType: String = notImplemented()
-    override val idTokenSignedResponseAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val idTokenEncryptedResponseAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val idTokenEncryptedResponseEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm = notImplemented()
-    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm = notImplemented()
-    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm = notImplemented()
-    override val tokenEndpointAuthenticationMethod: String = notImplemented()
-    override val defaultMaxAge: Long = notImplemented()
-    override val requireAuthTime: Boolean = notImplemented()
-    override val defaultAcrValues: List<String> = notImplemented()
-    override val initiateLoginUri: String = notImplemented()
-    override val requestUris: List<String> = notImplemented()
-    override val secret: ByteArray = notImplemented()
-    override val name: String = notImplemented()
-    override val type: String = notImplemented()
-    override val redirectUris: Set<String> = notImplemented()
-    override val responseTypes: Set<String> = notImplemented()
-    override val grantTypes: Set<String> = notImplemented()
-    override val scopes: Set<String> = notImplemented()
+    override val applicationType: String by lazy { notImplemented() }
+    override val contacts: LinkedHashSet<String> by lazy { notImplemented() }
+    override val logoUri: String by lazy { notImplemented() }
+    override val clientUri: String by lazy { notImplemented() }
+    override val policyUri: String by lazy { notImplemented() }
+    override val tosUri: String by lazy { notImplemented() }
+    override val jwksUri: String by lazy { notImplemented() }
+    override val jwks: String by lazy { notImplemented() }
+    override val sectorIdentifierUri: String by lazy { notImplemented() }
+    override val subjectType: String by lazy { notImplemented() }
+    override val idTokenSignedResponseAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val idTokenEncryptedResponseAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val idTokenEncryptedResponseEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val requestObjectSigningAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val requestObjectEncryptionAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val requestObjectEncryptionEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val userInfoSignedResponseAlgorithm: JwtSigningAlgorithm by lazy { notImplemented() }
+    override val userInfoEncryptedResponseAlgorithm: JweKeyManagementAlgorithm by lazy { notImplemented() }
+    override val userInfoEncryptedResponseEncoding: JweContentEncodingAlgorithm by lazy { notImplemented() }
+    override val tokenEndpointAuthenticationMethod: String by lazy { notImplemented() }
+    override val defaultMaxAge: Long by lazy { notImplemented() }
+    override val requireAuthTime: Boolean by lazy { notImplemented() }
+    override val defaultAcrValues: List<String> by lazy { notImplemented() }
+    override val initiateLoginUri: String by lazy { notImplemented() }
+    override val requestUris: List<String> by lazy { notImplemented() }
+    override val secret: ByteArray by lazy { notImplemented() }
+    override val name: String by lazy { notImplemented() }
+    override val type: String by lazy { notImplemented() }
+    override val redirectUris: Set<String> by lazy { notImplemented() }
+    override val responseTypes: Set<String> by lazy { notImplemented() }
+    override val grantTypes: Set<String> by lazy { notImplemented() }
+    override val scopes: Set<String> by lazy { notImplemented() }
 }
