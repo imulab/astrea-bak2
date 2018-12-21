@@ -6,11 +6,9 @@ import io.imulab.astrea.sdk.oauth.error.InvalidScope
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.reserved.ResponseType
 import io.vertx.core.Vertx
-import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.kodein.di.generic.instance
 import org.spekframework.spek2.Spek
-import java.util.concurrent.TimeUnit
 
 object AuthorizeIntegrationTest : Spek({
 
@@ -18,8 +16,8 @@ object AuthorizeIntegrationTest : Spek({
         val service by IntegrationTest(Vertx.vertx(), ConfigFactory.parseString(config))
             .bootstrap()
             .instance<AuthorizeCodeFlowService>()
-        val server = IntegrationTest.startInProcessService(service)
-        val stub = IntegrationTest.getInProcessServiceStub()
+        val serverContext = IntegrationTest.startInProcessService(service)
+        val stub = serverContext.stub()
 
         `when`("requested to create an authorization code") {
             val response = stub.authorize(Narrative.authorizeRequest)
@@ -121,10 +119,7 @@ object AuthorizeIntegrationTest : Spek({
         }
 
         after {
-            runBlocking {
-                server.shutdown()
-                server.awaitTermination(5, TimeUnit.SECONDS)
-            }
+            serverContext.shutdownHook()
         }
     }
 })

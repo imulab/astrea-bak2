@@ -15,8 +15,8 @@ object ExchangeIntegrationTest : Spek({
         val service by IntegrationTest(Vertx.vertx(), ConfigFactory.parseString(config))
             .bootstrap()
             .instance<AuthorizeCodeFlowService>()
-        val server = IntegrationTest.startInProcessService(service)
-        val stub = IntegrationTest.getInProcessServiceStub()
+        val serverContext = IntegrationTest.startInProcessService(service)
+        val stub = serverContext.stub()
 
         `when`("refresh code is used to exchange for tokens") {
             val authorizeCode = stub.authorize(Narrative.authorizeRequest).let {
@@ -83,10 +83,7 @@ object ExchangeIntegrationTest : Spek({
         }
 
         after {
-            runBlocking {
-                server.shutdown()
-                server.awaitTermination(5, TimeUnit.SECONDS)
-            }
+            serverContext.shutdownHook()
         }
     }
 })

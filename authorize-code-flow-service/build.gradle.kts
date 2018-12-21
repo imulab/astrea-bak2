@@ -45,7 +45,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "io.imulab.astrea.service.flow.MainKt"
+    mainClassName = "io.imulab.astrea.service.MainKt"
 }
 
 tasks.withType<ShadowJar> {

@@ -22,6 +22,7 @@ import io.imulab.astrea.sdk.oidc.reserved.JweKeyManagementAlgorithm
 import io.imulab.astrea.sdk.oidc.reserved.SubjectType
 import io.vertx.core.Vertx
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.runBlocking
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
@@ -31,6 +32,7 @@ import org.spekframework.spek2.dsl.Skip
 import org.spekframework.spek2.dsl.TestBody
 import org.spekframework.spek2.style.specification.Suite
 import org.spekframework.spek2.style.specification.describe
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
@@ -38,27 +40,41 @@ class IntegrationTest(vertx: Vertx, config: Config) : Components(vertx, config) 
 
     companion object {
 
-        fun startInProcessService(service: AuthorizeCodeFlowService): Server {
-            return InProcessServerBuilder
-                .forName("TestAuthorizeCodeFlowService")
-                .directExecutor()
-                .addService(service)
-                .build().also {
-                    Runtime.getRuntime().addShutdownHook(thread(start = false) {
-                        it.shutdown()
-                        it.awaitTermination(5, TimeUnit.SECONDS)
-                    })
-                }
-                .start()
+        fun startInProcessService(service: AuthorizeCodeFlowService): ServerContext {
+            val name = UUID.randomUUID().toString()
+            return ServerContext(
+                name = name,
+                server = InProcessServerBuilder
+                    .forName(name)
+                    .directExecutor()
+                    .addService(service)
+                    .build().also {
+                        Runtime.getRuntime().addShutdownHook(thread(start = false) {
+                            it.shutdown()
+                            it.awaitTermination(5, TimeUnit.SECONDS)
+                        })
+                    }
+                    .start()
+            )
         }
 
-        fun getInProcessServiceStub(): AuthorizeCodeFlowGrpc.AuthorizeCodeFlowBlockingStub {
-            val channel = InProcessChannelBuilder
-                .forName("TestAuthorizeCodeFlowService")
-                .directExecutor()
-                .build()
-            return AuthorizeCodeFlowGrpc.newBlockingStub(channel)
-        }
+        class ServerContext(
+            server: Server,
+            name: String,
+            val stub: () -> AuthorizeCodeFlowGrpc.AuthorizeCodeFlowBlockingStub = {
+                val channel = InProcessChannelBuilder
+                    .forName(name)
+                    .directExecutor()
+                    .build()
+                AuthorizeCodeFlowGrpc.newBlockingStub(channel)
+            },
+            val shutdownHook: () -> Unit = {
+                runBlocking {
+                    server.shutdown()
+                    server.awaitTermination(5, TimeUnit.SECONDS)
+                }
+            }
+        )
     }
 
     override fun bootstrap(): Kodein {
