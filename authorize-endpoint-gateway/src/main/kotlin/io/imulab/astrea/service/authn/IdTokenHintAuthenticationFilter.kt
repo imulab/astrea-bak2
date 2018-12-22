@@ -8,6 +8,7 @@ import io.imulab.astrea.sdk.oidc.jwk.JwtVerificationKeyResolver
 import io.imulab.astrea.sdk.oidc.jwk.acrValues
 import io.imulab.astrea.sdk.oidc.jwk.authTime
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
+import io.imulab.astrea.sdk.oidc.reserved.Prompt
 import io.vertx.ext.web.RoutingContext
 import org.jose4j.jwk.JsonWebKeySet
 import org.jose4j.jwt.JwtClaims
@@ -26,7 +27,9 @@ class IdTokenHintAuthenticationFilter(
     private val logger = LoggerFactory.getLogger(IdTokenHintAuthenticationFilter::class.java)
 
     override fun shouldFilter(request: OidcAuthorizeRequest, rc: RoutingContext): Boolean {
-        return super.shouldFilter(request, rc) && request.idTokenHint.isNotEmpty()
+        return super.shouldFilter(request, rc) &&
+                request.idTokenHint.isNotEmpty() &&
+                !request.prompts.contains(Prompt.login)
     }
 
     override suspend fun tryAuthenticate(request: OidcAuthorizeRequest, rc: RoutingContext) {

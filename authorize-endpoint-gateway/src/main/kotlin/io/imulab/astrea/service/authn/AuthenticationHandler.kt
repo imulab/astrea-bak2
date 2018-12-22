@@ -3,6 +3,7 @@ package io.imulab.astrea.service.authn
 import io.imulab.astrea.sdk.oauth.assertType
 import io.imulab.astrea.sdk.oauth.error.AccessDenied
 import io.imulab.astrea.sdk.oidc.request.OidcSession
+import io.imulab.astrea.sdk.oidc.reserved.Prompt
 import io.imulab.astrea.service.Params
 import io.imulab.astrea.service.RedirectionSignal
 import io.imulab.astrea.service.getOidcAuthorizeRequest
@@ -41,8 +42,16 @@ class AuthenticationHandler(
             return
         }
 
-        if (locker.hasVisitedAuthenticationBefore(rc)) {
-            throw AccessDenied.byServer("Server was not able to establish user identity.")
+        /**
+         * Fail if:
+         * - Login provider responded (re-entry scenario), but still no authentication
+         * - prompt=none, and unable to resolve authentication
+         */
+        when {
+            locker.hasVisitedAuthenticationBefore(rc) ->
+                throw AccessDenied.byServer("Server was not able to establish user identity.")
+            request.prompts.contains(Prompt.none) ->
+                throw AccessDenied.noAuthenticationOnNonePrompt()
         }
 
         // prepare for login redirection

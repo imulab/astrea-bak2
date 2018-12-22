@@ -20,6 +20,24 @@ object AccessDenied {
             )
         }
 
+    val noAuthenticationOnNonePrompt: () -> Throwable =
+        {
+            OAuthException(
+                status,
+                code,
+                "Server cannot resolve authentication, and <none> prompt is requested."
+            )
+        }
+
+    val noAuthorizationOnNonePrompt: () -> Throwable =
+        {
+            OAuthException(
+                status,
+                code,
+                "Server cannot resolve user authorization, and <none> prompt is requested."
+            )
+        }
+
     val newAuthenticationOnNonePrompt: () -> Throwable =
         {
             OAuthException(

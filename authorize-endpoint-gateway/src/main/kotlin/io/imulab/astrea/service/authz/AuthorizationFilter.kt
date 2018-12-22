@@ -13,7 +13,18 @@ abstract class AuthorizationFilter {
         return rc.getAuthorization() == null
     }
 
+    suspend fun authorize(request: OidcAuthorizeRequest, rc: RoutingContext) {
+        if (shouldFilter(request, rc)) {
+            try {
+                tryAuthorize(request, rc)
+            } catch (t: Throwable) {
+                logger.info("Suppressed authorization filter error <{}>. Assuming failed, moving on to next filter.", t)
+                rc.remove<Any>(RoutingContextAttribute.authorization)
+            }
+        }
+    }
 
+    protected abstract suspend fun tryAuthorize(request: OidcAuthorizeRequest, rc: RoutingContext)
 }
 
 /**
