@@ -5,6 +5,7 @@ import io.imulab.astrea.sdk.oidc.client.OidcClient
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
 import io.imulab.astrea.sdk.oidc.request.OidcSession
 import io.imulab.astrea.sdk.oidc.validation.AuthTimeValidator
+import io.imulab.astrea.service.RoutingContextAttribute
 import io.vertx.ext.web.RoutingContext
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -33,7 +34,7 @@ abstract class AuthenticationFilter {
                 validateAuthTime(request, rc)
             } catch (t: Throwable) {
                 logger.info("Suppressed authentication filter error <{}>. Assuming failed, moving on to next filter.", t)
-                rc.remove<Any>(authKey)
+                rc.remove<Any>(RoutingContextAttribute.authentication)
             }
     }
 
@@ -64,14 +65,12 @@ class Authentication(
     val acrValues: List<String> = emptyList()
 )
 
-internal const val authKey = "authKey"
-
 internal fun RoutingContext.getAuthentication(): Authentication? = try {
-    get<Authentication>(authKey)
+    get<Authentication>(RoutingContextAttribute.authentication)
 } catch (t: Throwable) {
     null
 }
 
 internal fun RoutingContext.setAuthentication(auth: Authentication) {
-    put(authKey, auth)
+    put(RoutingContextAttribute.authentication, auth)
 }

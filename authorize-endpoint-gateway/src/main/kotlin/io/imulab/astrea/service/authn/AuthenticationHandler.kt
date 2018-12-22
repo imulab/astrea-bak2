@@ -3,10 +3,10 @@ package io.imulab.astrea.service.authn
 import io.imulab.astrea.sdk.oauth.assertType
 import io.imulab.astrea.sdk.oauth.error.AccessDenied
 import io.imulab.astrea.sdk.oidc.request.OidcSession
+import io.imulab.astrea.service.Params
 import io.imulab.astrea.service.RedirectionSignal
 import io.imulab.astrea.service.getOidcAuthorizeRequest
 import io.imulab.astrea.service.lock.ParameterLocker
-import io.imulab.astrea.service.lock.parameterLockParam
 import io.vertx.ext.web.RoutingContext
 import okhttp3.HttpUrl
 
@@ -50,7 +50,7 @@ class AuthenticationHandler(
             .newBuilder()
             .also { b ->
                 rc.request().params().forEach { p -> b.addQueryParameter(p.key, p.value) }
-                b.addQueryParameter(parameterLockParam, locker.createLockForAuthenticationStage(rc))
+                b.addQueryParameter(Params.parameterLock, locker.createLockForAuthenticationStage(rc))
             }
             .build()
             .toString()

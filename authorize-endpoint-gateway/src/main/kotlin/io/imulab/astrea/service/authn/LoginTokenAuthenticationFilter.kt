@@ -5,11 +5,10 @@ import io.imulab.astrea.sdk.oidc.jwk.JwtVerificationKeyResolver
 import io.imulab.astrea.sdk.oidc.jwk.acrValues
 import io.imulab.astrea.sdk.oidc.jwk.authTime
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
+import io.imulab.astrea.service.Params
 import io.vertx.ext.web.RoutingContext
 import org.jose4j.jwk.JsonWebKeySet
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
-
-internal const val parameterLoginToken = "login_token"
 
 /**
  * An implementation of [AuthenticationFilter] that attempts to resolve authentication from login token.
@@ -21,11 +20,11 @@ class LoginTokenAuthenticationFilter(
 ) : AuthenticationFilter() {
 
     override fun shouldFilter(request: OidcAuthorizeRequest, rc: RoutingContext): Boolean {
-        return super.shouldFilter(request, rc) && rc.request().getParam(parameterLoginToken) != null
+        return super.shouldFilter(request, rc) && rc.request().getParam(Params.loginToken) != null
     }
 
     override suspend fun tryAuthenticate(request: OidcAuthorizeRequest, rc: RoutingContext) {
-        val loginToken = rc.request().getParam(parameterLoginToken)!!
+        val loginToken = rc.request().getParam(Params.loginToken)!!
 
         val claims = JwtConsumerBuilder()
             .also { b ->

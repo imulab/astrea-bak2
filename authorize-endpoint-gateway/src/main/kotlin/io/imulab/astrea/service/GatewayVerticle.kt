@@ -40,6 +40,8 @@ class GatewayVerticle(
 
         router.get("/")
             .errorHandler { rc ->
+                parameterLocker.hashParameters(rc)
+
                 try {
                     parameterLocker.verifyParameterLock(rc)
                 } catch (e: Exception) {
@@ -47,7 +49,6 @@ class GatewayVerticle(
                     throw AccessDenied.byServer("parameter lock is potentially tempered.")
                 }
 
-                parameterLocker.hashParameters(rc)
                 rc.next()
             }
             .suspendedErrorHandler { rc ->
