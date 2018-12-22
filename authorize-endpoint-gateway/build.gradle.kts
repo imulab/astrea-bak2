@@ -29,7 +29,7 @@ dependencies {
         loadGrpc = true,
         loadRedisClient = true
     )
-    grpc()
+    grpc(loadNetty = true)
     typeSafeConfig()
     jBCrypt()
     jose4j()

@@ -110,27 +110,32 @@ open class Components(
 
     val discovery = Kodein.Module("discovery") {
         bind<Discovery>() with eagerSingleton {
-            Retry.decorateSupplier(
-                Retry.of("discovery", RetryConfig.Builder()
-                    .maxAttempts(5)
-                    .waitDuration(Duration.ofSeconds(10))
-                    .retryExceptions(Exception::class.java)
-                    .build()
+            val channel = ManagedChannelBuilder
+                .forAddress(
+                    config.getString("discovery.host"),
+                    config.getInt("discovery.port")
                 )
-            ) {
+                .enableRetry()
+                .maxRetryAttempts(10)
+                .usePlaintext()
+                .build()
+
+            val retry = Retry.of("discovery", RetryConfig.Builder()
+                .maxAttempts(5)
+                .waitDuration(Duration.ofSeconds(10))
+                .retryExceptions(Exception::class.java)
+                .build()
+            )
+
+            val discovery = Retry.decorateSupplier(retry) {
                 runBlocking {
-                    GrpcDiscoveryService(
-                        ManagedChannelBuilder.forAddress(
-                            instance<Config>().getString("discovery.host"),
-                            instance<Config>().getInt("discovery.port")
-                        ).enableRetry().maxRetryAttempts(10).usePlaintext().build()
-                    ).getDiscovery()
+                    GrpcDiscoveryService(channel).getDiscovery()
                 }.also {
                     logger.info("Acquired discovery configuration.")
                 }
-            }.let {
-                Try.ofSupplier(it).getOrElse { throw ServerError.internal("Cannot obtain discovery.") }
             }
+
+            Try.ofSupplier(discovery).getOrElse { throw ServerError.internal("Cannot obtain discovery.") }
         }
     }
 }

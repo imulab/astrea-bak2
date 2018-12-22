@@ -29,18 +29,18 @@ services:
     ports:
       - "8180:8080"
   # to be deprecated
-  authorize-service:
-    build: ./authorize-service
-    depends_on:
-      - redisdb
-    ports:
-      - "9091:8080"
-    environment:
-      - REDIS_HOST=redisdb
-      - REDIS_PORT=6379
-      - REDIS_DB=1
-      - CLIENT_SERVICE_HOST=client-service
-      - CLIENT_SERVICE_PORT=35027
+#  authorize-service:
+#    build: ./authorize-service
+#    depends_on:
+#      - redisdb
+#    ports:
+#      - "9091:8080"
+#    environment:
+#      - REDIS_HOST=redisdb
+#      - REDIS_PORT=6379
+#      - REDIS_DB=1
+#      - CLIENT_SERVICE_HOST=client-service
+#      - CLIENT_SERVICE_PORT=35027
   authorize-code-flow-service:
     build: ./authorize-code-flow-service
     depends_on:

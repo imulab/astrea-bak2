@@ -94,12 +94,12 @@ class GatewayVerticle(
     }
 
     private fun Route.suspendedErrorHandler(block: suspend (RoutingContext) -> Unit): Route {
-        errorHandler { rc ->
+        handler { rc ->
             CoroutineScope(rc.vertx().dispatcher()).async {
                 block(rc)
             }.invokeOnCompletion { e ->
                 if (e != null)
-                    rc.fail(e)
+                    rc.renderError(e)
             }
         }
         return this
@@ -110,42 +110,46 @@ class GatewayVerticle(
             try {
                 block(rc)
             } catch (t: Throwable) {
-                if (t is RedirectionSignal) {
-                    rc.response().setStatusCode(307).putHeader("Location", t.url).end()
-                    return@handler
-                }
-
-                val e = if (t is OAuthException) t else ServerError.wrapped(t)
-                val redirectUri = rc.get<String>(Param.redirectUri) ?: ""
-                val responseMode = rc.get<String>(OidcParam.responseMode) ?: ""
-
-                val r = rc.response().apply {
-                    statusCode = e.status
-                    e.headers.forEach { t, u -> putHeader(t, u) }
-                }
-
-                when {
-                    redirectUri.isEmpty() -> {
-                        r.end(Json.encode(e.data))
-                    }
-                    responseMode == ResponseMode.query -> {
-                        val url = HttpUrl.parse(redirectUri)!!.newBuilder().apply {
-                            e.data.forEach { t, u -> addQueryParameter(t, u) }
-                        }.build().toString()
-                        r.putHeader("Location", url).end()
-                    }
-                    responseMode == ResponseMode.fragment -> {
-                        val query = HttpUrl.parse(redirectUri)!!.newBuilder().apply {
-                            e.data.forEach { t, u -> addQueryParameter(t, u) }
-                        }.build().query()
-                        val url = HttpUrl.parse(redirectUri)!!.newBuilder().fragment(query).build().toString()
-                        r.putHeader("Location", url).end()
-                    }
-                    else -> throw IllegalStateException("invalid state during error rendering.")
-                }
+                rc.renderError(t)
             }
         }
         return this
+    }
+
+    private fun RoutingContext.renderError(t: Throwable) {
+        if (t is RedirectionSignal) {
+            response().setStatusCode(307).putHeader("Location", t.url).end()
+            return
+        }
+
+        val e = if (t is OAuthException) t else ServerError.wrapped(t)
+        val redirectUri = get<String>(Param.redirectUri) ?: ""
+        val responseMode = get<String>(OidcParam.responseMode) ?: ""
+
+        val r = response().apply {
+            statusCode = e.status
+            e.headers.forEach { t, u -> putHeader(t, u) }
+        }
+
+        when {
+            redirectUri.isEmpty() -> {
+                r.end(Json.encode(e.data))
+            }
+            responseMode == ResponseMode.query -> {
+                val url = HttpUrl.parse(redirectUri)!!.newBuilder().apply {
+                    e.data.forEach { t, u -> addQueryParameter(t, u) }
+                }.build().toString()
+                r.putHeader("Location", url).end()
+            }
+            responseMode == ResponseMode.fragment -> {
+                val query = HttpUrl.parse(redirectUri)!!.newBuilder().apply {
+                    e.data.forEach { t, u -> addQueryParameter(t, u) }
+                }.build().query()
+                val url = HttpUrl.parse(redirectUri)!!.newBuilder().fragment(query).build().toString()
+                r.putHeader("Location", url).end()
+            }
+            else -> throw IllegalStateException("invalid state during error rendering.")
+        }
     }
 }
 
