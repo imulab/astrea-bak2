@@ -1,7 +1,9 @@
 package io.imulab.astrea.service
 
+import com.typesafe.config.ConfigFactory
 import io.vertx.core.Vertx
 import io.vertx.kotlin.coroutines.awaitResult
+import org.kodein.di.generic.instance
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -9,8 +11,10 @@ internal val logger: Logger = LoggerFactory.getLogger("io.imulab.astrea.service.
 
 suspend fun main() {
     val vertx = Vertx.vertx()
+    val config = ConfigFactory.load()
 
-    val gateway = GatewayVerticle()
+    val components = Components(vertx, config).bootstrap()
+    val gateway by components.instance<GatewayVerticle>()
 
     try {
         val deploymentId = awaitResult<String> { vertx.deployVerticle(gateway, it) }
