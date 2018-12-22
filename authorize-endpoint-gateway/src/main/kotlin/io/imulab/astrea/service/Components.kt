@@ -12,15 +12,22 @@ import io.imulab.astrea.sdk.oauth.request.OAuthRequestProducer
 import io.imulab.astrea.sdk.oidc.discovery.Discovery
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequestProducer
 import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
+import io.imulab.astrea.service.authn.AuthenticationHandler
+import io.imulab.astrea.service.authn.IdTokenHintAuthenticationFilter
+import io.imulab.astrea.service.authn.LoginTokenAuthenticationFilter
+import io.imulab.astrea.service.lock.ParameterLocker
 import io.vavr.control.Try
 import io.vertx.core.Vertx
 import kotlinx.coroutines.runBlocking
+import org.jose4j.jwk.JsonWebKeySet
+import org.jose4j.keys.AesKey
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.eagerSingleton
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
 import java.time.Duration
+import java.util.*
 
 open class Components(
     private val vertx: Vertx,
@@ -36,7 +43,9 @@ open class Components(
             bind<GatewayVerticle>() with singleton {
                 GatewayVerticle(
                     appConfig = config,
-                    requestProducer = instance()
+                    requestProducer = instance(),
+                    authenticationHandler = instance(),
+                    parameterLocker = instance()
                 )
             }
         }
@@ -50,6 +59,36 @@ open class Components(
                 claimConverter = JacksonClaimConverter,
                 responseTypeValidator = OidcResponseTypeValidator
             )
+        }
+
+        bind<ParameterLocker>() with singleton {
+            ParameterLocker(
+                serviceName = config.getString("service.name"),
+                lockKey = AesKey(Base64.getDecoder().decode(config.getString("service.paramLockKey")))
+            )
+        }
+
+        bind<AuthenticationHandler>() with singleton {
+            AuthenticationHandler(
+                loginProviderUrl = config.getString("login.url"),
+                filters = listOf(
+                    instance<LoginTokenAuthenticationFilter>(),
+                    instance<IdTokenHintAuthenticationFilter>()
+                ),
+                locker = instance()
+            )
+        }
+
+        bind<LoginTokenAuthenticationFilter>() with singleton {
+            LoginTokenAuthenticationFilter(
+                loginProviderUrl = config.getString("login.url"),
+                serviceName = config.getString("service.name"),
+                loginProviderJwks = JsonWebKeySet(config.getString("login.jwks"))
+            )
+        }
+
+        bind<IdTokenHintAuthenticationFilter>() with singleton {
+            IdTokenHintAuthenticationFilter(instance(), JsonWebKeySet(config.getString("service.jwks")))
         }
     }
 

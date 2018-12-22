@@ -8,8 +8,6 @@ import io.imulab.astrea.sdk.oidc.jwk.JwtVerificationKeyResolver
 import io.imulab.astrea.sdk.oidc.jwk.acrValues
 import io.imulab.astrea.sdk.oidc.jwk.authTime
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
-import io.imulab.astrea.sdk.oidc.request.OidcSession
-import io.imulab.astrea.sdk.oidc.validation.AuthTimeValidator
 import io.vertx.ext.web.RoutingContext
 import org.jose4j.jwk.JsonWebKeySet
 import org.jose4j.jwt.JwtClaims
@@ -18,8 +16,7 @@ import org.slf4j.LoggerFactory
 
 /**
  * An [AuthenticationFilter] implementation that attempts to resolve authentication from a previously issued
- * id_token via parameter id_token_hint. This filter merely sets the decoded data in context, it does not validate
- * the relation between auth_time and max_age. It is left for a later filter.
+ * id_token via parameter id_token_hint.
  */
 class IdTokenHintAuthenticationFilter(
     private val discovery: Discovery,
@@ -37,17 +34,6 @@ class IdTokenHintAuthenticationFilter(
         val idTokenHint = request.idTokenHint
 
         verifyAndDecodeToken(idTokenHint, client).let { c ->
-            // setup a request structure so auth_time can be validated
-            AuthTimeValidator.validate(OidcAuthorizeRequest.Builder().also { b ->
-                b.client = client
-                b.maxAge = if (request.maxAge > 0) request.maxAge else
-                    request.client.assertType<OidcClient>().defaultMaxAge
-                b.prompts = request.prompts.toMutableSet()
-                b.session = OidcSession(
-                    authTime = c.authTime()
-                )
-            }.build())
-
             rc.setAuthentication(
                 Authentication(
                     subject = c.subject,

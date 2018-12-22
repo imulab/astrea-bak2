@@ -33,6 +33,7 @@ dependencies {
     typeSafeConfig()
     jBCrypt()
     jose4j()
+    okHttp()
 
     resilience4j(loadRetry = true)
 

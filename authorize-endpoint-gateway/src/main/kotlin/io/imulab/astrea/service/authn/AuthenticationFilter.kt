@@ -1,15 +1,26 @@
 package io.imulab.astrea.service.authn
 
+import io.imulab.astrea.sdk.oauth.assertType
+import io.imulab.astrea.sdk.oidc.client.OidcClient
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
+import io.imulab.astrea.sdk.oidc.request.OidcSession
+import io.imulab.astrea.sdk.oidc.validation.AuthTimeValidator
 import io.vertx.ext.web.RoutingContext
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
+/**
+ * Skeleton construct for an authentication filter. The main entry point is the [authenticate] method. This method
+ * ensures that:
+ * - When [shouldFilter] returns false, processing logic will not be executed.
+ * - When [tryAuthenticate] throw exception, processing is assumed to have been unable to confirm authentication and will
+ * move to the next filter
+ * - If authentication context is set after processing, the relation of max_age and auth_time is validated. If such validation
+ * fails, processing will also move to next filter.
+ */
 abstract class AuthenticationFilter {
 
     private val logger = LoggerFactory.getLogger(AuthenticationFilter::class.java)
-
-    private val authKey = "authKey"
 
     open fun shouldFilter(request: OidcAuthorizeRequest, rc: RoutingContext): Boolean {
         return rc.getAuthentication() == null
@@ -19,37 +30,48 @@ abstract class AuthenticationFilter {
         if (shouldFilter(request, rc))
             try {
                 tryAuthenticate(request, rc)
+                validateAuthTime(request, rc)
             } catch (t: Throwable) {
-                if (shouldBeSuppressed(t)) {
-                    logger.info("Suppressed authentication filter error <{}>. Assuming failed, moving on to next filter.", t)
-                } else {
-                    logger.error("Error during authentication.", t)
-                    throw t
-                }
+                logger.info("Suppressed authentication filter error <{}>. Assuming failed, moving on to next filter.", t)
+                rc.remove<Any>(authKey)
             }
     }
 
-    open fun shouldBeSuppressed(t: Throwable): Boolean = true
-
-    abstract suspend fun tryAuthenticate(request: OidcAuthorizeRequest, rc: RoutingContext)
-
-    protected fun RoutingContext.getAuthentication(): Authentication? = try {
-        get<Authentication>(authKey)
-    } catch (t: Throwable) {
-        null
+    private fun validateAuthTime(request: OidcAuthorizeRequest, rc: RoutingContext) {
+        val auth = rc.getAuthentication()
+        if (auth != null) {
+            AuthTimeValidator.validate(OidcAuthorizeRequest.Builder().also { b ->
+                b.client = request.client.assertType()
+                b.maxAge = if (request.maxAge > 0) request.maxAge else
+                    request.client.assertType<OidcClient>().defaultMaxAge
+                b.prompts = request.prompts.toMutableSet()
+                b.session = OidcSession(
+                    authTime = auth.authTime
+                )
+            }.build())
+        }
     }
 
-    protected fun RoutingContext.setAuthentication(auth: Authentication) {
-        put(authKey, auth)
-    }
-
-    protected fun RoutingContext.removeAuthentication() {
-        remove<Any>(authKey)
-    }
+    protected abstract suspend fun tryAuthenticate(request: OidcAuthorizeRequest, rc: RoutingContext)
 }
 
+/**
+ * Data holder for authentication context in routing context.
+ */
 class Authentication(
     val subject: String,
     val authTime: LocalDateTime? = null,
     val acrValues: List<String> = emptyList()
 )
+
+internal const val authKey = "authKey"
+
+internal fun RoutingContext.getAuthentication(): Authentication? = try {
+    get<Authentication>(authKey)
+} catch (t: Throwable) {
+    null
+}
+
+internal fun RoutingContext.setAuthentication(auth: Authentication) {
+    put(authKey, auth)
+}
