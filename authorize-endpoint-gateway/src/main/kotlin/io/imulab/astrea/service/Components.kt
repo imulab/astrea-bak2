@@ -15,6 +15,8 @@ import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
 import io.imulab.astrea.service.authn.AuthenticationHandler
 import io.imulab.astrea.service.authn.IdTokenHintAuthenticationFilter
 import io.imulab.astrea.service.authn.LoginTokenAuthenticationFilter
+import io.imulab.astrea.service.authz.AuthorizationHandler
+import io.imulab.astrea.service.authz.ConsentTokenAuthorizationFilter
 import io.imulab.astrea.service.lock.ParameterLocker
 import io.vavr.control.Try
 import io.vertx.core.Vertx
@@ -45,6 +47,7 @@ open class Components(
                     appConfig = config,
                     requestProducer = instance(),
                     authenticationHandler = instance(),
+                    authorizationHandler = instance(),
                     parameterLocker = instance()
                 )
             }
@@ -89,6 +92,24 @@ open class Components(
 
         bind<IdTokenHintAuthenticationFilter>() with singleton {
             IdTokenHintAuthenticationFilter(instance(), JsonWebKeySet(config.getString("service.jwks")))
+        }
+
+        bind<ConsentTokenAuthorizationFilter>() with singleton {
+            ConsentTokenAuthorizationFilter(
+                consentProviderUrl = config.getString("consent.url"),
+                serviceName = config.getString("service.name"),
+                consentProviderJwks = JsonWebKeySet(config.getString("consent.jwks"))
+            )
+        }
+
+        bind<AuthorizationHandler>() with singleton {
+            AuthorizationHandler(
+                consentProviderUrl = config.getString("consent.url"),
+                locker = instance(),
+                filters = listOf(
+                    instance<ConsentTokenAuthorizationFilter>()
+                )
+            )
         }
     }
 

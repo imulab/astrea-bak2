@@ -12,6 +12,7 @@ import io.imulab.astrea.sdk.oidc.request.OidcRequestForm
 import io.imulab.astrea.sdk.oidc.reserved.OidcParam
 import io.imulab.astrea.sdk.oidc.reserved.ResponseMode
 import io.imulab.astrea.service.authn.AuthenticationHandler
+import io.imulab.astrea.service.authz.AuthorizationHandler
 import io.imulab.astrea.service.lock.ParameterLocker
 import io.vertx.core.http.HttpServerOptions
 import io.vertx.core.json.Json
@@ -30,6 +31,7 @@ class GatewayVerticle(
     private val appConfig: Config,
     private val requestProducer: OAuthRequestProducer,
     private val authenticationHandler: AuthenticationHandler,
+    private val authorizationHandler: AuthorizationHandler,
     private val parameterLocker: ParameterLocker
 ) : CoroutineVerticle() {
 
@@ -64,6 +66,10 @@ class GatewayVerticle(
             .suspendedErrorHandler(::preValidate)
             .suspendedErrorHandler { rc ->
                 authenticationHandler.authenticateOrRedirect(rc)
+                rc.next()
+            }
+            .suspendedErrorHandler { rc ->
+                authorizationHandler.authorizeOrRedirect(rc)
                 rc.next()
             }
             .suspendedErrorHandler(::postValidate)
