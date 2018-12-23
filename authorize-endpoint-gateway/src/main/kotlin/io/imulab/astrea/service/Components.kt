@@ -6,6 +6,7 @@ import io.github.resilience4j.retry.RetryConfig
 import io.grpc.ManagedChannelBuilder
 import io.imulab.astrea.sdk.client.GrpcClientLookup
 import io.imulab.astrea.sdk.discovery.GrpcDiscoveryService
+import io.imulab.astrea.sdk.flow.AuthorizeCodeFlowGrpc
 import io.imulab.astrea.sdk.oauth.client.ClientLookup
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.request.OAuthRequestProducer
@@ -18,6 +19,7 @@ import io.imulab.astrea.service.authn.IdTokenHintAuthenticationFilter
 import io.imulab.astrea.service.authn.LoginTokenAuthenticationFilter
 import io.imulab.astrea.service.authz.AuthorizationHandler
 import io.imulab.astrea.service.authz.ConsentTokenAuthorizationFilter
+import io.imulab.astrea.service.dispatch.AuthorizeCodeFlow
 import io.imulab.astrea.service.lock.ParameterLocker
 import io.vavr.control.Try
 import io.vertx.core.Vertx
@@ -50,7 +52,10 @@ open class Components(
                     authenticationHandler = instance(),
                     authorizationHandler = instance(),
                     parameterLocker = instance(),
-                    supportValidator = instance()
+                    supportValidator = instance(),
+                    dispatchers = listOf(
+                        instance<AuthorizeCodeFlow.AuthorizeLeg>()
+                    )
                 )
             }
         }
@@ -112,6 +117,22 @@ open class Components(
                 locker = instance(),
                 filters = listOf(
                     instance<ConsentTokenAuthorizationFilter>()
+                )
+            )
+        }
+
+        bind<AuthorizeCodeFlow.AuthorizeLeg>() with singleton {
+            AuthorizeCodeFlow.AuthorizeLeg(
+                AuthorizeCodeFlowGrpc.newBlockingStub(
+                    ManagedChannelBuilder
+                        .forAddress(
+                            config.getString("authorizeCodeFlow.host"),
+                            config.getInt("authorizeCodeFlow.port")
+                        )
+                        .enableRetry()
+                        .maxRetryAttempts(10)
+                        .usePlaintext()
+                        .build()
                 )
             )
         }

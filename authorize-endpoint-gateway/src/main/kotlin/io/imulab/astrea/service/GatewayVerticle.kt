@@ -3,7 +3,6 @@ package io.imulab.astrea.service
 import com.typesafe.config.Config
 import io.imulab.astrea.sdk.oauth.assertType
 import io.imulab.astrea.sdk.oauth.error.AccessDenied
-import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.request.OAuthRequestProducer
 import io.imulab.astrea.sdk.oauth.reserved.Param
@@ -15,9 +14,9 @@ import io.imulab.astrea.sdk.oidc.reserved.ResponseMode
 import io.imulab.astrea.sdk.oidc.validation.*
 import io.imulab.astrea.service.authn.AuthenticationHandler
 import io.imulab.astrea.service.authz.AuthorizationHandler
+import io.imulab.astrea.service.dispatch.OAuthDispatcher
 import io.imulab.astrea.service.lock.ParameterLocker
 import io.vertx.core.http.HttpServerOptions
-import io.vertx.core.json.Json
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
@@ -25,7 +24,6 @@ import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
-import okhttp3.HttpUrl
 import org.slf4j.LoggerFactory
 
 class GatewayVerticle(
@@ -34,7 +32,8 @@ class GatewayVerticle(
     private val authenticationHandler: AuthenticationHandler,
     private val authorizationHandler: AuthorizationHandler,
     private val parameterLocker: ParameterLocker,
-    private val supportValidator: SupportValidator
+    private val supportValidator: SupportValidator,
+    private val dispatchers: List<OAuthDispatcher>
 ) : CoroutineVerticle() {
 
     private val logger = LoggerFactory.getLogger(GatewayVerticle::class.java)
@@ -101,10 +100,12 @@ class GatewayVerticle(
             }
             .suspendedOAuthHandler { rc ->
                 /**
-                 * Dispatch request to various flow services based on their trait.
+                 * Find a handler that supports processing the request and dispatch it.
                  */
-                // todo: dispatch
-                rc.response().end("ok")
+                val request = rc.getOidcAuthorizeRequest()!!
+                val dispatcher = dispatchers.find { it.supports(request, rc) }
+                    ?: throw ServerError.internal("Cannot find proper handler for request.")
+                dispatcher.handle(request, rc)
             }
 
         vertx.createHttpServer(HttpServerOptions().apply {
@@ -118,48 +119,10 @@ class GatewayVerticle(
                 block(rc)
             }.invokeOnCompletion { e ->
                 if (e != null)
-                    rc.renderError(e)
+                    ResponseRenderer.render(e, rc)
             }
         }
         return this
-    }
-
-    private fun RoutingContext.renderError(t: Throwable) {
-        if (t is RedirectionSignal) {
-            response().setStatusCode(307).putHeader("Location", t.url).end()
-            return
-        }
-
-        val e = if (t is OAuthException) t else ServerError.wrapped(t)
-        val redirectUri = get<String>(Param.redirectUri) ?: ""
-        val responseMode = get<String>(OidcParam.responseMode) ?: ""
-
-        val r = response().apply {
-            e.headers.forEach { t, u -> putHeader(t, u) }
-        }
-
-        when {
-            redirectUri.isEmpty() -> {
-                r.statusCode = e.status
-                r.end(Json.encode(e.data))
-            }
-            responseMode == ResponseMode.query -> {
-                val url = HttpUrl.parse(redirectUri)!!.newBuilder().apply {
-                    e.data.forEach { t, u -> addQueryParameter(t, u) }
-                }.build().toString()
-                r.statusCode = 302
-                r.putHeader("Location", url).end()
-            }
-            responseMode == ResponseMode.fragment -> {
-                val query = HttpUrl.parse(redirectUri)!!.newBuilder().apply {
-                    e.data.forEach { t, u -> addQueryParameter(t, u) }
-                }.build().query()
-                val url = HttpUrl.parse(redirectUri)!!.newBuilder().fragment(query).build().toString()
-                r.statusCode = 302
-                r.putHeader("Location", url).end()
-            }
-            else -> throw IllegalStateException("invalid state during error rendering.")
-        }
     }
 
     private fun String.defaultOnEmpty(default: String): String = if (this.isNotEmpty()) this else default
