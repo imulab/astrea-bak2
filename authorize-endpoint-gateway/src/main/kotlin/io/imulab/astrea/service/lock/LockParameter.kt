@@ -123,7 +123,7 @@ class ParameterLocker(
             return false
 
         val verifiedLock = rc.get<JwtClaims>(RoutingContextAttribute.verifiedParameterLock) ?: verifyLock(lock)
-        return verifiedLock.getStringClaimValue(Stage.name).toInt() >= Stage.authentication
+        return verifiedLock.getClaimValue(Stage.name) as Long >= Stage.authentication
     }
 
     /**
@@ -136,6 +136,6 @@ class ParameterLocker(
             return false
 
         val verifiedLock = rc.get<JwtClaims>(RoutingContextAttribute.verifiedParameterLock) ?: verifyLock(lock)
-        return verifiedLock.getStringClaimValue(Stage.name).toInt() >= Stage.authorization
+        return verifiedLock.getClaimValue(Stage.name) as Long >= Stage.authorization
     }
 }

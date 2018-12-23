@@ -54,7 +54,9 @@ class AuthenticationHandler(
                 throw AccessDenied.noAuthenticationOnNonePrompt()
         }
 
-        // prepare for login redirection
+        /**
+         * Throw special redirect signal, so route handlers can redirect user to external provider.
+         */
         val url = HttpUrl.parse(loginProviderUrl)!!
             .newBuilder()
             .also { b ->
@@ -63,7 +65,6 @@ class AuthenticationHandler(
             }
             .build()
             .toString()
-
         throw RedirectionSignal(url)
     }
 }

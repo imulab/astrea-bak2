@@ -12,6 +12,7 @@ import io.imulab.astrea.sdk.oauth.request.OAuthRequestProducer
 import io.imulab.astrea.sdk.oidc.discovery.Discovery
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequestProducer
 import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
+import io.imulab.astrea.sdk.oidc.validation.SupportValidator
 import io.imulab.astrea.service.authn.AuthenticationHandler
 import io.imulab.astrea.service.authn.IdTokenHintAuthenticationFilter
 import io.imulab.astrea.service.authn.LoginTokenAuthenticationFilter
@@ -48,7 +49,8 @@ open class Components(
                     requestProducer = instance(),
                     authenticationHandler = instance(),
                     authorizationHandler = instance(),
-                    parameterLocker = instance()
+                    parameterLocker = instance(),
+                    supportValidator = instance()
                 )
             }
         }
@@ -70,6 +72,8 @@ open class Components(
                 lockKey = AesKey(Base64.getDecoder().decode(config.getString("service.paramLockKey")))
             )
         }
+
+        bind<SupportValidator>() with singleton { SupportValidator(instance()) }
 
         bind<AuthenticationHandler>() with singleton {
             AuthenticationHandler(

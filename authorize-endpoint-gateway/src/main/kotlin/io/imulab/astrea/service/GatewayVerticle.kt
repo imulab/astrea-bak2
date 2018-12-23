@@ -7,10 +7,12 @@ import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.request.OAuthRequestProducer
 import io.imulab.astrea.sdk.oauth.reserved.Param
+import io.imulab.astrea.sdk.oauth.validation.RedirectUriValidator
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
 import io.imulab.astrea.sdk.oidc.request.OidcRequestForm
 import io.imulab.astrea.sdk.oidc.reserved.OidcParam
 import io.imulab.astrea.sdk.oidc.reserved.ResponseMode
+import io.imulab.astrea.sdk.oidc.validation.*
 import io.imulab.astrea.service.authn.AuthenticationHandler
 import io.imulab.astrea.service.authz.AuthorizationHandler
 import io.imulab.astrea.service.lock.ParameterLocker
@@ -25,14 +27,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import okhttp3.HttpUrl
 import org.slf4j.LoggerFactory
-import java.lang.RuntimeException
 
 class GatewayVerticle(
     private val appConfig: Config,
     private val requestProducer: OAuthRequestProducer,
     private val authenticationHandler: AuthenticationHandler,
     private val authorizationHandler: AuthorizationHandler,
-    private val parameterLocker: ParameterLocker
+    private val parameterLocker: ParameterLocker,
+    private val supportValidator: SupportValidator
 ) : CoroutineVerticle() {
 
     private val logger = LoggerFactory.getLogger(GatewayVerticle::class.java)
@@ -41,9 +43,11 @@ class GatewayVerticle(
         val router = Router.router(vertx)
 
         router.get("/")
-            .errorHandler { rc ->
+            .suspendedOAuthHandler { rc ->
+                /**
+                 * Lock incoming parameters. If param_lock is present, check parameter integrity.
+                 */
                 parameterLocker.hashParameters(rc)
-
                 try {
                     parameterLocker.verifyParameterLock(rc)
                 } catch (e: Exception) {
@@ -51,32 +55,55 @@ class GatewayVerticle(
                     throw AccessDenied.byServer("parameter lock is potentially tempered.")
                 }
 
-                rc.next()
-            }
-            .suspendedErrorHandler { rc ->
+                /**
+                 * Parse request parameters and produce the request.
+                 */
                 val form = OidcRequestForm(
                     rc.request().params().entries().groupBy(
                         keySelector = { e -> e.key },
                         valueTransform = { e -> e.value }
                     ).toMutableMap()
                 )
-                rc.setOidcAuthorizeRequest(requestProducer.produce(form).assertType())
+                val request = requestProducer.produce(form).assertType<OidcAuthorizeRequest>().also {
+                    rc.setOidcAuthorizeRequest(it)
+                }
+
+                /**
+                 * Perform preliminary validation.
+                 *
+                 * Special case: validate redirect_uri and response_mode first. If they are valid, set them on context,
+                 * so any errors after can be rendered properly
+                 */
+                RedirectUriValidator.validate(request)
+                rc.put(
+                    Param.redirectUri,
+                    request.redirectUri.defaultOnEmpty(request.client.redirectUris.first())
+                )
+                ResponseModeValidator.validate(request)
+                rc.put(
+                    OidcParam.responseMode,
+                    request.responseMode.defaultOnEmpty(ResponseMode.query)
+                )
+                listOf(MaxAgeValidator, PromptValidator, DisplayValidator, supportValidator).forEach { v ->
+                    v.validate(request)
+                }
+
                 rc.next()
             }
-            .suspendedErrorHandler(::preValidate)
-            .suspendedErrorHandler { rc ->
+            .suspendedOAuthHandler { rc ->
+                /**
+                 * Resolve authentication context, and acquire user authorization.
+                 */
                 authenticationHandler.authenticateOrRedirect(rc)
-                rc.next()
-            }
-            .suspendedErrorHandler { rc ->
                 authorizationHandler.authorizeOrRedirect(rc)
+
                 rc.next()
             }
-            .suspendedErrorHandler(::postValidate)
-            .suspendedErrorHandler(::dispatch)
-            .suspendedErrorHandler { rc ->
-                // debug:
-                // render ok for now. will be removed in the future
+            .suspendedOAuthHandler { rc ->
+                /**
+                 * Dispatch request to various flow services based on their trait.
+                 */
+                // todo: dispatch
                 rc.response().end("ok")
             }
 
@@ -85,39 +112,13 @@ class GatewayVerticle(
         }).requestHandler(router).listen()
     }
 
-    private suspend fun preValidate(rc: RoutingContext) {
-        // todo
-        rc.next()
-    }
-
-    private suspend fun postValidate(rc: RoutingContext) {
-        // todo
-        rc.next()
-    }
-
-    private suspend fun dispatch(rc: RoutingContext) {
-        // todo
-        rc.next()
-    }
-
-    private fun Route.suspendedErrorHandler(block: suspend (RoutingContext) -> Unit): Route {
+    private fun Route.suspendedOAuthHandler(block: suspend (RoutingContext) -> Unit): Route {
         handler { rc ->
             CoroutineScope(rc.vertx().dispatcher()).async {
                 block(rc)
             }.invokeOnCompletion { e ->
                 if (e != null)
                     rc.renderError(e)
-            }
-        }
-        return this
-    }
-
-    private fun Route.errorHandler(block: (RoutingContext) -> Unit): Route {
-        handler { rc ->
-            try {
-                block(rc)
-            } catch (t: Throwable) {
-                rc.renderError(t)
             }
         }
         return this
@@ -134,18 +135,19 @@ class GatewayVerticle(
         val responseMode = get<String>(OidcParam.responseMode) ?: ""
 
         val r = response().apply {
-            statusCode = e.status
             e.headers.forEach { t, u -> putHeader(t, u) }
         }
 
         when {
             redirectUri.isEmpty() -> {
+                r.statusCode = e.status
                 r.end(Json.encode(e.data))
             }
             responseMode == ResponseMode.query -> {
                 val url = HttpUrl.parse(redirectUri)!!.newBuilder().apply {
                     e.data.forEach { t, u -> addQueryParameter(t, u) }
                 }.build().toString()
+                r.statusCode = 302
                 r.putHeader("Location", url).end()
             }
             responseMode == ResponseMode.fragment -> {
@@ -153,11 +155,14 @@ class GatewayVerticle(
                     e.data.forEach { t, u -> addQueryParameter(t, u) }
                 }.build().query()
                 val url = HttpUrl.parse(redirectUri)!!.newBuilder().fragment(query).build().toString()
+                r.statusCode = 302
                 r.putHeader("Location", url).end()
             }
             else -> throw IllegalStateException("invalid state during error rendering.")
         }
     }
+
+    private fun String.defaultOnEmpty(default: String): String = if (this.isNotEmpty()) this else default
 }
 
 private const val requestKey = "OidcAuthorizeRequest"
