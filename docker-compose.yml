@@ -51,6 +51,20 @@ services:
       - SERVICE_PARAM_LOCK_KEY=NjhhMjJjMGFkZjhkNDA5MThlYTVkMTMzMmNhZGNiNTY=
       - AUTHORIZE_CODE_FLOW_HOST=authorize-code-flow-service
       - AUTHORIZE_CODE_FLOW_PORT=35127
+  token-endpoint-gateway:
+    build: ./token-endpoint-gateway
+    depends_on:
+      - discovery-service
+      - client-service
+    ports:
+      - "8300:8080"
+    environment:
+      - DISCOVERY_SERVICE_HOST=discovery-service
+      - DISCOVERY_SERVICE_PORT=35028
+      - CLIENT_SERVICE_HOST=client-service
+      - CLIENT_SERVICE_PORT=35027
+      - AUTHORIZE_CODE_FLOW_HOST=authorize-code-flow-service
+      - AUTHORIZE_CODE_FLOW_PORT=35127
   authorize-code-flow-service:
     build: ./authorize-code-flow-service
     depends_on:
@@ -73,22 +87,6 @@ services:
       - ID_TOKEN_TTL=1h
       - STATE_ENTROPY=8
       - NONCE_ENTROPY=8
-#  # to be deprecated
-#  token-proxy:
-#    build: ./token-proxy
-#    depends_on:
-#      - client-service
-#      - discovery-service
-#      - authorization-service
-#    ports:
-#      - "9190:8080"
-#    environment:
-#      - CLIENT_SERVICE_HOST=client-service
-#      - CLIENT_SERVICE_PORT=35027
-#      - DISCOVERY_SERVICE_HOST=discovery-service
-#      - DISCOVERY_SERVICE_PORT=35028
-#      - TOKEN_ENDPOINT_HOST=authorization-service
-#      - TOKEN_ENDPOINT_PORT=8080
   client-service:
     build: ./client-service
     depends_on:
