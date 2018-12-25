@@ -15,9 +15,11 @@ import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequestProducer
 import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
 import io.imulab.astrea.sdk.oidc.validation.SupportValidator
 import io.imulab.astrea.service.authn.AuthenticationHandler
+import io.imulab.astrea.service.authn.AutoLoginAuthenticationFilter
 import io.imulab.astrea.service.authn.IdTokenHintAuthenticationFilter
 import io.imulab.astrea.service.authn.LoginTokenAuthenticationFilter
 import io.imulab.astrea.service.authz.AuthorizationHandler
+import io.imulab.astrea.service.authz.AutoConsentAuthorizationFilter
 import io.imulab.astrea.service.authz.ConsentTokenAuthorizationFilter
 import io.imulab.astrea.service.dispatch.AuthorizeCodeFlow
 import io.imulab.astrea.service.lock.ParameterLocker
@@ -85,7 +87,8 @@ open class Components(
                 loginProviderUrl = config.getString("login.url"),
                 filters = listOf(
                     instance<LoginTokenAuthenticationFilter>(),
-                    instance<IdTokenHintAuthenticationFilter>()
+                    instance<IdTokenHintAuthenticationFilter>(),
+                    instance<AutoLoginAuthenticationFilter>()
                 ),
                 locker = instance()
             )
@@ -103,6 +106,10 @@ open class Components(
             IdTokenHintAuthenticationFilter(instance(), JsonWebKeySet(config.getString("service.jwks")))
         }
 
+        bind<AutoLoginAuthenticationFilter>() with singleton {
+            AutoLoginAuthenticationFilter(config = config)
+        }
+
         bind<ConsentTokenAuthorizationFilter>() with singleton {
             ConsentTokenAuthorizationFilter(
                 consentProviderUrl = config.getString("consent.url"),
@@ -111,12 +118,17 @@ open class Components(
             )
         }
 
+        bind<AutoConsentAuthorizationFilter>() with singleton {
+            AutoConsentAuthorizationFilter(config = config)
+        }
+
         bind<AuthorizationHandler>() with singleton {
             AuthorizationHandler(
                 consentProviderUrl = config.getString("consent.url"),
                 locker = instance(),
                 filters = listOf(
-                    instance<ConsentTokenAuthorizationFilter>()
+                    instance<ConsentTokenAuthorizationFilter>(),
+                    instance<AutoConsentAuthorizationFilter>()
                 )
             )
         }

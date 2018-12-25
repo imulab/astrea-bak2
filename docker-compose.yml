@@ -51,6 +51,8 @@ services:
       - SERVICE_PARAM_LOCK_KEY=NjhhMjJjMGFkZjhkNDA5MThlYTVkMTMzMmNhZGNiNTY=
       - AUTHORIZE_CODE_FLOW_HOST=authorize-code-flow-service
       - AUTHORIZE_CODE_FLOW_PORT=35127
+      - SERVICE_DEBUG_AUTO_LOGIN=true
+      - SERVICE_DEBUG_AUTO_CONSENT=true
   token-endpoint-gateway:
     build: ./token-endpoint-gateway
     depends_on:
