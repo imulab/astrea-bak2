@@ -17,4 +17,5 @@ include 'token-service'
 include 'authorize-code-flow-sdk'
 include 'authorize-code-flow-service'
 include 'authorize-endpoint-gateway'
+include 'token-endpoint-gateway'
 
