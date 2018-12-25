@@ -14,7 +14,8 @@ import okhttp3.HttpUrl
 class AuthenticationHandler(
     private val loginProviderUrl: String,
     private val filters: List<AuthenticationFilter>,
-    private val locker: ParameterLocker
+    private val locker: ParameterLocker,
+    private val subjectObfuscation: SubjectObfuscation
 ) {
 
     suspend fun authenticateOrRedirect(rc: RoutingContext) {
@@ -36,6 +37,7 @@ class AuthenticationHandler(
         if (auth != null) {
             request.session.assertType<OidcSession>().apply {
                 subject = auth.subject
+                obfuscatedSubject = subjectObfuscation.obfuscate(auth.subject, request.client.assertType())
                 authTime = auth.authTime
                 acrValues.addAll(auth.acrValues)
             }

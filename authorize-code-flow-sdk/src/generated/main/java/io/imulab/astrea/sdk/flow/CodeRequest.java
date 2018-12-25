@@ -1341,6 +1341,16 @@ private static final long serialVersionUID = 0L;
      */
     com.google.protobuf.ByteString
         getNonceBytes();
+
+    /**
+     * <code>string obfuscatedSubject = 6;</code>
+     */
+    java.lang.String getObfuscatedSubject();
+    /**
+     * <code>string obfuscatedSubject = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getObfuscatedSubjectBytes();
   }
   /**
    * Protobuf type {@code client.CodeRequest.Session}
@@ -1360,6 +1370,7 @@ private static final long serialVersionUID = 0L;
       authenticationTime_ = 0L;
       acrValues_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       nonce_ = "";
+      obfuscatedSubject_ = "";
     }
 
     @java.lang.Override
@@ -1419,6 +1430,12 @@ private static final long serialVersionUID = 0L;
               java.lang.String s = input.readStringRequireUtf8();
 
               nonce_ = s;
+              break;
+            }
+            case 50: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              obfuscatedSubject_ = s;
               break;
             }
             default: {
@@ -1595,6 +1612,40 @@ private static final long serialVersionUID = 0L;
       }
     }
 
+    public static final int OBFUSCATEDSUBJECT_FIELD_NUMBER = 6;
+    private volatile java.lang.Object obfuscatedSubject_;
+    /**
+     * <code>string obfuscatedSubject = 6;</code>
+     */
+    public java.lang.String getObfuscatedSubject() {
+      java.lang.Object ref = obfuscatedSubject_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        obfuscatedSubject_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string obfuscatedSubject = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getObfuscatedSubjectBytes() {
+      java.lang.Object ref = obfuscatedSubject_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        obfuscatedSubject_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -1623,6 +1674,9 @@ private static final long serialVersionUID = 0L;
       }
       if (!getNonceBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, nonce_);
+      }
+      if (!getObfuscatedSubjectBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, obfuscatedSubject_);
       }
       unknownFields.writeTo(output);
     }
@@ -1659,6 +1713,9 @@ private static final long serialVersionUID = 0L;
       if (!getNonceBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, nonce_);
       }
+      if (!getObfuscatedSubjectBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, obfuscatedSubject_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -1685,6 +1742,8 @@ private static final long serialVersionUID = 0L;
           .equals(other.getAcrValuesList());
       result = result && getNonce()
           .equals(other.getNonce());
+      result = result && getObfuscatedSubject()
+          .equals(other.getObfuscatedSubject());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1711,6 +1770,8 @@ private static final long serialVersionUID = 0L;
       }
       hash = (37 * hash) + NONCE_FIELD_NUMBER;
       hash = (53 * hash) + getNonce().hashCode();
+      hash = (37 * hash) + OBFUSCATEDSUBJECT_FIELD_NUMBER;
+      hash = (53 * hash) + getObfuscatedSubject().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -1854,6 +1915,8 @@ private static final long serialVersionUID = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
         nonce_ = "";
 
+        obfuscatedSubject_ = "";
+
         return this;
       }
 
@@ -1895,6 +1958,7 @@ private static final long serialVersionUID = 0L;
         }
         result.acrValues_ = acrValues_;
         result.nonce_ = nonce_;
+        result.obfuscatedSubject_ = obfuscatedSubject_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1973,6 +2037,10 @@ private static final long serialVersionUID = 0L;
         }
         if (!other.getNonce().isEmpty()) {
           nonce_ = other.nonce_;
+          onChanged();
+        }
+        if (!other.getObfuscatedSubject().isEmpty()) {
+          obfuscatedSubject_ = other.obfuscatedSubject_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -2353,6 +2421,75 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
         
         nonce_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object obfuscatedSubject_ = "";
+      /**
+       * <code>string obfuscatedSubject = 6;</code>
+       */
+      public java.lang.String getObfuscatedSubject() {
+        java.lang.Object ref = obfuscatedSubject_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          obfuscatedSubject_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string obfuscatedSubject = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getObfuscatedSubjectBytes() {
+        java.lang.Object ref = obfuscatedSubject_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          obfuscatedSubject_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string obfuscatedSubject = 6;</code>
+       */
+      public Builder setObfuscatedSubject(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        obfuscatedSubject_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string obfuscatedSubject = 6;</code>
+       */
+      public Builder clearObfuscatedSubject() {
+        
+        obfuscatedSubject_ = getDefaultInstance().getObfuscatedSubject();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string obfuscatedSubject = 6;</code>
+       */
+      public Builder setObfuscatedSubjectBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        obfuscatedSubject_ = value;
         onChanged();
         return this;
       }

@@ -79,6 +79,7 @@ class AuthorizeCodeFlowService(
             session = OidcSession().also { s ->
                 request.session.takeIf { it != null }?.let { rs ->
                     s.subject = rs.subject
+                    s.obfuscatedSubject = rs.obfuscatedSubject
                     s.authTime = LocalDateTime.ofEpochSecond(rs.authenticationTime, 0, ZoneOffset.UTC)
                     s.nonce = rs.nonce
                     s.grantedScopes.addAll(rs.grantedScopesList)

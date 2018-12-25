@@ -34,6 +34,7 @@ message CodeRequest {
         int64 authenticationTime = 3;
         repeated string acrValues = 4;
         string nonce = 5;
+        string obfuscatedSubject = 6;
     }
 }
 

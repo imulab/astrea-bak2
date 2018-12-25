@@ -78,7 +78,7 @@ public final class AuthorizeCodeFlowProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\034authorize_code_service.proto\022\006client\"\227" +
+      "\n\034authorize_code_service.proto\022\006client\"\263" +
       "\003\n\013CodeRequest\022\n\n\002id\030\001 \001(\t\022\023\n\013requestTim" +
       "e\030\002 \001(\003\022\025\n\rresponseTypes\030\003 \003(\t\022\023\n\013redire" +
       "ctUri\030\004 \001(\t\022\r\n\005state\030\005 \001(\t\022\016\n\006scopes\030\006 \003" +
@@ -86,38 +86,39 @@ public final class AuthorizeCodeFlowProto {
       "Client\022,\n\007session\030\010 \001(\0132\033.client.CodeReq" +
       "uest.Session\032Q\n\006Client\022\n\n\002id\030\001 \001(\t\022\025\n\rre" +
       "sponseTypes\030\002 \003(\t\022\024\n\014redirectUris\030\003 \003(\t\022" +
-      "\016\n\006scopes\030\004 \003(\t\032o\n\007Session\022\017\n\007subject\030\001 " +
-      "\001(\t\022\025\n\rgrantedScopes\030\002 \003(\t\022\032\n\022authentica" +
-      "tionTime\030\003 \001(\003\022\021\n\tacrValues\030\004 \003(\t\022\r\n\005non" +
-      "ce\030\005 \001(\t\"d\n\014CodeResponse\022\017\n\007success\030\001 \001(" +
-      "\010\022!\n\004data\030\002 \001(\0132\023.client.CodePackage\022 \n\007" +
-      "failure\030\003 \001(\0132\017.client.Failure\"\220\003\n\014Token" +
-      "Request\022\n\n\002id\030\001 \001(\t\022\023\n\013requestTime\030\002 \001(\003" +
-      "\022\021\n\tgrantType\030\003 \001(\t\022\014\n\004code\030\004 \001(\t\022\023\n\013red" +
-      "irectUri\030\005 \001(\t\022+\n\006client\030\006 \001(\0132\033.client." +
-      "TokenRequest.Client\032\373\001\n\006Client\022\n\n\002id\030\001 \001" +
-      "(\t\022\022\n\ngrantTypes\030\002 \003(\t\022\024\n\014redirectUris\030\003" +
-      " \003(\t\022\014\n\004jwks\030\004 \001(\t\022\033\n\023sectorIdentifierUr" +
-      "i\030\005 \001(\t\022\023\n\013subjectType\030\006 \001(\t\022&\n\036idTokenS" +
-      "ignedResponseAlgorithm\030\007 \001(\t\022)\n!idTokenE" +
-      "ncryptedResponseAlgorithm\030\010 \001(\t\022(\n idTok" +
-      "enEncryptedResponseEncoding\030\t \001(\t\"f\n\rTok" +
-      "enResponse\022\017\n\007success\030\001 \001(\010\022\"\n\004data\030\002 \001(" +
-      "\0132\024.client.TokenPackage\022 \n\007failure\030\003 \001(\013" +
-      "2\017.client.Failure\"+\n\013CodePackage\022\014\n\004code" +
-      "\030\001 \001(\t\022\016\n\006scopes\030\002 \003(\t\"p\n\014TokenPackage\022\023" +
-      "\n\013accessToken\030\001 \001(\t\022\021\n\ttokenType\030\002 \001(\t\022\021" +
-      "\n\texpiresIn\030\003 \001(\003\022\024\n\014refreshToken\030\004 \001(\t\022" +
-      "\017\n\007idToken\030\005 \001(\t\"\234\001\n\007Failure\022\r\n\005error\030\001 " +
-      "\001(\t\022\023\n\013description\030\002 \001(\t\022\016\n\006status\030\003 \001(\005" +
-      "\022-\n\007headers\030\004 \003(\0132\034.client.Failure.Heade" +
-      "rsEntry\032.\n\014HeadersEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005" +
-      "value\030\002 \001(\t:\0028\0012\204\001\n\021AuthorizeCodeFlow\0226\n" +
-      "\tAuthorize\022\023.client.CodeRequest\032\024.client" +
-      ".CodeResponse\0227\n\010Exchange\022\024.client.Token" +
-      "Request\032\025.client.TokenResponseB5\n\031io.imu" +
-      "lab.astrea.sdk.flowB\026AuthorizeCodeFlowPr" +
-      "otoP\001b\006proto3"
+      "\016\n\006scopes\030\004 \003(\t\032\212\001\n\007Session\022\017\n\007subject\030\001" +
+      " \001(\t\022\025\n\rgrantedScopes\030\002 \003(\t\022\032\n\022authentic" +
+      "ationTime\030\003 \001(\003\022\021\n\tacrValues\030\004 \003(\t\022\r\n\005no" +
+      "nce\030\005 \001(\t\022\031\n\021obfuscatedSubject\030\006 \001(\t\"d\n\014" +
+      "CodeResponse\022\017\n\007success\030\001 \001(\010\022!\n\004data\030\002 " +
+      "\001(\0132\023.client.CodePackage\022 \n\007failure\030\003 \001(" +
+      "\0132\017.client.Failure\"\220\003\n\014TokenRequest\022\n\n\002i" +
+      "d\030\001 \001(\t\022\023\n\013requestTime\030\002 \001(\003\022\021\n\tgrantTyp" +
+      "e\030\003 \001(\t\022\014\n\004code\030\004 \001(\t\022\023\n\013redirectUri\030\005 \001" +
+      "(\t\022+\n\006client\030\006 \001(\0132\033.client.TokenRequest" +
+      ".Client\032\373\001\n\006Client\022\n\n\002id\030\001 \001(\t\022\022\n\ngrantT" +
+      "ypes\030\002 \003(\t\022\024\n\014redirectUris\030\003 \003(\t\022\014\n\004jwks" +
+      "\030\004 \001(\t\022\033\n\023sectorIdentifierUri\030\005 \001(\t\022\023\n\013s" +
+      "ubjectType\030\006 \001(\t\022&\n\036idTokenSignedRespons" +
+      "eAlgorithm\030\007 \001(\t\022)\n!idTokenEncryptedResp" +
+      "onseAlgorithm\030\010 \001(\t\022(\n idTokenEncryptedR" +
+      "esponseEncoding\030\t \001(\t\"f\n\rTokenResponse\022\017" +
+      "\n\007success\030\001 \001(\010\022\"\n\004data\030\002 \001(\0132\024.client.T" +
+      "okenPackage\022 \n\007failure\030\003 \001(\0132\017.client.Fa" +
+      "ilure\"+\n\013CodePackage\022\014\n\004code\030\001 \001(\t\022\016\n\006sc" +
+      "opes\030\002 \003(\t\"p\n\014TokenPackage\022\023\n\013accessToke" +
+      "n\030\001 \001(\t\022\021\n\ttokenType\030\002 \001(\t\022\021\n\texpiresIn\030" +
+      "\003 \001(\003\022\024\n\014refreshToken\030\004 \001(\t\022\017\n\007idToken\030\005" +
+      " \001(\t\"\234\001\n\007Failure\022\r\n\005error\030\001 \001(\t\022\023\n\013descr" +
+      "iption\030\002 \001(\t\022\016\n\006status\030\003 \001(\005\022-\n\007headers\030" +
+      "\004 \003(\0132\034.client.Failure.HeadersEntry\032.\n\014H" +
+      "eadersEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:" +
+      "\0028\0012\204\001\n\021AuthorizeCodeFlow\0226\n\tAuthorize\022\023" +
+      ".client.CodeRequest\032\024.client.CodeRespons" +
+      "e\0227\n\010Exchange\022\024.client.TokenRequest\032\025.cl" +
+      "ient.TokenResponseB5\n\031io.imulab.astrea.s" +
+      "dk.flowB\026AuthorizeCodeFlowProtoP\001b\006proto" +
+      "3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -148,7 +149,7 @@ public final class AuthorizeCodeFlowProto {
     internal_static_client_CodeRequest_Session_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_client_CodeRequest_Session_descriptor,
-        new java.lang.String[] { "Subject", "GrantedScopes", "AuthenticationTime", "AcrValues", "Nonce", });
+        new java.lang.String[] { "Subject", "GrantedScopes", "AuthenticationTime", "AcrValues", "Nonce", "ObfuscatedSubject", });
     internal_static_client_CodeResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_client_CodeResponse_fieldAccessorTable = new

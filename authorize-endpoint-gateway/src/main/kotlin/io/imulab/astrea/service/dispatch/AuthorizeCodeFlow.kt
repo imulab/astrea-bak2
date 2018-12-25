@@ -72,6 +72,7 @@ class AuthorizeCodeFlow{
                 .setSession(
                     CodeRequest.Session.newBuilder()
                         .setSubject(session.subject)
+                        .setObfuscatedSubject(session.assertType<OidcSession>().obfuscatedSubject)
                         .addAllGrantedScopes(session.grantedScopes)
                         .setAuthenticationTime(session.assertType<OidcSession>().authTime?.toEpochSecond(ZoneOffset.UTC) ?: 0)
                         .addAllAcrValues(session.assertType<OidcSession>().acrValues)

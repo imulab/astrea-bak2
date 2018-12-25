@@ -14,10 +14,7 @@ import io.imulab.astrea.sdk.oidc.discovery.Discovery
 import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequestProducer
 import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
 import io.imulab.astrea.sdk.oidc.validation.SupportValidator
-import io.imulab.astrea.service.authn.AuthenticationHandler
-import io.imulab.astrea.service.authn.AutoLoginAuthenticationFilter
-import io.imulab.astrea.service.authn.IdTokenHintAuthenticationFilter
-import io.imulab.astrea.service.authn.LoginTokenAuthenticationFilter
+import io.imulab.astrea.service.authn.*
 import io.imulab.astrea.service.authz.AuthorizationHandler
 import io.imulab.astrea.service.authz.AutoConsentAuthorizationFilter
 import io.imulab.astrea.service.authz.ConsentTokenAuthorizationFilter
@@ -90,7 +87,10 @@ open class Components(
                     instance<IdTokenHintAuthenticationFilter>(),
                     instance<AutoLoginAuthenticationFilter>()
                 ),
-                locker = instance()
+                locker = instance(),
+                subjectObfuscation = SubjectObfuscation(
+                    Base64.getDecoder().decode(config.getString("service.pairwiseSalt"))
+                )
             )
         }
 

@@ -146,6 +146,7 @@ class RedisAuthorizeCodeRepository(
         @JsonProperty("9") var authTime: Long = 0
         @JsonProperty("10") var nonce: String = ""
         @JsonProperty("11") var redirectUri: String = ""
+        @JsonProperty("12") var obfuscatedSubject: String = ""
 
         fun toRequest(): OAuthRequest {
             return OidcAuthorizeRequest.Builder().also { b ->
@@ -154,6 +155,7 @@ class RedisAuthorizeCodeRepository(
                 b.redirectUri = redirectUri
                 b.session = OidcSession().also { s ->
                     s.subject = subject
+                    s.obfuscatedSubject = obfuscatedSubject
                     s.acrValues.addAll(acrValues)
                     s.authTime = LocalDateTime.ofEpochSecond(authTime, 0, ZoneOffset.UTC)
                     s.nonce = nonce
@@ -175,6 +177,7 @@ class RedisAuthorizeCodeRepository(
                     clientId = req.client.id
                     scopes = req.session.grantedScopes
                     subject = req.session.subject
+                    obfuscatedSubject = req.session.assertType<OidcSession>().obfuscatedSubject
                     accessTokenClaims = req.session.accessTokenClaims
                     acrValues = req.session.assertType<OidcSession>().acrValues
                     idTokenClaims = req.session.assertType<OidcSession>().idTokenClaims
