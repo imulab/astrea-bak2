@@ -145,11 +145,13 @@ class RedisAuthorizeCodeRepository(
         @JsonProperty("8") var idTokenClaims: Map<String, Any> = emptyMap()
         @JsonProperty("9") var authTime: Long = 0
         @JsonProperty("10") var nonce: String = ""
+        @JsonProperty("11") var redirectUri: String = ""
 
         fun toRequest(): OAuthRequest {
             return OidcAuthorizeRequest.Builder().also { b ->
                 b.client = IdOnlyClient(clientId)
                 b.nonce = nonce
+                b.redirectUri = redirectUri
                 b.session = OidcSession().also { s ->
                     s.subject = subject
                     s.acrValues.addAll(acrValues)
@@ -178,6 +180,16 @@ class RedisAuthorizeCodeRepository(
                     idTokenClaims = req.session.assertType<OidcSession>().idTokenClaims
                     authTime = req.session.assertType<OidcSession>().authTime?.toEpochSecond(ZoneOffset.UTC) ?: 0
                     nonce = req.session.assertType<OidcSession>().nonce
+                    redirectUri = when (req) {
+                        // todo: replace with effectiveRedirectUri call, assuming is already validated.
+                        is OAuthAuthorizeRequest -> {
+                            if (req.redirectUri.isEmpty())
+                                req.client.redirectUris.first()
+                            else
+                                req.redirectUri
+                        }
+                        else -> ""
+                    }
                 }
             }
         }

@@ -77,7 +77,7 @@ open class Components(private val vertx: Vertx, private val config: Config) {
 
         bind<AuthorizeCodeFlow.TokenLeg>() with singleton {
             AuthorizeCodeFlow.TokenLeg(
-                authorizationCodeFlowPrefix = "authorizeCodeFlow.serviceId",
+                authorizationCodeFlowPrefix = config.getString("authorizeCodeFlow.serviceId"),
                 stub = AuthorizeCodeFlowGrpc.newBlockingStub(
                     ManagedChannelBuilder
                         .forAddress(
