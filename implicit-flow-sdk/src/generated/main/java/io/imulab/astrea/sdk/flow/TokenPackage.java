@@ -20,6 +20,7 @@ private static final long serialVersionUID = 0L;
     tokenType_ = "";
     expiresIn_ = 0L;
     idToken_ = "";
+    scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
   @java.lang.Override
@@ -69,6 +70,15 @@ private static final long serialVersionUID = 0L;
             idToken_ = s;
             break;
           }
+          case 42: {
+            java.lang.String s = input.readStringRequireUtf8();
+            if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+              scopes_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000010;
+            }
+            scopes_.add(s);
+            break;
+          }
           default: {
             if (!parseUnknownFieldProto3(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -84,6 +94,9 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+        scopes_ = scopes_.getUnmodifiableView();
+      }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
@@ -101,6 +114,7 @@ private static final long serialVersionUID = 0L;
             io.imulab.astrea.sdk.flow.TokenPackage.class, io.imulab.astrea.sdk.flow.TokenPackage.Builder.class);
   }
 
+  private int bitField0_;
   public static final int ACCESSTOKEN_FIELD_NUMBER = 1;
   private volatile java.lang.Object accessToken_;
   /**
@@ -212,6 +226,35 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int SCOPES_FIELD_NUMBER = 5;
+  private com.google.protobuf.LazyStringList scopes_;
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  public com.google.protobuf.ProtocolStringList
+      getScopesList() {
+    return scopes_;
+  }
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  public int getScopesCount() {
+    return scopes_.size();
+  }
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  public java.lang.String getScopes(int index) {
+    return scopes_.get(index);
+  }
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  public com.google.protobuf.ByteString
+      getScopesBytes(int index) {
+    return scopes_.getByteString(index);
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -238,6 +281,9 @@ private static final long serialVersionUID = 0L;
     if (!getIdTokenBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 4, idToken_);
     }
+    for (int i = 0; i < scopes_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, scopes_.getRaw(i));
+    }
     unknownFields.writeTo(output);
   }
 
@@ -259,6 +305,14 @@ private static final long serialVersionUID = 0L;
     }
     if (!getIdTokenBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, idToken_);
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < scopes_.size(); i++) {
+        dataSize += computeStringSizeNoTag(scopes_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getScopesList().size();
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -284,6 +338,8 @@ private static final long serialVersionUID = 0L;
         == other.getExpiresIn());
     result = result && getIdToken()
         .equals(other.getIdToken());
+    result = result && getScopesList()
+        .equals(other.getScopesList());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -304,6 +360,10 @@ private static final long serialVersionUID = 0L;
         getExpiresIn());
     hash = (37 * hash) + IDTOKEN_FIELD_NUMBER;
     hash = (53 * hash) + getIdToken().hashCode();
+    if (getScopesCount() > 0) {
+      hash = (37 * hash) + SCOPES_FIELD_NUMBER;
+      hash = (53 * hash) + getScopesList().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -445,6 +505,8 @@ private static final long serialVersionUID = 0L;
 
       idToken_ = "";
 
+      scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000010);
       return this;
     }
 
@@ -471,10 +533,18 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public io.imulab.astrea.sdk.flow.TokenPackage buildPartial() {
       io.imulab.astrea.sdk.flow.TokenPackage result = new io.imulab.astrea.sdk.flow.TokenPackage(this);
+      int from_bitField0_ = bitField0_;
+      int to_bitField0_ = 0;
       result.accessToken_ = accessToken_;
       result.tokenType_ = tokenType_;
       result.expiresIn_ = expiresIn_;
       result.idToken_ = idToken_;
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        scopes_ = scopes_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000010);
+      }
+      result.scopes_ = scopes_;
+      result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
     }
@@ -538,6 +608,16 @@ private static final long serialVersionUID = 0L;
         idToken_ = other.idToken_;
         onChanged();
       }
+      if (!other.scopes_.isEmpty()) {
+        if (scopes_.isEmpty()) {
+          scopes_ = other.scopes_;
+          bitField0_ = (bitField0_ & ~0x00000010);
+        } else {
+          ensureScopesIsMutable();
+          scopes_.addAll(other.scopes_);
+        }
+        onChanged();
+      }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -566,6 +646,7 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+    private int bitField0_;
 
     private java.lang.Object accessToken_ = "";
     /**
@@ -796,6 +877,100 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       idToken_ = value;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringList scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureScopesIsMutable() {
+      if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+        scopes_ = new com.google.protobuf.LazyStringArrayList(scopes_);
+        bitField0_ |= 0x00000010;
+       }
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public com.google.protobuf.ProtocolStringList
+        getScopesList() {
+      return scopes_.getUnmodifiableView();
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public int getScopesCount() {
+      return scopes_.size();
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public java.lang.String getScopes(int index) {
+      return scopes_.get(index);
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getScopesBytes(int index) {
+      return scopes_.getByteString(index);
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public Builder setScopes(
+        int index, java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureScopesIsMutable();
+      scopes_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public Builder addScopes(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureScopesIsMutable();
+      scopes_.add(value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public Builder addAllScopes(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureScopesIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, scopes_);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public Builder clearScopes() {
+      scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000010);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated string scopes = 5;</code>
+     */
+    public Builder addScopesBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      ensureScopesIsMutable();
+      scopes_.add(value);
       onChanged();
       return this;
     }

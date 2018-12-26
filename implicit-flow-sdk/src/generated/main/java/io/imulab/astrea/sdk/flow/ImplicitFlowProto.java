@@ -58,34 +58,35 @@ public final class ImplicitFlowProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\026implicit_service.proto\022\006client\"\310\004\n\014Tok" +
+      "\n\026implicit_service.proto\022\006client\"\345\004\n\014Tok" +
       "enRequest\022\n\n\002id\030\001 \001(\t\022\023\n\013requestTime\030\002 \001" +
       "(\003\022\025\n\rresponseTypes\030\003 \003(\t\022\023\n\013redirectUri" +
       "\030\004 \001(\t\022\r\n\005state\030\005 \001(\t\022\016\n\006scopes\030\006 \003(\t\022+\n" +
       "\006client\030\007 \001(\0132\033.client.TokenRequest.Clie" +
       "nt\022-\n\007session\030\010 \001(\0132\034.client.TokenReques" +
-      "t.Session\032\342\001\n\006Client\022\n\n\002id\030\001 \001(\t\022\025\n\rresp" +
-      "onseTypes\030\002 \003(\t\022\024\n\014redirectUris\030\003 \003(\t\022\016\n" +
-      "\006scopes\030\004 \003(\t\022\022\n\ngrantTypes\030\005 \003(\t\022&\n\036idT" +
-      "okenSignedResponseAlgorithm\030\006 \001(\t\022)\n!idT" +
-      "okenEncryptedResponseAlgorithm\030\007 \001(\t\022(\n " +
-      "idTokenEncryptedResponseEncoding\030\010 \001(\t\032\212" +
-      "\001\n\007Session\022\017\n\007subject\030\001 \001(\t\022\025\n\rgrantedSc" +
-      "opes\030\002 \003(\t\022\032\n\022authenticationTime\030\003 \001(\003\022\021" +
-      "\n\tacrValues\030\004 \003(\t\022\r\n\005nonce\030\005 \001(\t\022\031\n\021obfu" +
-      "scatedSubject\030\006 \001(\t\"f\n\rTokenResponse\022\017\n\007" +
-      "success\030\001 \001(\010\022\"\n\004data\030\002 \001(\0132\024.client.Tok" +
-      "enPackage\022 \n\007failure\030\003 \001(\0132\017.client.Fail" +
-      "ure\"Z\n\014TokenPackage\022\023\n\013accessToken\030\001 \001(\t" +
-      "\022\021\n\ttokenType\030\002 \001(\t\022\021\n\texpiresIn\030\003 \001(\003\022\017" +
-      "\n\007idToken\030\004 \001(\t\"\234\001\n\007Failure\022\r\n\005error\030\001 \001" +
-      "(\t\022\023\n\013description\030\002 \001(\t\022\016\n\006status\030\003 \001(\005\022" +
-      "-\n\007headers\030\004 \003(\0132\034.client.Failure.Header" +
-      "sEntry\032.\n\014HeadersEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005v" +
-      "alue\030\002 \001(\t:\0028\0012H\n\014ImplicitFlow\0228\n\tAuthor" +
-      "ize\022\024.client.TokenRequest\032\025.client.Token" +
-      "ResponseB0\n\031io.imulab.astrea.sdk.flowB\021I" +
-      "mplicitFlowProtoP\001b\006proto3"
+      "t.Session\022\r\n\005nonce\030\t \001(\t\032\360\001\n\006Client\022\n\n\002i" +
+      "d\030\001 \001(\t\022\025\n\rresponseTypes\030\002 \003(\t\022\024\n\014redire" +
+      "ctUris\030\003 \003(\t\022\016\n\006scopes\030\004 \003(\t\022\022\n\ngrantTyp" +
+      "es\030\005 \003(\t\022&\n\036idTokenSignedResponseAlgorit" +
+      "hm\030\006 \001(\t\022)\n!idTokenEncryptedResponseAlgo" +
+      "rithm\030\007 \001(\t\022(\n idTokenEncryptedResponseE" +
+      "ncoding\030\010 \001(\t\022\014\n\004jwks\030\t \001(\t\032\212\001\n\007Session\022" +
+      "\017\n\007subject\030\001 \001(\t\022\025\n\rgrantedScopes\030\002 \003(\t\022" +
+      "\032\n\022authenticationTime\030\003 \001(\003\022\021\n\tacrValues" +
+      "\030\004 \003(\t\022\r\n\005nonce\030\005 \001(\t\022\031\n\021obfuscatedSubje" +
+      "ct\030\006 \001(\t\"f\n\rTokenResponse\022\017\n\007success\030\001 \001" +
+      "(\010\022\"\n\004data\030\002 \001(\0132\024.client.TokenPackage\022 " +
+      "\n\007failure\030\003 \001(\0132\017.client.Failure\"j\n\014Toke" +
+      "nPackage\022\023\n\013accessToken\030\001 \001(\t\022\021\n\ttokenTy" +
+      "pe\030\002 \001(\t\022\021\n\texpiresIn\030\003 \001(\003\022\017\n\007idToken\030\004" +
+      " \001(\t\022\016\n\006scopes\030\005 \003(\t\"\234\001\n\007Failure\022\r\n\005erro" +
+      "r\030\001 \001(\t\022\023\n\013description\030\002 \001(\t\022\016\n\006status\030\003" +
+      " \001(\005\022-\n\007headers\030\004 \003(\0132\034.client.Failure.H" +
+      "eadersEntry\032.\n\014HeadersEntry\022\013\n\003key\030\001 \001(\t" +
+      "\022\r\n\005value\030\002 \001(\t:\0028\0012H\n\014ImplicitFlow\0228\n\tA" +
+      "uthorize\022\024.client.TokenRequest\032\025.client." +
+      "TokenResponseB0\n\031io.imulab.astrea.sdk.fl" +
+      "owB\021ImplicitFlowProtoP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -104,13 +105,13 @@ public final class ImplicitFlowProto {
     internal_static_client_TokenRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_client_TokenRequest_descriptor,
-        new java.lang.String[] { "Id", "RequestTime", "ResponseTypes", "RedirectUri", "State", "Scopes", "Client", "Session", });
+        new java.lang.String[] { "Id", "RequestTime", "ResponseTypes", "RedirectUri", "State", "Scopes", "Client", "Session", "Nonce", });
     internal_static_client_TokenRequest_Client_descriptor =
       internal_static_client_TokenRequest_descriptor.getNestedTypes().get(0);
     internal_static_client_TokenRequest_Client_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_client_TokenRequest_Client_descriptor,
-        new java.lang.String[] { "Id", "ResponseTypes", "RedirectUris", "Scopes", "GrantTypes", "IdTokenSignedResponseAlgorithm", "IdTokenEncryptedResponseAlgorithm", "IdTokenEncryptedResponseEncoding", });
+        new java.lang.String[] { "Id", "ResponseTypes", "RedirectUris", "Scopes", "GrantTypes", "IdTokenSignedResponseAlgorithm", "IdTokenEncryptedResponseAlgorithm", "IdTokenEncryptedResponseEncoding", "Jwks", });
     internal_static_client_TokenRequest_Session_descriptor =
       internal_static_client_TokenRequest_descriptor.getNestedTypes().get(1);
     internal_static_client_TokenRequest_Session_fieldAccessorTable = new
@@ -128,7 +129,7 @@ public final class ImplicitFlowProto {
     internal_static_client_TokenPackage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_client_TokenPackage_descriptor,
-        new java.lang.String[] { "AccessToken", "TokenType", "ExpiresIn", "IdToken", });
+        new java.lang.String[] { "AccessToken", "TokenType", "ExpiresIn", "IdToken", "Scopes", });
     internal_static_client_Failure_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_client_Failure_fieldAccessorTable = new

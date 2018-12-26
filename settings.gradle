@@ -16,4 +16,5 @@ include 'authorize-code-flow-service'
 
 include 'authorization-service'
 include 'implicit-flow-sdk'
+include 'implicit-flow-service'
 

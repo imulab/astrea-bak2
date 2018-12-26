@@ -19,6 +19,7 @@ message TokenRequest {
     repeated string scopes = 6;
     Client client = 7;
     Session session = 8;
+    string nonce = 9;
 
     message Client {
         string id = 1;
@@ -29,6 +30,7 @@ message TokenRequest {
         string idTokenSignedResponseAlgorithm = 6;
         string idTokenEncryptedResponseAlgorithm = 7;
         string idTokenEncryptedResponseEncoding = 8;
+        string jwks = 9;
     }
 
     message Session {
@@ -52,6 +54,7 @@ message TokenPackage {
     string tokenType = 2;
     int64 expiresIn = 3;
     string idToken = 4;
+    repeated string scopes = 5;
 }
 
 message Failure {

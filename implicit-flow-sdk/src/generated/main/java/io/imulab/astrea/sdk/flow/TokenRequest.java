@@ -22,6 +22,7 @@ private static final long serialVersionUID = 0L;
     redirectUri_ = "";
     state_ = "";
     scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    nonce_ = "";
   }
 
   @java.lang.Override
@@ -113,6 +114,12 @@ private static final long serialVersionUID = 0L;
               session_ = subBuilder.buildPartial();
             }
 
+            break;
+          }
+          case 74: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            nonce_ = s;
             break;
           }
           default: {
@@ -272,6 +279,16 @@ private static final long serialVersionUID = 0L;
      */
     com.google.protobuf.ByteString
         getIdTokenEncryptedResponseEncodingBytes();
+
+    /**
+     * <code>string jwks = 9;</code>
+     */
+    java.lang.String getJwks();
+    /**
+     * <code>string jwks = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getJwksBytes();
   }
   /**
    * Protobuf type {@code client.TokenRequest.Client}
@@ -294,6 +311,7 @@ private static final long serialVersionUID = 0L;
       idTokenSignedResponseAlgorithm_ = "";
       idTokenEncryptedResponseAlgorithm_ = "";
       idTokenEncryptedResponseEncoding_ = "";
+      jwks_ = "";
     }
 
     @java.lang.Override
@@ -378,6 +396,12 @@ private static final long serialVersionUID = 0L;
               java.lang.String s = input.readStringRequireUtf8();
 
               idTokenEncryptedResponseEncoding_ = s;
+              break;
+            }
+            case 74: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              jwks_ = s;
               break;
             }
             default: {
@@ -677,6 +701,40 @@ private static final long serialVersionUID = 0L;
       }
     }
 
+    public static final int JWKS_FIELD_NUMBER = 9;
+    private volatile java.lang.Object jwks_;
+    /**
+     * <code>string jwks = 9;</code>
+     */
+    public java.lang.String getJwks() {
+      java.lang.Object ref = jwks_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        jwks_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string jwks = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getJwksBytes() {
+      java.lang.Object ref = jwks_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        jwks_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -714,6 +772,9 @@ private static final long serialVersionUID = 0L;
       }
       if (!getIdTokenEncryptedResponseEncodingBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 8, idTokenEncryptedResponseEncoding_);
+      }
+      if (!getJwksBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, jwks_);
       }
       unknownFields.writeTo(output);
     }
@@ -768,6 +829,9 @@ private static final long serialVersionUID = 0L;
       if (!getIdTokenEncryptedResponseEncodingBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, idTokenEncryptedResponseEncoding_);
       }
+      if (!getJwksBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, jwks_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -800,6 +864,8 @@ private static final long serialVersionUID = 0L;
           .equals(other.getIdTokenEncryptedResponseAlgorithm());
       result = result && getIdTokenEncryptedResponseEncoding()
           .equals(other.getIdTokenEncryptedResponseEncoding());
+      result = result && getJwks()
+          .equals(other.getJwks());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -835,6 +901,8 @@ private static final long serialVersionUID = 0L;
       hash = (53 * hash) + getIdTokenEncryptedResponseAlgorithm().hashCode();
       hash = (37 * hash) + IDTOKENENCRYPTEDRESPONSEENCODING_FIELD_NUMBER;
       hash = (53 * hash) + getIdTokenEncryptedResponseEncoding().hashCode();
+      hash = (37 * hash) + JWKS_FIELD_NUMBER;
+      hash = (53 * hash) + getJwks().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -984,6 +1052,8 @@ private static final long serialVersionUID = 0L;
 
         idTokenEncryptedResponseEncoding_ = "";
 
+        jwks_ = "";
+
         return this;
       }
 
@@ -1036,6 +1106,7 @@ private static final long serialVersionUID = 0L;
         result.idTokenSignedResponseAlgorithm_ = idTokenSignedResponseAlgorithm_;
         result.idTokenEncryptedResponseAlgorithm_ = idTokenEncryptedResponseAlgorithm_;
         result.idTokenEncryptedResponseEncoding_ = idTokenEncryptedResponseEncoding_;
+        result.jwks_ = jwks_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1139,6 +1210,10 @@ private static final long serialVersionUID = 0L;
         }
         if (!other.getIdTokenEncryptedResponseEncoding().isEmpty()) {
           idTokenEncryptedResponseEncoding_ = other.idTokenEncryptedResponseEncoding_;
+          onChanged();
+        }
+        if (!other.getJwks().isEmpty()) {
+          jwks_ = other.jwks_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -1819,6 +1894,75 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
         
         idTokenEncryptedResponseEncoding_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object jwks_ = "";
+      /**
+       * <code>string jwks = 9;</code>
+       */
+      public java.lang.String getJwks() {
+        java.lang.Object ref = jwks_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          jwks_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string jwks = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getJwksBytes() {
+        java.lang.Object ref = jwks_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          jwks_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string jwks = 9;</code>
+       */
+      public Builder setJwks(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        jwks_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string jwks = 9;</code>
+       */
+      public Builder clearJwks() {
+        
+        jwks_ = getDefaultInstance().getJwks();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string jwks = 9;</code>
+       */
+      public Builder setJwksBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        jwks_ = value;
         onChanged();
         return this;
       }
@@ -3358,6 +3502,40 @@ private static final long serialVersionUID = 0L;
     return getSession();
   }
 
+  public static final int NONCE_FIELD_NUMBER = 9;
+  private volatile java.lang.Object nonce_;
+  /**
+   * <code>string nonce = 9;</code>
+   */
+  public java.lang.String getNonce() {
+    java.lang.Object ref = nonce_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      nonce_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string nonce = 9;</code>
+   */
+  public com.google.protobuf.ByteString
+      getNonceBytes() {
+    java.lang.Object ref = nonce_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      nonce_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -3395,6 +3573,9 @@ private static final long serialVersionUID = 0L;
     }
     if (session_ != null) {
       output.writeMessage(8, getSession());
+    }
+    if (!getNonceBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 9, nonce_);
     }
     unknownFields.writeTo(output);
   }
@@ -3442,6 +3623,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(8, getSession());
     }
+    if (!getNonceBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, nonce_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -3480,6 +3664,8 @@ private static final long serialVersionUID = 0L;
       result = result && getSession()
           .equals(other.getSession());
     }
+    result = result && getNonce()
+        .equals(other.getNonce());
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -3516,6 +3702,8 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + SESSION_FIELD_NUMBER;
       hash = (53 * hash) + getSession().hashCode();
     }
+    hash = (37 * hash) + NONCE_FIELD_NUMBER;
+    hash = (53 * hash) + getNonce().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -3673,6 +3861,8 @@ private static final long serialVersionUID = 0L;
         session_ = null;
         sessionBuilder_ = null;
       }
+      nonce_ = "";
+
       return this;
     }
 
@@ -3725,6 +3915,7 @@ private static final long serialVersionUID = 0L;
       } else {
         result.session_ = sessionBuilder_.build();
       }
+      result.nonce_ = nonce_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -3814,6 +4005,10 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasSession()) {
         mergeSession(other.getSession());
+      }
+      if (!other.getNonce().isEmpty()) {
+        nonce_ = other.nonce_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -4498,6 +4693,75 @@ private static final long serialVersionUID = 0L;
         session_ = null;
       }
       return sessionBuilder_;
+    }
+
+    private java.lang.Object nonce_ = "";
+    /**
+     * <code>string nonce = 9;</code>
+     */
+    public java.lang.String getNonce() {
+      java.lang.Object ref = nonce_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        nonce_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string nonce = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNonceBytes() {
+      java.lang.Object ref = nonce_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        nonce_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string nonce = 9;</code>
+     */
+    public Builder setNonce(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      nonce_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string nonce = 9;</code>
+     */
+    public Builder clearNonce() {
+      
+      nonce_ = getDefaultInstance().getNonce();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string nonce = 9;</code>
+     */
+    public Builder setNonceBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      nonce_ = value;
+      onChanged();
+      return this;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

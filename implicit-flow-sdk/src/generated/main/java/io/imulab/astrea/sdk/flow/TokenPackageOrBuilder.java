@@ -41,4 +41,23 @@ public interface TokenPackageOrBuilder extends
    */
   com.google.protobuf.ByteString
       getIdTokenBytes();
+
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  java.util.List<java.lang.String>
+      getScopesList();
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  int getScopesCount();
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  java.lang.String getScopes(int index);
+  /**
+   * <code>repeated string scopes = 5;</code>
+   */
+  com.google.protobuf.ByteString
+      getScopesBytes(int index);
 }

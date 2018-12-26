@@ -105,4 +105,14 @@ public interface TokenRequestOrBuilder extends
    * <code>.client.TokenRequest.Session session = 8;</code>
    */
   io.imulab.astrea.sdk.flow.TokenRequest.SessionOrBuilder getSessionOrBuilder();
+
+  /**
+   * <code>string nonce = 9;</code>
+   */
+  java.lang.String getNonce();
+  /**
+   * <code>string nonce = 9;</code>
+   */
+  com.google.protobuf.ByteString
+      getNonceBytes();
 }
