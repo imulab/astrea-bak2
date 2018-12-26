@@ -15,4 +15,5 @@ include 'token-endpoint-gateway'
 include 'authorize-code-flow-service'
 
 include 'authorization-service'
+include 'implicit-flow-sdk'
 

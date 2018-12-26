@@ -33,7 +33,9 @@ class OidcImplicitHandler(
             response.state = request.state
 
         if (request.responseTypes.contains(io.imulab.astrea.sdk.oauth.reserved.ResponseType.token)) {
-            accessTokenHelper.createAccessToken(request, response).join()
+            if (response.accessToken.isEmpty())
+                accessTokenHelper.createAccessToken(request, response).join()
+
             request.session.assertType<OidcSession>().idTokenClaims[IdTokenClaim.accessTokenHash] =
                     io.imulab.astrea.sdk.oidc.handler.helper.TokenHashHelper.leftMostHash(
                         response.accessToken,
