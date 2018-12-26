@@ -2,12 +2,11 @@ package io.imulab.astrea.service
 
 import com.typesafe.config.Config
 import io.grpc.stub.StreamObserver
-import io.imulab.astrea.sdk.flow.*
+import io.imulab.astrea.sdk.flow.implicit.*
 import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.handler.AuthorizeRequestHandler
 import io.imulab.astrea.sdk.oauth.validation.OAuthRequestValidationChain
-import io.imulab.astrea.sdk.oidc.request.OidcAuthorizeRequest
 import io.imulab.astrea.sdk.oidc.response.OidcAuthorizeEndpointResponse
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
@@ -59,7 +58,7 @@ class ImplicitFlowService(
     private val authorizeValidation: OAuthRequestValidationChain
 ) : ImplicitFlowGrpc.ImplicitFlowImplBase(), CoroutineScope {
 
-    override fun authorize(request: TokenRequest?, responseObserver: StreamObserver<TokenResponse>?) {
+    override fun authorize(request: ImplicitTokenRequest?, responseObserver: StreamObserver<ImplicitTokenResponse>?) {
         if (request == null || responseObserver == null)
             return
 
@@ -79,14 +78,14 @@ class ImplicitFlowService(
                 job.cancel()
                 val e: OAuthException = if (t is OAuthException) t else ServerError.wrapped(t)
                 responseObserver.onNext(
-                    TokenResponse.newBuilder()
+                    ImplicitTokenResponse.newBuilder()
                         .setSuccess(false)
                         .setFailure(e.toFailure())
                         .build()
                 )
             } else {
                 responseObserver.onNext(
-                    TokenResponse.newBuilder()
+                    ImplicitTokenResponse.newBuilder()
                         .setSuccess(true)
                         .setData(
                             TokenPackage.newBuilder()

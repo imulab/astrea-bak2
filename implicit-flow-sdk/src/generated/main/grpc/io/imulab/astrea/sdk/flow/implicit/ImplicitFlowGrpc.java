@@ -1,4 +1,4 @@
-package io.imulab.astrea.sdk.flow;
+package io.imulab.astrea.sdk.flow.implicit;
 
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
@@ -27,30 +27,30 @@ public final class ImplicitFlowGrpc {
   public static final String SERVICE_NAME = "client.ImplicitFlow";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.TokenRequest,
-      io.imulab.astrea.sdk.flow.TokenResponse> getAuthorizeMethod;
+  private static volatile io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest,
+      io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse> getAuthorizeMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "Authorize",
-      requestType = io.imulab.astrea.sdk.flow.TokenRequest.class,
-      responseType = io.imulab.astrea.sdk.flow.TokenResponse.class,
+      requestType = io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest.class,
+      responseType = io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.TokenRequest,
-      io.imulab.astrea.sdk.flow.TokenResponse> getAuthorizeMethod() {
-    io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.TokenRequest, io.imulab.astrea.sdk.flow.TokenResponse> getAuthorizeMethod;
+  public static io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest,
+      io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse> getAuthorizeMethod() {
+    io.grpc.MethodDescriptor<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest, io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse> getAuthorizeMethod;
     if ((getAuthorizeMethod = ImplicitFlowGrpc.getAuthorizeMethod) == null) {
       synchronized (ImplicitFlowGrpc.class) {
         if ((getAuthorizeMethod = ImplicitFlowGrpc.getAuthorizeMethod) == null) {
           ImplicitFlowGrpc.getAuthorizeMethod = getAuthorizeMethod = 
-              io.grpc.MethodDescriptor.<io.imulab.astrea.sdk.flow.TokenRequest, io.imulab.astrea.sdk.flow.TokenResponse>newBuilder()
+              io.grpc.MethodDescriptor.<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest, io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
                   "client.ImplicitFlow", "Authorize"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.imulab.astrea.sdk.flow.TokenRequest.getDefaultInstance()))
+                  io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  io.imulab.astrea.sdk.flow.TokenResponse.getDefaultInstance()))
+                  io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse.getDefaultInstance()))
                   .setSchemaDescriptor(new ImplicitFlowMethodDescriptorSupplier("Authorize"))
                   .build();
           }
@@ -88,8 +88,8 @@ public final class ImplicitFlowGrpc {
 
     /**
      */
-    public void authorize(io.imulab.astrea.sdk.flow.TokenRequest request,
-        io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.TokenResponse> responseObserver) {
+    public void authorize(io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest request,
+        io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getAuthorizeMethod(), responseObserver);
     }
 
@@ -99,8 +99,8 @@ public final class ImplicitFlowGrpc {
             getAuthorizeMethod(),
             asyncUnaryCall(
               new MethodHandlers<
-                io.imulab.astrea.sdk.flow.TokenRequest,
-                io.imulab.astrea.sdk.flow.TokenResponse>(
+                io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest,
+                io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse>(
                   this, METHODID_AUTHORIZE)))
           .build();
     }
@@ -126,8 +126,8 @@ public final class ImplicitFlowGrpc {
 
     /**
      */
-    public void authorize(io.imulab.astrea.sdk.flow.TokenRequest request,
-        io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.TokenResponse> responseObserver) {
+    public void authorize(io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest request,
+        io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getAuthorizeMethod(), getCallOptions()), request, responseObserver);
     }
@@ -153,7 +153,7 @@ public final class ImplicitFlowGrpc {
 
     /**
      */
-    public io.imulab.astrea.sdk.flow.TokenResponse authorize(io.imulab.astrea.sdk.flow.TokenRequest request) {
+    public io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse authorize(io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest request) {
       return blockingUnaryCall(
           getChannel(), getAuthorizeMethod(), getCallOptions(), request);
     }
@@ -179,8 +179,8 @@ public final class ImplicitFlowGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<io.imulab.astrea.sdk.flow.TokenResponse> authorize(
-        io.imulab.astrea.sdk.flow.TokenRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse> authorize(
+        io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest request) {
       return futureUnaryCall(
           getChannel().newCall(getAuthorizeMethod(), getCallOptions()), request);
     }
@@ -206,8 +206,8 @@ public final class ImplicitFlowGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_AUTHORIZE:
-          serviceImpl.authorize((io.imulab.astrea.sdk.flow.TokenRequest) request,
-              (io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.TokenResponse>) responseObserver);
+          serviceImpl.authorize((io.imulab.astrea.sdk.flow.implicit.ImplicitTokenRequest) request,
+              (io.grpc.stub.StreamObserver<io.imulab.astrea.sdk.flow.implicit.ImplicitTokenResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -231,7 +231,7 @@ public final class ImplicitFlowGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return io.imulab.astrea.sdk.flow.ImplicitFlowProto.getDescriptor();
+      return io.imulab.astrea.sdk.flow.implicit.ImplicitFlowProto.getDescriptor();
     }
 
     @java.lang.Override

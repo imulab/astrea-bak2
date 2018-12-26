@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":discovery-sdk"))
     implementation(project(":client-sdk"))
     implementation(project(":authorize-code-flow-sdk"))
+    implementation(project(":implicit-flow-sdk"))
 
     kotlin(loadCoroutine = true)
     kodein(loadErased = false)

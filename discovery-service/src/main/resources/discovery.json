@@ -1,5 +1,5 @@
 {
-  "issuer": "foo",
+  "issuer": "https://astrea.imulab.io",
   "authorization_endpoint": "https://astrea.imulab.io/oauth/auth",
   "token_endpoint": "https://astrea.imulab.io/oauth/token",
   "userinfo_endpoint": "https://astrea.imulab.io/userinfo",

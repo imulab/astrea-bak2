@@ -7,6 +7,7 @@ import io.grpc.ManagedChannelBuilder
 import io.imulab.astrea.sdk.client.GrpcClientLookup
 import io.imulab.astrea.sdk.discovery.GrpcDiscoveryService
 import io.imulab.astrea.sdk.flow.AuthorizeCodeFlowGrpc
+import io.imulab.astrea.sdk.flow.implicit.ImplicitFlowGrpc
 import io.imulab.astrea.sdk.oauth.client.ClientLookup
 import io.imulab.astrea.sdk.oauth.error.ServerError
 import io.imulab.astrea.sdk.oauth.request.OAuthRequestProducer
@@ -19,6 +20,7 @@ import io.imulab.astrea.service.authz.AuthorizationHandler
 import io.imulab.astrea.service.authz.AutoConsentAuthorizationFilter
 import io.imulab.astrea.service.authz.ConsentTokenAuthorizationFilter
 import io.imulab.astrea.service.dispatch.AuthorizeCodeFlow
+import io.imulab.astrea.service.dispatch.ImplicitFlow
 import io.imulab.astrea.service.lock.ParameterLocker
 import io.vavr.control.Try
 import io.vertx.core.Vertx
@@ -42,6 +44,8 @@ open class Components(
         return Kodein {
             importOnce(discovery)
             importOnce(client)
+            importOnce(authorizeCodeFlow)
+            importOnce(implicitFlow)
             importOnce(app)
 
             bind<GatewayVerticle>() with singleton {
@@ -53,7 +57,8 @@ open class Components(
                     parameterLocker = instance(),
                     supportValidator = instance(),
                     dispatchers = listOf(
-                        instance<AuthorizeCodeFlow.AuthorizeLeg>()
+                        instance<AuthorizeCodeFlow.AuthorizeLeg>(),
+                        instance<ImplicitFlow>()
                     )
                 )
             }
@@ -132,7 +137,9 @@ open class Components(
                 )
             )
         }
+    }
 
+    val authorizeCodeFlow = Kodein.Module("authorizeCodeFlow") {
         bind<AuthorizeCodeFlow.AuthorizeLeg>() with singleton {
             AuthorizeCodeFlow.AuthorizeLeg(
                 AuthorizeCodeFlowGrpc.newBlockingStub(
@@ -140,6 +147,24 @@ open class Components(
                         .forAddress(
                             config.getString("authorizeCodeFlow.host"),
                             config.getInt("authorizeCodeFlow.port")
+                        )
+                        .enableRetry()
+                        .maxRetryAttempts(10)
+                        .usePlaintext()
+                        .build()
+                )
+            )
+        }
+    }
+
+    val implicitFlow = Kodein.Module("implicitFlow") {
+        bind<ImplicitFlow>() with singleton {
+            ImplicitFlow(
+                ImplicitFlowGrpc.newBlockingStub(
+                    ManagedChannelBuilder
+                        .forAddress(
+                            config.getString("implicitFlow.host"),
+                            config.getInt("implicitFlow.port")
                         )
                         .enableRetry()
                         .maxRetryAttempts(10)

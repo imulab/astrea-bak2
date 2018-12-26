@@ -1,16 +1,16 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "io.imulab.astrea.sdk.flow";
+option java_package = "io.imulab.astrea.sdk.flow.implicit";
 option java_outer_classname = "ImplicitFlowProto";
 
 package client;
 
 service ImplicitFlow {
-    rpc Authorize (TokenRequest) returns (TokenResponse);
+    rpc Authorize (ImplicitTokenRequest) returns (ImplicitTokenResponse);
 }
 
-message TokenRequest {
+message ImplicitTokenRequest {
     string id = 1;
     int64 requestTime = 2;
     repeated string responseTypes = 3;
@@ -43,7 +43,7 @@ message TokenRequest {
     }
 }
 
-message TokenResponse {
+message ImplicitTokenResponse {
     bool success = 1;
     TokenPackage data = 2;
     Failure failure = 3;
@@ -55,6 +55,7 @@ message TokenPackage {
     int64 expiresIn = 3;
     string idToken = 4;
     repeated string scopes = 5;
+    string foo = 6;
 }
 
 message Failure {
