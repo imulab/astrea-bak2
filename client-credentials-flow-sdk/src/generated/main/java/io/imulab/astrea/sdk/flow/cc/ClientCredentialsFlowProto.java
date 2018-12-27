@@ -54,27 +54,29 @@ public final class ClientCredentialsFlowProto {
   static {
     java.lang.String[] descriptorData = {
       "\n client_credentials_service.proto\022\004flow" +
-      "\"\254\001\n\035ClientCredentialsTokenRequest\022\n\n\002id" +
+      "\"\350\001\n\035ClientCredentialsTokenRequest\022\n\n\002id" +
       "\030\001 \001(\t\022\023\n\013requestTime\030\002 \001(\003\022\022\n\ngrantType" +
-      "s\030\003 \003(\t\022\016\n\006scopes\030\006 \003(\t\032F\n\006Client\022\n\n\002id\030" +
-      "\001 \001(\t\022\014\n\004type\030\002 \001(\t\022\016\n\006scopes\030\003 \003(\t\022\022\n\ng" +
-      "rantTypes\030\004 \003(\t\"\310\003\n\036ClientCredentialsTok" +
-      "enResponse\022\017\n\007success\030\001 \001(\010\022?\n\004data\030\002 \001(" +
-      "\01321.flow.ClientCredentialsTokenResponse." +
-      "TokenPackage\022=\n\007failure\030\003 \001(\0132,.flow.Cli" +
-      "entCredentialsTokenResponse.Failure\032Y\n\014T" +
-      "okenPackage\022\023\n\013accessToken\030\001 \001(\t\022\021\n\ttoke" +
-      "nType\030\002 \001(\t\022\021\n\texpiresIn\030\003 \001(\003\022\016\n\006scopes" +
-      "\030\004 \003(\t\032\271\001\n\007Failure\022\r\n\005error\030\001 \001(\t\022\023\n\013des" +
-      "cription\030\002 \001(\t\022\016\n\006status\030\003 \001(\005\022J\n\007header" +
-      "s\030\004 \003(\01329.flow.ClientCredentialsTokenRes" +
-      "ponse.Failure.HeadersEntry\032.\n\014HeadersEnt" +
-      "ry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\0012n\n\025Cl" +
-      "ientCredentialsFlow\022U\n\010exchange\022#.flow.C" +
-      "lientCredentialsTokenRequest\032$.flow.Clie" +
-      "ntCredentialsTokenResponseB<\n\034io.imulab." +
-      "astrea.sdk.flow.ccB\032ClientCredentialsFlo" +
-      "wProtoP\001b\006proto3"
+      "s\030\003 \003(\t\022\016\n\006scopes\030\004 \003(\t\022:\n\006client\030\005 \001(\0132" +
+      "*.flow.ClientCredentialsTokenRequest.Cli" +
+      "ent\032F\n\006Client\022\n\n\002id\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022" +
+      "\016\n\006scopes\030\003 \003(\t\022\022\n\ngrantTypes\030\004 \003(\t\"\336\003\n\036" +
+      "ClientCredentialsTokenResponse\022\017\n\007succes" +
+      "s\030\001 \001(\010\022?\n\004data\030\002 \001(\01321.flow.ClientCrede" +
+      "ntialsTokenResponse.TokenPackage\022=\n\007fail" +
+      "ure\030\003 \001(\0132,.flow.ClientCredentialsTokenR" +
+      "esponse.Failure\032o\n\014TokenPackage\022\023\n\013acces" +
+      "sToken\030\001 \001(\t\022\021\n\ttokenType\030\002 \001(\t\022\021\n\texpir" +
+      "esIn\030\003 \001(\003\022\016\n\006scopes\030\004 \003(\t\022\024\n\014refreshTok" +
+      "en\030\005 \001(\t\032\271\001\n\007Failure\022\r\n\005error\030\001 \001(\t\022\023\n\013d" +
+      "escription\030\002 \001(\t\022\016\n\006status\030\003 \001(\005\022J\n\007head" +
+      "ers\030\004 \003(\01329.flow.ClientCredentialsTokenR" +
+      "esponse.Failure.HeadersEntry\032.\n\014HeadersE" +
+      "ntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\0012n\n\025" +
+      "ClientCredentialsFlow\022U\n\010exchange\022#.flow" +
+      ".ClientCredentialsTokenRequest\032$.flow.Cl" +
+      "ientCredentialsTokenResponseB<\n\034io.imula" +
+      "b.astrea.sdk.flow.ccB\032ClientCredentialsF" +
+      "lowProtoP\001b\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -93,7 +95,7 @@ public final class ClientCredentialsFlowProto {
     internal_static_flow_ClientCredentialsTokenRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_flow_ClientCredentialsTokenRequest_descriptor,
-        new java.lang.String[] { "Id", "RequestTime", "GrantTypes", "Scopes", });
+        new java.lang.String[] { "Id", "RequestTime", "GrantTypes", "Scopes", "Client", });
     internal_static_flow_ClientCredentialsTokenRequest_Client_descriptor =
       internal_static_flow_ClientCredentialsTokenRequest_descriptor.getNestedTypes().get(0);
     internal_static_flow_ClientCredentialsTokenRequest_Client_fieldAccessorTable = new
@@ -111,7 +113,7 @@ public final class ClientCredentialsFlowProto {
     internal_static_flow_ClientCredentialsTokenResponse_TokenPackage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_flow_ClientCredentialsTokenResponse_TokenPackage_descriptor,
-        new java.lang.String[] { "AccessToken", "TokenType", "ExpiresIn", "Scopes", });
+        new java.lang.String[] { "AccessToken", "TokenType", "ExpiresIn", "Scopes", "RefreshToken", });
     internal_static_flow_ClientCredentialsTokenResponse_Failure_descriptor =
       internal_static_flow_ClientCredentialsTokenResponse_descriptor.getNestedTypes().get(1);
     internal_static_flow_ClientCredentialsTokenResponse_Failure_fieldAccessorTable = new

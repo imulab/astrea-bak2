@@ -42,21 +42,34 @@ public interface ClientCredentialsTokenRequestOrBuilder extends
       getGrantTypesBytes(int index);
 
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   java.util.List<java.lang.String>
       getScopesList();
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   int getScopesCount();
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   java.lang.String getScopes(int index);
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   com.google.protobuf.ByteString
       getScopesBytes(int index);
+
+  /**
+   * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+   */
+  boolean hasClient();
+  /**
+   * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+   */
+  io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client getClient();
+  /**
+   * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+   */
+  io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.ClientOrBuilder getClientOrBuilder();
 }

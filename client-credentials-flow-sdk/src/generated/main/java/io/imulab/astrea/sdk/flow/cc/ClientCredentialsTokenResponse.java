@@ -153,6 +153,16 @@ private static final long serialVersionUID = 0L;
      */
     com.google.protobuf.ByteString
         getScopesBytes(int index);
+
+    /**
+     * <code>string refreshToken = 5;</code>
+     */
+    java.lang.String getRefreshToken();
+    /**
+     * <code>string refreshToken = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getRefreshTokenBytes();
   }
   /**
    * Protobuf type {@code flow.ClientCredentialsTokenResponse.TokenPackage}
@@ -171,6 +181,7 @@ private static final long serialVersionUID = 0L;
       tokenType_ = "";
       expiresIn_ = 0L;
       scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      refreshToken_ = "";
     }
 
     @java.lang.Override
@@ -221,6 +232,12 @@ private static final long serialVersionUID = 0L;
                 mutable_bitField0_ |= 0x00000008;
               }
               scopes_.add(s);
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              refreshToken_ = s;
               break;
             }
             default: {
@@ -365,6 +382,40 @@ private static final long serialVersionUID = 0L;
       return scopes_.getByteString(index);
     }
 
+    public static final int REFRESHTOKEN_FIELD_NUMBER = 5;
+    private volatile java.lang.Object refreshToken_;
+    /**
+     * <code>string refreshToken = 5;</code>
+     */
+    public java.lang.String getRefreshToken() {
+      java.lang.Object ref = refreshToken_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        refreshToken_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string refreshToken = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRefreshTokenBytes() {
+      java.lang.Object ref = refreshToken_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        refreshToken_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -390,6 +441,9 @@ private static final long serialVersionUID = 0L;
       }
       for (int i = 0; i < scopes_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 4, scopes_.getRaw(i));
+      }
+      if (!getRefreshTokenBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, refreshToken_);
       }
       unknownFields.writeTo(output);
     }
@@ -418,6 +472,9 @@ private static final long serialVersionUID = 0L;
         size += dataSize;
         size += 1 * getScopesList().size();
       }
+      if (!getRefreshTokenBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, refreshToken_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -442,6 +499,8 @@ private static final long serialVersionUID = 0L;
           == other.getExpiresIn());
       result = result && getScopesList()
           .equals(other.getScopesList());
+      result = result && getRefreshToken()
+          .equals(other.getRefreshToken());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -464,6 +523,8 @@ private static final long serialVersionUID = 0L;
         hash = (37 * hash) + SCOPES_FIELD_NUMBER;
         hash = (53 * hash) + getScopesList().hashCode();
       }
+      hash = (37 * hash) + REFRESHTOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getRefreshToken().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -605,6 +666,8 @@ private static final long serialVersionUID = 0L;
 
         scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000008);
+        refreshToken_ = "";
+
         return this;
       }
 
@@ -641,6 +704,7 @@ private static final long serialVersionUID = 0L;
           bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.scopes_ = scopes_;
+        result.refreshToken_ = refreshToken_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -709,6 +773,10 @@ private static final long serialVersionUID = 0L;
             ensureScopesIsMutable();
             scopes_.addAll(other.scopes_);
           }
+          onChanged();
+        }
+        if (!other.getRefreshToken().isEmpty()) {
+          refreshToken_ = other.refreshToken_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -995,6 +1063,75 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
         ensureScopesIsMutable();
         scopes_.add(value);
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object refreshToken_ = "";
+      /**
+       * <code>string refreshToken = 5;</code>
+       */
+      public java.lang.String getRefreshToken() {
+        java.lang.Object ref = refreshToken_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          refreshToken_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string refreshToken = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRefreshTokenBytes() {
+        java.lang.Object ref = refreshToken_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          refreshToken_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string refreshToken = 5;</code>
+       */
+      public Builder setRefreshToken(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        refreshToken_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string refreshToken = 5;</code>
+       */
+      public Builder clearRefreshToken() {
+        
+        refreshToken_ = getDefaultInstance().getRefreshToken();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string refreshToken = 5;</code>
+       */
+      public Builder setRefreshTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        refreshToken_ = value;
         onChanged();
         return this;
       }

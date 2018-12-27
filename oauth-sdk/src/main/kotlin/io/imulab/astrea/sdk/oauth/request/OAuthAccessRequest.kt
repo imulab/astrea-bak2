@@ -30,8 +30,6 @@ open class OAuthAccessRequest(
         fun build(): OAuthAccessRequest {
             if (grantTypes.isEmpty())
                 throw InvalidRequest.required(Param.grantType)
-            if (redirectUri.isEmpty())
-                throw InvalidRequest.required(Param.redirectUri)
 
             checkNotNull(client)
 

@@ -66,13 +66,26 @@ private static final long serialVersionUID = 0L;
             grantTypes_.add(s);
             break;
           }
-          case 50: {
+          case 34: {
             java.lang.String s = input.readStringRequireUtf8();
             if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
               scopes_ = new com.google.protobuf.LazyStringArrayList();
               mutable_bitField0_ |= 0x00000008;
             }
             scopes_.add(s);
+            break;
+          }
+          case 42: {
+            io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.Builder subBuilder = null;
+            if (client_ != null) {
+              subBuilder = client_.toBuilder();
+            }
+            client_ = input.readMessage(io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(client_);
+              client_ = subBuilder.buildPartial();
+            }
+
             break;
           }
           default: {
@@ -1256,33 +1269,54 @@ private static final long serialVersionUID = 0L;
     return grantTypes_.getByteString(index);
   }
 
-  public static final int SCOPES_FIELD_NUMBER = 6;
+  public static final int SCOPES_FIELD_NUMBER = 4;
   private com.google.protobuf.LazyStringList scopes_;
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   public com.google.protobuf.ProtocolStringList
       getScopesList() {
     return scopes_;
   }
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   public int getScopesCount() {
     return scopes_.size();
   }
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   public java.lang.String getScopes(int index) {
     return scopes_.get(index);
   }
   /**
-   * <code>repeated string scopes = 6;</code>
+   * <code>repeated string scopes = 4;</code>
    */
   public com.google.protobuf.ByteString
       getScopesBytes(int index) {
     return scopes_.getByteString(index);
+  }
+
+  public static final int CLIENT_FIELD_NUMBER = 5;
+  private io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client client_;
+  /**
+   * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+   */
+  public boolean hasClient() {
+    return client_ != null;
+  }
+  /**
+   * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+   */
+  public io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client getClient() {
+    return client_ == null ? io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.getDefaultInstance() : client_;
+  }
+  /**
+   * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+   */
+  public io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.ClientOrBuilder getClientOrBuilder() {
+    return getClient();
   }
 
   private byte memoizedIsInitialized = -1;
@@ -1309,7 +1343,10 @@ private static final long serialVersionUID = 0L;
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, grantTypes_.getRaw(i));
     }
     for (int i = 0; i < scopes_.size(); i++) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, scopes_.getRaw(i));
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, scopes_.getRaw(i));
+    }
+    if (client_ != null) {
+      output.writeMessage(5, getClient());
     }
     unknownFields.writeTo(output);
   }
@@ -1343,6 +1380,10 @@ private static final long serialVersionUID = 0L;
       size += dataSize;
       size += 1 * getScopesList().size();
     }
+    if (client_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(5, getClient());
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -1367,6 +1408,11 @@ private static final long serialVersionUID = 0L;
         .equals(other.getGrantTypesList());
     result = result && getScopesList()
         .equals(other.getScopesList());
+    result = result && (hasClient() == other.hasClient());
+    if (hasClient()) {
+      result = result && getClient()
+          .equals(other.getClient());
+    }
     result = result && unknownFields.equals(other.unknownFields);
     return result;
   }
@@ -1390,6 +1436,10 @@ private static final long serialVersionUID = 0L;
     if (getScopesCount() > 0) {
       hash = (37 * hash) + SCOPES_FIELD_NUMBER;
       hash = (53 * hash) + getScopesList().hashCode();
+    }
+    if (hasClient()) {
+      hash = (37 * hash) + CLIENT_FIELD_NUMBER;
+      hash = (53 * hash) + getClient().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -1532,6 +1582,12 @@ private static final long serialVersionUID = 0L;
       bitField0_ = (bitField0_ & ~0x00000004);
       scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       bitField0_ = (bitField0_ & ~0x00000008);
+      if (clientBuilder_ == null) {
+        client_ = null;
+      } else {
+        client_ = null;
+        clientBuilder_ = null;
+      }
       return this;
     }
 
@@ -1572,6 +1628,11 @@ private static final long serialVersionUID = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
       }
       result.scopes_ = scopes_;
+      if (clientBuilder_ == null) {
+        result.client_ = client_;
+      } else {
+        result.client_ = clientBuilder_.build();
+      }
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -1647,6 +1708,9 @@ private static final long serialVersionUID = 0L;
           scopes_.addAll(other.scopes_);
         }
         onChanged();
+      }
+      if (other.hasClient()) {
+        mergeClient(other.getClient());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -1875,33 +1939,33 @@ private static final long serialVersionUID = 0L;
        }
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public com.google.protobuf.ProtocolStringList
         getScopesList() {
       return scopes_.getUnmodifiableView();
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public int getScopesCount() {
       return scopes_.size();
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public java.lang.String getScopes(int index) {
       return scopes_.get(index);
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public com.google.protobuf.ByteString
         getScopesBytes(int index) {
       return scopes_.getByteString(index);
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public Builder setScopes(
         int index, java.lang.String value) {
@@ -1914,7 +1978,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public Builder addScopes(
         java.lang.String value) {
@@ -1927,7 +1991,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public Builder addAllScopes(
         java.lang.Iterable<java.lang.String> values) {
@@ -1938,7 +2002,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public Builder clearScopes() {
       scopes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -1947,7 +2011,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string scopes = 6;</code>
+     * <code>repeated string scopes = 4;</code>
      */
     public Builder addScopesBytes(
         com.google.protobuf.ByteString value) {
@@ -1959,6 +2023,123 @@ private static final long serialVersionUID = 0L;
       scopes_.add(value);
       onChanged();
       return this;
+    }
+
+    private io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client client_ = null;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client, io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.Builder, io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.ClientOrBuilder> clientBuilder_;
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public boolean hasClient() {
+      return clientBuilder_ != null || client_ != null;
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client getClient() {
+      if (clientBuilder_ == null) {
+        return client_ == null ? io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.getDefaultInstance() : client_;
+      } else {
+        return clientBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public Builder setClient(io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client value) {
+      if (clientBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        client_ = value;
+        onChanged();
+      } else {
+        clientBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public Builder setClient(
+        io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.Builder builderForValue) {
+      if (clientBuilder_ == null) {
+        client_ = builderForValue.build();
+        onChanged();
+      } else {
+        clientBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public Builder mergeClient(io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client value) {
+      if (clientBuilder_ == null) {
+        if (client_ != null) {
+          client_ =
+            io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.newBuilder(client_).mergeFrom(value).buildPartial();
+        } else {
+          client_ = value;
+        }
+        onChanged();
+      } else {
+        clientBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public Builder clearClient() {
+      if (clientBuilder_ == null) {
+        client_ = null;
+        onChanged();
+      } else {
+        client_ = null;
+        clientBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.Builder getClientBuilder() {
+      
+      onChanged();
+      return getClientFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    public io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.ClientOrBuilder getClientOrBuilder() {
+      if (clientBuilder_ != null) {
+        return clientBuilder_.getMessageOrBuilder();
+      } else {
+        return client_ == null ?
+            io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.getDefaultInstance() : client_;
+      }
+    }
+    /**
+     * <code>.flow.ClientCredentialsTokenRequest.Client client = 5;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client, io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.Builder, io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.ClientOrBuilder> 
+        getClientFieldBuilder() {
+      if (clientBuilder_ == null) {
+        clientBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client, io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.Client.Builder, io.imulab.astrea.sdk.flow.cc.ClientCredentialsTokenRequest.ClientOrBuilder>(
+                getClient(),
+                getParentForChildren(),
+                isClean());
+        client_ = null;
+      }
+      return clientBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(
