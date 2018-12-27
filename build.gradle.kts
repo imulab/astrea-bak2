@@ -44,7 +44,7 @@ subprojects {
 
     tasks.withType<Test>().all {
         useJUnitPlatform {
-            includeEngines("spek2")
+            includeEngines("junit-jupiter", "spek2")
         }
     }
 

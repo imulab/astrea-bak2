@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import build.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -8,6 +10,10 @@ plugins {
 
 group = "io.imulab.astrea.test"
 version = "0.0.1-SNAPSHOT"
+
+repositories {
+    jcenter()
+}
 
 dependencies {
     kotlin(loadReflect = true)
