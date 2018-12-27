@@ -8,11 +8,17 @@ import io.imulab.astrea.sdk.discovery.DiscoveryRequest
 import io.imulab.astrea.sdk.discovery.DiscoveryResponse
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.Status
 import io.vertx.grpc.VertxServerBuilder
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
-class DiscoveryGrpcVerticle(discovery: Discovery, private val appConfig: Config) : AbstractVerticle() {
+class DiscoveryGrpcVerticle(
+    discovery: Discovery,
+    private val appConfig: Config,
+    private val healthCheckHandler: HealthCheckHandler
+) : AbstractVerticle() {
 
     private val discoveryResponse = DiscoveryResponse.newBuilder()
         .setIssuer(discovery.issuer)
@@ -63,6 +69,13 @@ class DiscoveryGrpcVerticle(discovery: Discovery, private val appConfig: Config)
         })
 
         server.start(startFuture?.completer())
+
+        healthCheckHandler.register("DiscoveryGrpc") { h ->
+            if (server.isTerminated)
+                h.complete(Status.KO())
+            else
+                h.complete(Status.OK())
+        }
     }
 
     private val service = object : DiscoveryGrpc.DiscoveryImplBase() {

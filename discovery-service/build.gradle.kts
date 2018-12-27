@@ -21,7 +21,8 @@ dependencies {
     kotlin()
     vertx(
         loadWeb = true,
-        loadGrpc = true
+        loadGrpc = true,
+        loadHealthCheck = true
     )
     grpc(loadNetty = true)
     typeSafeConfig()

@@ -8,6 +8,7 @@ import io.imulab.astrea.sdk.discovery.Discovery
 import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
 import io.vertx.core.json.Json
+import io.vertx.ext.healthchecks.HealthCheckHandler
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
 
@@ -31,8 +32,9 @@ fun main() {
 
     val config = ConfigFactory.load()
     val discovery = readDiscovery(vertx, config)
+    val healthCheckHandler = HealthCheckHandler.create(vertx)
 
-    vertx.deployVerticle(DiscoveryHttpVerticle(discovery, config)) { ar ->
+    vertx.deployVerticle(DiscoveryHttpVerticle(discovery, config, healthCheckHandler)) { ar ->
         if (ar.failed()) {
             rootLogger.error("Server encountered error.", ar.cause())
         } else {
@@ -40,7 +42,7 @@ fun main() {
         }
     }
 
-    vertx.deployVerticle(DiscoveryGrpcVerticle(discovery, config)) { ar ->
+    vertx.deployVerticle(DiscoveryGrpcVerticle(discovery, config, healthCheckHandler)) { ar ->
         if (ar.failed()) {
             rootLogger.error("Server encountered error.", ar.cause())
         } else {
