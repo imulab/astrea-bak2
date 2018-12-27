@@ -18,4 +18,5 @@ include 'authorization-service'
 include 'implicit-flow-sdk'
 include 'implicit-flow-service'
 include 'client-credentials-flow-sdk'
+include 'client-credentials-flow-service'
 
