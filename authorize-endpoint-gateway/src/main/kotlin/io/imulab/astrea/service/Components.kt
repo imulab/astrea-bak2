@@ -24,6 +24,7 @@ import io.imulab.astrea.service.dispatch.ImplicitFlow
 import io.imulab.astrea.service.lock.ParameterLocker
 import io.vavr.control.Try
 import io.vertx.core.Vertx
+import io.vertx.ext.healthchecks.HealthCheckHandler
 import kotlinx.coroutines.runBlocking
 import org.jose4j.jwk.JsonWebKeySet
 import org.jose4j.keys.AesKey
@@ -51,6 +52,7 @@ open class Components(
             bind<GatewayVerticle>() with singleton {
                 GatewayVerticle(
                     appConfig = config,
+                    healthCheckHandler = instance(),
                     requestProducer = instance(),
                     authenticationHandler = instance(),
                     authorizationHandler = instance(),
@@ -66,6 +68,8 @@ open class Components(
     }
 
     val app = Kodein.Module("app") {
+        bind<HealthCheckHandler>() with singleton { HealthCheckHandler.create(vertx) }
+
         bind<OAuthRequestProducer>() with singleton {
             // todo support request object
             OidcAuthorizeRequestProducer(
