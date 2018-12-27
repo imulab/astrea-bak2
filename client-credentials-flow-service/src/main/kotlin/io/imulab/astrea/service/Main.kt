@@ -21,4 +21,13 @@ fun main(args: Array<String>) {
             logger.error("Client credentials flow service failed to deploy.", ar.cause())
         }
     }
+
+    val healthVerticle by components.instance<HealthVerticle>()
+    vertx.deployVerticle(healthVerticle) { ar ->
+        if (ar.succeeded()) {
+            logger.info("Client credentials flow service health information available.")
+        } else {
+            logger.error("Client credentials flow service health information unavailable.", ar.cause())
+        }
+    }
 }

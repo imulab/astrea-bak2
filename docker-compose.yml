@@ -113,6 +113,7 @@ services:
       - discovery-service
     ports:
       - "35327:35327"
+      - "9000:8080"
     environment:
       - DISCOVERY_SERVICE_HOST=discovery-service
       - DISCOVERY_SERVICE_PORT=35028

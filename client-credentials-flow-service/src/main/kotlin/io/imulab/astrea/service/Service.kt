@@ -15,6 +15,10 @@ import io.imulab.astrea.sdk.oauth.response.TokenEndpointResponse
 import io.imulab.astrea.sdk.oauth.validation.OAuthRequestValidationChain
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
+import io.vertx.core.http.HttpServerOptions
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.Status
+import io.vertx.ext.web.Router
 import io.vertx.grpc.VertxServerBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -28,10 +32,12 @@ import kotlin.coroutines.CoroutineContext
 
 class GrpcVerticle(
     private val flowService: ClientCredentialsFlowService,
-    private val appConfig: Config
+    private val appConfig: Config,
+    private val healthCheckHandler: HealthCheckHandler
 ) : AbstractVerticle() {
 
     private val logger = LoggerFactory.getLogger(GrpcVerticle::class.java)
+    private val serviceName = "ClientCredentialsFlowGRPC"
 
     override fun start(startFuture: Future<Void>?) {
         val server = VertxServerBuilder
@@ -48,11 +54,32 @@ class GrpcVerticle(
         server.start { ar ->
             if (ar.failed()) {
                 logger.error("GrpcVerticle failed to start.", ar.cause())
+                startFuture?.fail(ar.cause())
             } else {
                 startFuture?.complete()
                 logger.info("GrpcVerticle started...")
             }
         }
+
+        healthCheckHandler.register(serviceName) { h ->
+            if (server.isTerminated)
+                h.complete(Status.KO())
+            else
+                h.complete(Status.OK())
+        }
+    }
+}
+
+class HealthVerticle(
+    private val healthCheckHandler: HealthCheckHandler,
+    private val appConfig: Config
+) : AbstractVerticle() {
+    override fun start() {
+        val router = Router.router(vertx)
+        router.get("/health").handler(healthCheckHandler)
+        vertx.createHttpServer(HttpServerOptions().apply {
+            port = appConfig.getInt("service.healthPort")
+        }).requestHandler(router).listen()
     }
 }
 

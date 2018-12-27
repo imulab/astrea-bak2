@@ -18,6 +18,7 @@ import io.imulab.astrea.sdk.oauth.validation.ScopeValidator
 import io.imulab.astrea.sdk.oidc.discovery.Discovery
 import io.vavr.control.Try
 import io.vertx.core.Vertx
+import io.vertx.ext.healthchecks.HealthCheckHandler
 import kotlinx.coroutines.runBlocking
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
@@ -33,11 +34,26 @@ open class Components(private val vertx: Vertx, private val config: Config) {
             importOnce(discovery)
             importOnce(app)
 
-            bind<GrpcVerticle>() with singleton { GrpcVerticle(instance(), config) }
+            bind<GrpcVerticle>() with singleton {
+                GrpcVerticle(
+                    flowService = instance(),
+                    appConfig = config,
+                    healthCheckHandler = instance()
+                )
+            }
+
+            bind<HealthVerticle>() with singleton {
+                HealthVerticle(
+                    appConfig = config,
+                    healthCheckHandler = instance()
+                )
+            }
         }
     }
 
     val app = Kodein.Module("app") {
+        bind<HealthCheckHandler>() with singleton { HealthCheckHandler.create(vertx) }
+
         bind<ServiceContext>() with singleton {
             ServiceContext(instance(), config)
         }
