@@ -5,6 +5,8 @@ import io.imulab.astrea.service.client.grpc.ClientAuthenticationService
 import io.imulab.astrea.service.client.grpc.ClientLookupService
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.Status
 import io.vertx.grpc.VertxServerBuilder
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
@@ -13,7 +15,8 @@ import kotlin.concurrent.thread
 class ClientGrpcVerticle(
     private val appConfig: Config,
     private val clientLookupService: ClientLookupService,
-    private val clientAuthenticationService: ClientAuthenticationService
+    private val clientAuthenticationService: ClientAuthenticationService,
+    private val healthCheckHandler: HealthCheckHandler
 ) : AbstractVerticle() {
 
     private val logger = LoggerFactory.getLogger(ClientGrpcVerticle::class.java)
@@ -38,6 +41,13 @@ class ClientGrpcVerticle(
                 startFuture?.complete()
                 logger.info("ClientGrpcVerticle started...")
             }
+        }
+
+        healthCheckHandler.register("ClientGRPC") { h ->
+            if (server.isTerminated)
+                h.complete(Status.KO())
+            else
+                h.complete(Status.OK())
         }
     }
 }

@@ -26,6 +26,8 @@ import io.imulab.astrea.service.client.verticle.ClientGrpcVerticle
 import io.vavr.control.Try
 import io.vertx.core.Vertx
 import io.vertx.core.json.JsonObject
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.Status
 import io.vertx.ext.mongo.MongoClient
 import io.vertx.kotlin.core.json.json
 import io.vertx.kotlin.core.json.obj
@@ -41,6 +43,19 @@ import java.time.Duration
 fun wireComponents(vertx: Vertx): Kodein {
 
     val appModule = Kodein.Module("app") {
+        bind<HealthCheckHandler>() with singleton {
+            val mongoClient = instance<MongoClient>()
+            HealthCheckHandler.create(vertx).apply {
+                register("ClientPersistence") { h ->
+                    mongoClient.runCommand("ping", JsonObject().apply { put("ping", "1") }) { ar ->
+                        if (ar.succeeded())
+                            h.complete(Status.OK())
+                        else
+                            h.complete(Status.KO())
+                    }
+                }
+            }
+        }
 
         bind<Config>() with singleton { ConfigFactory.load() }
 
@@ -129,14 +144,20 @@ fun wireComponents(vertx: Vertx): Kodein {
         importOnce(grpcApiModule)
 
         bind<ClientApiVerticle>() with singleton {
-            ClientApiVerticle(createClientHandler = instance(), readClientHandler = instance(), appConfig = instance())
+            ClientApiVerticle(
+                createClientHandler = instance(),
+                readClientHandler = instance(),
+                appConfig = instance(),
+                healthCheckHandler = instance()
+            )
         }
 
         bind<ClientGrpcVerticle>() with singleton {
             ClientGrpcVerticle(
                 clientLookupService = instance(),
                 clientAuthenticationService = instance(),
-                appConfig = instance()
+                appConfig = instance(),
+                healthCheckHandler = instance()
             )
         }
     }

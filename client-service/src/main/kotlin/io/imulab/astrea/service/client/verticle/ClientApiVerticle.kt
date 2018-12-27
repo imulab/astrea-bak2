@@ -6,6 +6,8 @@ import io.imulab.astrea.service.client.handlers.ReadClientHandler
 import io.imulab.astrea.service.client.handlers.errorHandler
 import io.imulab.astrea.service.client.support.addSuspendHandlerByOperationId
 import io.vertx.core.http.HttpServerOptions
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.Status
 import io.vertx.ext.web.api.contract.RouterFactoryOptions
 import io.vertx.kotlin.core.http.listenAwait
 import io.vertx.kotlin.coroutines.CoroutineVerticle
@@ -16,7 +18,8 @@ import org.slf4j.LoggerFactory
 class ClientApiVerticle(
     private val appConfig: Config,
     private val createClientHandler: CreateClientHandler,
-    private val readClientHandler: ReadClientHandler
+    private val readClientHandler: ReadClientHandler,
+    private val healthCheckHandler: HealthCheckHandler
 ) : CoroutineVerticle() {
 
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -34,12 +37,14 @@ class ClientApiVerticle(
             addSuspendHandlerByOperationId("client.create", createClientHandler::createClient)
             addSuspendHandlerByOperationId("client.read", readClientHandler::readClient)
         }.router
+        router.get("/health").handler(healthCheckHandler)
 
         vertx.createHttpServer(HttpServerOptions().apply {
             port = appConfig.getInt("service.restPort")
         }).requestHandler(router).listenAwait()
 
         logger.info("Http server started.")
+        healthCheckHandler.register("ClientAPI") { h -> h.complete(Status.OK()) }
     }
 
     override suspend fun stop() {
