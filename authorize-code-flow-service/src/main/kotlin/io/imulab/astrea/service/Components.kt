@@ -22,6 +22,8 @@ import io.imulab.astrea.sdk.oidc.validation.NonceValidator
 import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
 import io.vavr.control.Try
 import io.vertx.core.Vertx
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.Status
 import io.vertx.redis.RedisClient
 import io.vertx.redis.RedisOptions
 import kotlinx.coroutines.runBlocking
@@ -57,7 +59,17 @@ open class Components(vertx: Vertx, private val config: Config) {
                 )
             }
 
-            bind<GrpcVerticle>() with singleton { GrpcVerticle(instance(), config) }
+            bind<GrpcVerticle>() with singleton {
+                GrpcVerticle(
+                    flowService = instance(),
+                    appConfig = config,
+                    healthCheckHandler = instance()
+                )
+            }
+
+            bind<HealthVerticle>() with singleton {
+                HealthVerticle(healthCheckHandler = instance(), appConfig = config)
+            }
         }
     }
 
@@ -90,13 +102,17 @@ open class Components(vertx: Vertx, private val config: Config) {
     }
 
     val persistence = Kodein.Module("persistence") {
+        bind<RedisClient>() with singleton {
+            RedisClient.create(vertx, RedisOptions().apply {
+                host = config.getString("redis.host")
+                port = config.getInt("redis.port")
+                select = config.getInt("redis.db")
+            })
+        }
+
         bind<RedisAuthorizeCodeRepository>() with singleton {
             RedisAuthorizeCodeRepository(
-                RedisClient.create(vertx, RedisOptions().apply {
-                    host = config.getString("redis.host")
-                    port = config.getInt("redis.port")
-                    select = config.getInt("redis.db")
-                }),
+                instance(),
                 instance<ServiceContext>().authorizeCodeLifespan
             )
         }
@@ -123,6 +139,20 @@ open class Components(vertx: Vertx, private val config: Config) {
     }
 
     val app = Kodein.Module("app") {
+        bind<HealthCheckHandler>() with singleton {
+            HealthCheckHandler.create(vertx).apply {
+                val redisClient = instance<RedisClient>()
+                register("AuthorizeCodePersistence") { h ->
+                    redisClient.ping { ar ->
+                        if (ar.succeeded())
+                            h.complete(Status.OK())
+                        else
+                            h.complete(Status.KO())
+                    }
+                }
+            }
+        }
+
         bind<ServiceContext>() with singleton {
             ServiceContext(
                 config,

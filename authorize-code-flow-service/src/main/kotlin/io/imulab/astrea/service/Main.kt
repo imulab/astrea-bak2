@@ -21,4 +21,13 @@ fun main(args: Array<String>) {
             logger.error("Authorize code flow service failed to deploy.", ar.cause())
         }
     }
+
+    val healthVerticle by components.instance<HealthVerticle>()
+    vertx.deployVerticle(healthVerticle) { ar ->
+        if (ar.succeeded()) {
+            logger.info("Authorize code flow service health information available.")
+        } else {
+            logger.error("Authorize code flow service health information unavailable.", ar.cause())
+        }
+    }
 }

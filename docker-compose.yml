@@ -78,6 +78,7 @@ services:
       - discovery-service
     ports:
       - "35127:35127"
+      - "9000:8080"
     environment:
       - REDIS_HOST=redisdb
       - REDIS_PORT=6379
@@ -99,6 +100,7 @@ services:
       - discovery-service
     ports:
       - "35227:35227"
+      - "9100:8080"
     environment:
       - DISCOVERY_SERVICE_HOST=discovery-service
       - DISCOVERY_SERVICE_PORT=35028
@@ -113,7 +115,7 @@ services:
       - discovery-service
     ports:
       - "35327:35327"
-      - "9000:8080"
+      - "9200:8080"
     environment:
       - DISCOVERY_SERVICE_HOST=discovery-service
       - DISCOVERY_SERVICE_PORT=35028
