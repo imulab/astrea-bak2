@@ -29,6 +29,7 @@ import io.imulab.astrea.service.dispatch.AuthorizeCodeFlow
 import io.imulab.astrea.service.dispatch.ClientCredentialsFlow
 import io.vavr.control.Try
 import io.vertx.core.Vertx
+import io.vertx.ext.healthchecks.HealthCheckHandler
 import kotlinx.coroutines.runBlocking
 import org.jose4j.jwk.JsonWebKeySet
 import org.kodein.di.Kodein
@@ -51,6 +52,7 @@ open class Components(private val vertx: Vertx, private val config: Config) {
             bind<GatewayVerticle>() with singleton {
                 GatewayVerticle(
                     appConfig = config,
+                    healthCheckHandler = instance(),
                     requestProducer = instance(),
                     dispatchers = listOf(
                         instance<AuthorizeCodeFlow.TokenLeg>(),
@@ -62,6 +64,8 @@ open class Components(private val vertx: Vertx, private val config: Config) {
     }
 
     val app = Kodein.Module("app") {
+        bind<HealthCheckHandler>() with singleton { HealthCheckHandler.create(vertx) }
+
         bind<OidcClientAuthenticators>() with singleton {
             OidcClientAuthenticators(
                 authenticators = listOf(

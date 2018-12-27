@@ -10,6 +10,8 @@ import io.imulab.astrea.sdk.oauth.validation.OAuthGrantTypeValidator
 import io.imulab.astrea.sdk.oidc.request.OidcRequestForm
 import io.imulab.astrea.service.dispatch.OAuthDispatcher
 import io.vertx.core.http.HttpServerOptions
+import io.vertx.ext.healthchecks.HealthCheckHandler
+import io.vertx.ext.healthchecks.Status
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
@@ -22,6 +24,7 @@ import org.slf4j.LoggerFactory
 
 class GatewayVerticle(
     private val appConfig: Config,
+    private val healthCheckHandler: HealthCheckHandler,
     private val requestProducer: OAuthRequestProducer,
     private val dispatchers: List<OAuthDispatcher>
 ) : CoroutineVerticle() {
@@ -65,10 +68,13 @@ class GatewayVerticle(
                     ?: throw ServerError.internal("Cannot find proper handler for request.")
                 dispatcher.handle(request, rc)
             }
+        router.get("/health").handler(healthCheckHandler)
 
         vertx.createHttpServer(HttpServerOptions().apply {
             port = appConfig.getInt("service.port")
         }).requestHandler(router).listen()
+
+        healthCheckHandler.register("TokenEndpointGatewayAPI") { h -> h.complete(Status.OK()) }
     }
 
     private fun Route.suspendedOAuthHandler(block: suspend (RoutingContext) -> Unit): Route {
