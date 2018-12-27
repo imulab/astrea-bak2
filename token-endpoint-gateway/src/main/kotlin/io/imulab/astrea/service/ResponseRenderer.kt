@@ -2,13 +2,13 @@ package io.imulab.astrea.service
 
 import io.imulab.astrea.sdk.oauth.error.OAuthException
 import io.imulab.astrea.sdk.oauth.error.ServerError
-import io.imulab.astrea.sdk.oidc.response.OidcTokenEndpointResponse
+import io.imulab.astrea.sdk.oauth.response.TokenEndpointResponse
 import io.vertx.core.json.Json
 import io.vertx.ext.web.RoutingContext
 
 object ResponseRenderer {
 
-    fun render(response: OidcTokenEndpointResponse, rc: RoutingContext) {
+    fun render(response: TokenEndpointResponse, rc: RoutingContext) {
         rc.response()
             .setStatusCode(200)
             .apply {

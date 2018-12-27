@@ -9,6 +9,7 @@ import io.imulab.astrea.sdk.client.GrpcClientLookup
 import io.imulab.astrea.sdk.client.GrpcClientPostAuthenticator
 import io.imulab.astrea.sdk.discovery.GrpcDiscoveryService
 import io.imulab.astrea.sdk.flow.AuthorizeCodeFlowGrpc
+import io.imulab.astrea.sdk.flow.cc.ClientCredentialsFlowGrpc
 import io.imulab.astrea.sdk.oauth.OAuthContext
 import io.imulab.astrea.sdk.oauth.client.ClientLookup
 import io.imulab.astrea.sdk.oauth.error.ServerError
@@ -25,6 +26,7 @@ import io.imulab.astrea.sdk.oidc.request.OidcAccessRequestProducer
 import io.imulab.astrea.sdk.oidc.spi.HttpResponse
 import io.imulab.astrea.sdk.oidc.spi.SimpleHttpClient
 import io.imulab.astrea.service.dispatch.AuthorizeCodeFlow
+import io.imulab.astrea.service.dispatch.ClientCredentialsFlow
 import io.vavr.control.Try
 import io.vertx.core.Vertx
 import kotlinx.coroutines.runBlocking
@@ -42,6 +44,8 @@ open class Components(private val vertx: Vertx, private val config: Config) {
         return Kodein {
             importOnce(discovery)
             importOnce(client)
+            importOnce(authorizeCodeFlow)
+            importOnce(clientCredentialsFlow)
             importOnce(app)
 
             bind<GatewayVerticle>() with singleton {
@@ -49,7 +53,8 @@ open class Components(private val vertx: Vertx, private val config: Config) {
                     appConfig = config,
                     requestProducer = instance(),
                     dispatchers = listOf(
-                        instance<AuthorizeCodeFlow.TokenLeg>()
+                        instance<AuthorizeCodeFlow.TokenLeg>(),
+                        instance<ClientCredentialsFlow>()
                     )
                 )
             }
@@ -74,7 +79,9 @@ open class Components(private val vertx: Vertx, private val config: Config) {
                 clientAuthenticators = instance()
             )
         }
+    }
 
+    val authorizeCodeFlow = Kodein.Module("authorizeCodeFlow") {
         bind<AuthorizeCodeFlow.TokenLeg>() with singleton {
             AuthorizeCodeFlow.TokenLeg(
                 authorizationCodeFlowPrefix = config.getString("authorizeCodeFlow.serviceId"),
@@ -83,6 +90,24 @@ open class Components(private val vertx: Vertx, private val config: Config) {
                         .forAddress(
                             config.getString("authorizeCodeFlow.host"),
                             config.getInt("authorizeCodeFlow.port")
+                        )
+                        .enableRetry()
+                        .maxRetryAttempts(10)
+                        .usePlaintext()
+                        .build()
+                )
+            )
+        }
+    }
+
+    val clientCredentialsFlow = Kodein.Module("clientCredentialsFlow") {
+        bind<ClientCredentialsFlow>() with singleton {
+            ClientCredentialsFlow(
+                stub = ClientCredentialsFlowGrpc.newBlockingStub(
+                    ManagedChannelBuilder
+                        .forAddress(
+                            config.getString("clientCredentialsFlow.host"),
+                            config.getInt("clientCredentialsFlow.port")
                         )
                         .enableRetry()
                         .maxRetryAttempts(10)

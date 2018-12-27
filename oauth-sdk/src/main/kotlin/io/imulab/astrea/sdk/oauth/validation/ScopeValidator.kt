@@ -1,8 +1,6 @@
 package io.imulab.astrea.sdk.oauth.validation
 
-import io.imulab.astrea.sdk.oauth.assertType
 import io.imulab.astrea.sdk.oauth.mustNotMalformedScope
-import io.imulab.astrea.sdk.oauth.request.OAuthAuthorizeRequest
 import io.imulab.astrea.sdk.oauth.request.OAuthRequest
 
 /**
@@ -17,11 +15,9 @@ object ScopeValidator : SpecDefinitionValidator,
     }
 
     override fun validate(request: OAuthRequest) {
-        val ar = request.assertType<OAuthAuthorizeRequest>()
-
-        ar.scopes.forEach { scope ->
+        request.scopes.forEach { scope ->
             scope.mustNotMalformedScope()
-            ar.client.mustScope(scope)
+            request.client.mustScope(scope)
         }
     }
 }
