@@ -25,6 +25,7 @@ dependencies {
     vertx(
         loadCoroutineSupport = true,
         loadHealthCheck = true,
+        loadWeb = true,
         loadGrpc = true,
         loadRedisClient = true
     )

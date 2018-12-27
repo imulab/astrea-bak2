@@ -22,4 +22,12 @@ suspend fun main(args: Array<String>) {
     } catch (e: Exception) {
         logger.error("Implicit flow service encountered error during deployment.", e)
     }
+
+    val healthVerticle by components.instance<HealthVerticle>()
+    try {
+        awaitResult<String> { vertx.deployVerticle(healthVerticle, it) }
+        logger.info("Implicit flow service health information available.")
+    } catch (e: Exception) {
+        logger.error("Implicit flow service health information unavailable.", e)
+    }
 }

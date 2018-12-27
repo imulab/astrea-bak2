@@ -20,6 +20,7 @@ import io.imulab.astrea.sdk.oidc.validation.NonceValidator
 import io.imulab.astrea.sdk.oidc.validation.OidcResponseTypeValidator
 import io.vavr.control.Try
 import io.vertx.core.Vertx
+import io.vertx.ext.healthchecks.HealthCheckHandler
 import kotlinx.coroutines.runBlocking
 import org.kodein.di.Kodein
 import org.kodein.di.generic.bind
@@ -36,12 +37,18 @@ open class Components(private val vertx: Vertx, private val config: Config) {
             importOnce(app)
 
             bind<GrpcVerticle>() with singleton {
-                GrpcVerticle(flowService = instance(), appConfig = config)
+                GrpcVerticle(flowService = instance(), appConfig = config, healthCheckHandler = instance())
+            }
+
+            bind<HealthVerticle>() with singleton {
+                HealthVerticle(healthCheckHandler = instance(), appConfig = config)
             }
         }
     }
 
     val app = Kodein.Module("app") {
+        bind<HealthCheckHandler>() with singleton { HealthCheckHandler.create(vertx) }
+
         bind<ServiceContext>() with singleton { ServiceContext(discovery = instance(), config = config) }
 
         bind<AccessTokenStrategy>() with singleton {
