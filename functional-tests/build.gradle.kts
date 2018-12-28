@@ -21,5 +21,6 @@ dependencies {
     typeSafeConfig()
     logging()
     test(loadJUnit5 = true, loadAssertj = true, loadSpek2 = true)
-    testContainers(loadJUnitJupiter = true, loadDockerCompose = true)
+
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:${Version.jacksonKotlin}")
 }
