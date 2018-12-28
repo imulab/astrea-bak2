@@ -3,7 +3,7 @@ kind: pipeline
 name: discovery-service
 
 steps:
-  - name: build
+  - name: build-discovery-service
     image: gradle:4.8-jdk8-slim
     privileged: true
     commands:
