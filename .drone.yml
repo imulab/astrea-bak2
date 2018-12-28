@@ -7,10 +7,10 @@ steps:
     image: gradle:4.8-jdk8-slim
     privileged: true
     commands:
-      - gradle :discovery-service:build
+      - gradle -g /drone/gradle :discovery-service:build
     volumes:
       - name: gradle_cache
-        path: /home/gradle/.gradle/caches
+        path: /drone/gradle
 
 trigger:
   event:
