@@ -12,6 +12,13 @@ steps:
       - name: gradle_cache
         path: /home/gradle/.gradle/caches
 
+trigger:
+  event:
+    - push
+  branch:
+    - master
+    - development
+
 volumes:
   - name: gradle_cache
     host:
