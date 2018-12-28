@@ -12,7 +12,6 @@ steps:
       - name: gradle_cache
         path: /home/gradle/.gradle/caches
 
-
 trigger:
   event:
     - push
