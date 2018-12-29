@@ -4,6 +4,6 @@ name: build
 
 steps:
   - name: build
-    image: gradle:4.8-jdk8-slim
+    image: openjdk:8-jdk-alpine
     commands:
-      - gradle build
+      - ./gradlew build
