@@ -7,7 +7,7 @@ steps:
     image: gradle:4.8-jdk8-slim
     privileged: true
     commands:
-      - gradle -g /drone/gradle :discovery-service:build
+      - gradle :discovery-service:build
     volumes:
       - name: gradle_cache
         path: /drone/gradle

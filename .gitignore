@@ -1,8 +1,8 @@
 .gradle/
 .idea/
 *.iml
-build/
 out/
+build/
 .DS_Store
 
-client-sdk/src/generated/
+!buildSrc/src/main/kotlin/build
