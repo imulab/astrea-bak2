@@ -10,7 +10,7 @@ steps:
       - gradle :discovery-service:build
     volumes:
       - name: gradle_cache
-        path: /drone/gradle
+        path: /home/gradle/.gradle/caches
 
 trigger:
   event:
