@@ -1,25 +1,10 @@
 ---
 kind: pipeline
-name: discovery-service
+name: build
 
 steps:
-  - name: build-discovery-service
+  - name: build
     image: gradle:4.8-jdk8-slim
     privileged: true
     commands:
-      - gradle :discovery-service:build
-    volumes:
-      - name: gradle_cache
-        path: /home/gradle/.gradle/caches
-
-trigger:
-  event:
-    - push
-  branch:
-    - master
-    - development
-
-volumes:
-  - name: gradle_cache
-    host:
-      path: /tmp/gradle_cache
+      - gradle build
