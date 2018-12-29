@@ -4,6 +4,6 @@ name: build
 
 steps:
   - name: build
-    image: openjdk:8-jdk-alpine
+    image: openjdk:8-jdk-stretch
     commands:
       - ./gradlew build -x :functional-tests:build
