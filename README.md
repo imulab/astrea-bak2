@@ -1,2 +1,2 @@
-# astrea
+# Astrea
 OAuth and OpenID Provider Platform
